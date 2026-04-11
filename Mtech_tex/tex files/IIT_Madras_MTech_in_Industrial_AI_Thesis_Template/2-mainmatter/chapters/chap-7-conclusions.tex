@@ -1,0 +1,76 @@
+\chapter{Conclusions and Future Work}\label{chap:conclusion}
+
+This chapter summarizes the findings from both research problems investigated in this thesis and outlines directions for future work. Problem~1 (automated ICD code prediction) is summarized first, followed by Problem~2 (SA-AKI mortality prediction), and the chapter concludes with a unified discussion of future research directions.
+
+%% ----------------------------------------------------------------
+%%  Problem 1 — NEW section summarising Old Report (ICD coding) work
+%% ----------------------------------------------------------------
+\section{Summary of Problem 1: ICD Code Prediction}\label{sec:p1:conclusion}
+
+The first problem investigated in this thesis---automated ICD-10-CM code prediction with a focus on rare diseases---was pursued through the following completed stages:
+
+\begin{enumerate}
+    \item \textbf{Literature Review:} An extensive survey of the ICD coding automation literature was conducted, spanning early rule-based and machine-learning approaches, deep-learning architectures (CNNs, RNNs, Transformers), curriculum learning, knowledge-based methods, and synthetic data generation strategies for rare codes.
+
+    \item \textbf{Problem Formulation:} The task was formally defined as a multi-label classification problem over the ICD-10-CM label space, with a composite evaluation metric that emphasises performance on rare codes. Central challenges---extreme label cardinality, long-tailed distributions, and lengthy clinical narratives---were identified and a methodological focus on ontology-driven data augmentation was proposed.
+
+    \item \textbf{Dataset Understanding:} A thorough exploration of the MIMIC--IV discharge-summary and diagnosis tables was carried out, including SQL-based extraction, visual analysis of ICD code distributions (long-tail plots, admission-level statistics, and co-occurrence patterns across ten exploratory figures), and preparation of the final modelling dataset.
+
+    \item \textbf{Preliminary Results:} A K-Nearest Neighbours baseline achieved a Macro F1-score of 0.12, confirming the difficulty of the task. MinHash-based similarity detection was applied to discharge summaries, and a rare-disease co-occurrence pipeline was developed to identify clinically meaningful groupings for downstream augmentation.
+\end{enumerate}
+
+\noindent
+\textbf{Incomplete work.}\quad The generation of synthetic discharge summaries via knowledge-driven data augmentation and the subsequent full-scale model training and evaluation were \emph{not} executed due to the high computational infrastructure costs required for large-language-model-based text generation. These stages remain the principal items of future work for Problem~1 (see Section~\ref{sec:fw:p1}).
+
+
+%% ----------------------------------------------------------------
+%%  Problem 2 — PRESERVED verbatim from Current Report
+%% ----------------------------------------------------------------
+\section{Summary of Problem 2: SA-AKI Mortality Prediction}
+This thesis has presented the design, implementation, and validation of a machine learning framework for early mortality prediction in Sepsis-Associated Acute Kidney Injury (SA--AKI), with the aim of establishing a methodologically sound benchmark for the field. Through strict adherence to a 24-hour clinical window and the TRIPOD reporting guidelines, a transparent and reproducible pipeline has been developed that addresses the critical shortcomings of data leakage and performance overestimation that have been identified as prevalent in much of the existing literature.
+
+The key contributions and findings are summarized as follows:
+\begin{enumerate}
+    \item \textbf{High-Fidelity Cohort Construction:} A well-defined SA--AKI cohort of 10,036 patients was constructed from the MIMIC--IV database, underpinned by an ontology-integrated PostgreSQL warehouse that ensured reproducible definitions and data harmonization.
+
+    \item \textbf{Leakage-Aware Preprocessing:} A strict 80/20 train-test split served as the foundation for a preprocessing pipeline that included a formal analysis of the missing data mechanism, the creation and statistical selection of significant missingness indicators as novel features, and the train-only fitting of all data transformers to prevent information leakage.
+
+    \item \textbf{Interpretable Predictive Modeling:} Following a benchmark of machine learning algorithms, a LightGBM model was selected, tuned, and calibrated. On the held-out test set, the final model achieved an AUROC of 0.749 and an F1-score of 0.522. The clinical validity of the model was supported by SHAP analysis, which revealed that predictions were driven by established risk factors such as SOFA score, RDW, and age.
+
+    \item \textbf{Dynamic Risk Assessment with Survival Analysis:} The utility of the early-window features was extended to time-to-event modeling. Both a Cox Proportional Hazards model and a custom DeepSurv model were developed, each achieving a C-index of approximately 0.69 on the test set. These models were found to be effective at stratifying patients into distinct risk groups over time, providing a more dynamic view of clinical risk.
+\end{enumerate}
+
+Collectively, this work has provided a full pipeline that yields a clinically interpretable predictive model while maintaining the methodological discipline that has been argued to be necessary for building clinical decision support tools suitable for consideration in real-world settings.
+
+
+%% ----------------------------------------------------------------
+%%  Future Work — MERGED section
+%% ----------------------------------------------------------------
+\section{Future Work}
+
+\subsection{Problem 1: Remaining Steps}\label{sec:fw:p1}
+The primary remaining work for the ICD code prediction problem consists of two stages that were deferred due to infrastructure constraints:
+\begin{itemize}
+    \item \textbf{Synthetic Data Generation:} Employing the ontology-based rare-disease groupings and co-occurrence patterns identified during the dataset understanding phase, knowledge-driven data augmentation will be used to generate synthetic discharge summaries that improve representation of rare ICD-10-CM codes. This step requires access to large-language-model inference infrastructure, which was the principal bottleneck.
+
+    \item \textbf{Full Model Training and Evaluation:} Once synthetic data are available, the deep-learning models (CNN, RNN, and Transformer-based architectures) outlined in the proposed methodology will be trained on the augmented dataset and evaluated against the MIMIC--IV test set using the composite metric that emphasises rare-code performance. Curriculum-learning schedules and hierarchical knowledge integration will be explored as part of the training protocol.
+\end{itemize}
+
+\noindent
+These steps can be undertaken when suitable computational infrastructure becomes available, building directly on the literature review, problem formulation, dataset preparation, and preliminary baselines already completed.
+
+\subsection{Problem 2: Future Directions}
+Building upon the foundation established in this thesis, several avenues for future research have been identified:
+\begin{itemize}
+    \item \textbf{External Validation and Transportability:} The immediate next step would be to evaluate the model's performance on external datasets, with the eICU Collaborative Research Database representing the most natural candidate. The eICU database, covering over 200 hospitals across the United States, would provide a demanding test of generalizability across different patient populations, clinical practices, and documentation standards. A validation protocol would involve re-applying the Sepsis--3 and KDIGO cohort definitions to eICU, re-deriving T0--T24 features from its schema, and evaluating the frozen model without retraining. Should performance degradation be observed, recalibration on the target population would be explored before any clinical deployment could be considered.
+
+    \item \textbf{Monte Carlo Simulation for Synthetic Data Augmentation:} The use of Monte Carlo methods to generate synthetic patient trajectories that respect the joint distribution of clinical variables observed in the training data represents a promising direction. Copula-based simulation or parametric bootstrap approaches could be employed to sample realistic feature vectors from the estimated multivariate distribution of T0--T24 measurements, preserving the correlation structure among biomarkers, vital signs, and severity scores. Such an approach would serve two purposes: augmenting the training set to improve model stability for underrepresented subgroups, and enabling sensitivity analyses to assess how model performance varies under perturbations of the input distribution. Unlike SMOTE or ADASYN, which operate in feature space without regard to clinical plausibility, a Monte Carlo approach grounded in domain-specific distributional assumptions would be expected to generate physiologically coherent synthetic patients \citep{Blagus_2013}. Generative adversarial networks and variational autoencoders trained on the MIMIC--IV cohort represent more flexible alternatives, though at the cost of reduced interpretability of the generation process.
+
+    \item \textbf{Multi-Database Risk Framing:} To strengthen the evidence base for the degree of risk within the first 24 hours, future work should seek to integrate data from multiple sources beyond MIMIC--IV. The Amsterdam UMCdb, the HiRID dataset from the Bern University Hospital, and the ANZICS Adult Patient Database each offer complementary patient populations and clinical practices. A federated or meta-analytic approach that estimates risk across these databases would provide stronger evidence for the universality of the 24-hour risk signal and would help disentangle center-specific effects from genuine physiological predictors.
+
+    \item \textbf{Exploration of Different Temporal Windows:} While this study focused on a 24-hour window, the predictive power of earlier windows (e.g., 6 or 12 hours) could be investigated to facilitate more timely interventions, or later windows (e.g., 48 hours) could be examined to capture evolving patient trajectories.
+
+    \item \textbf{Model Fairness and Equity Audit:} An important step before any clinical deployment would be to audit the model's performance across different demographic subgroups (e.g., by sex, age, and ethnicity) to verify that predictions are equitable and to identify and mitigate any potential biases that may have been introduced through the training data.
+
+    \item \textbf{Prospective Clinical Impact Study:} The ultimate goal would be to translate this research into clinical practice. A prospective, observational study could be designed to deploy the model in a real-world ICU setting as a decision support tool, allowing for the evaluation of its impact on clinical workflows, decision-making, and ultimately, patient outcomes.
+\end{itemize}

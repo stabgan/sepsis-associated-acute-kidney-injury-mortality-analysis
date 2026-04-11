@@ -1,0 +1,348 @@
+\chapter{Appendix}
+\label{chap:appendix}
+
+\section{SQL Code}
+\noindent
+All SQL queries used throughout Chapter~\ref{chap:dataset_understanding} are presented below. Each query is placed within a figure environment for clarity and reference.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.1: Counting rows/patients in the 'patients' table
+SELECT
+    COUNT(*) AS total_rows_in_patients,
+    COUNT(DISTINCT subject_id) AS num_unique_patients
+FROM mimic.patients;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code to retrieve the total number of rows and distinct patients in the \texttt{patients} table.}
+\label{fig:sql1_patient_rows}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.2: Counting rows/admissions in the 'admissions' table
+SELECT
+    COUNT(*) AS total_rows_in_admissions,
+    COUNT(DISTINCT hadm_id) AS num_unique_admissions
+FROM mimic.admissions;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code to retrieve the total number of rows and distinct admissions in the \texttt{admissions} table.}
+\label{fig:sql2_admission_rows}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.3: Identifying multiple admissions per patient
+SELECT subject_id, COUNT(*) AS num_admissions
+FROM mimic.admissions
+GROUP BY subject_id
+HAVING COUNT(*) > 1
+ORDER BY num_admissions DESC
+LIMIT 5;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code to find patients with more than one admission, illustrating recurrent hospital stays.}
+\label{fig:sql3_multiple_admissions}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.4: Counting total discharge notes
+SELECT COUNT(*) AS total_discharge_notes
+FROM mimic.discharge;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code to count the total number of discharge summaries in the \texttt{discharge} table.}
+\label{fig:sql4_discharge_notes}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.5: Admissions with and without discharge notes
+SELECT
+    (SELECT COUNT(DISTINCT hadm_id) FROM mimic.admissions) AS total_admissions,
+    (SELECT COUNT(DISTINCT hadm_id) FROM mimic.discharge)  AS hadm_with_discharge,
+    (SELECT COUNT(DISTINCT hadm_id) FROM mimic.admissions
+     WHERE hadm_id NOT IN (
+         SELECT DISTINCT hadm_id FROM mimic.discharge
+     )
+    ) AS hadm_without_discharge;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code comparing the number of admissions with discharge notes to those without.}
+\label{fig:sql5_hadm_no_discharge}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.6: Word count distribution of discharge summaries
+SELECT
+    PERCENTILE_CONT(0.5)
+        WITHIN GROUP (ORDER BY (LENGTH(text) - LENGTH(REPLACE(text, ' ', '')) + 1))
+      AS median_word_count,
+    PERCENTILE_CONT(0.9)
+      WITHIN GROUP (ORDER BY (LENGTH(text) - LENGTH(REPLACE(text, ' ', '')) + 1))
+    AS p90_word_count,
+    PERCENTILE_CONT(0.99)
+    WITHIN GROUP (ORDER BY (LENGTH(text) - LENGTH(REPLACE(text, ' ', '')) + 1))
+    AS p99_word_count
+FROM mimic.discharge;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code for computing word-count percentiles of the \texttt{discharge} table.}
+\label{fig:sql6_note_wordcount}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.7: Comparing total code assignments in ICD-9 vs. ICD-10
+SELECT
+    icd_version,
+    COUNT(*) AS code_assignments
+FROM mimic.diagnoses_icd
+GROUP BY icd_version
+ORDER BY code_assignments DESC;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code to assess the distribution of ICD-9 and ICD-10 usage in the dataset.}
+\label{fig:sql7_icd_version_counts}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.8: Retrieving top ICD-10 codes by frequency
+SELECT icd_code, COUNT(*) AS freq
+FROM mimic.diagnoses_icd
+WHERE icd_version = 10
+GROUP BY icd_code
+ORDER BY freq DESC
+LIMIT 10;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code used to find the 10 most common ICD-10 codes in MIMIC-IV.}
+\label{fig:sql8_top_icd10_codes}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.9: Counting unique ICD-10 codes
+SELECT icd_version,
+       COUNT(DISTINCT icd_code) AS num_unique_codes
+FROM mimic.diagnoses_icd
+GROUP BY icd_version;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code showing the total number of unique ICD codes by ICD version.}
+\label{fig:sql9_unique_codes}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.10: Identifying ICD-10 codes with fewer than five occurrences
+WITH code_counts AS (
+    SELECT icd_code, COUNT(*) AS freq
+    FROM mimic.diagnoses_icd
+    WHERE icd_version = 10
+    GROUP BY icd_code
+)
+SELECT COUNT(*) AS codes_under_5_occurrences
+FROM code_counts
+WHERE freq < 5;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code to quantify rare ICD-10 codes that appear fewer than five times.}
+\label{fig:sql10_rare_codes}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.11: Calculating average ICD-10 codes per admission
+WITH code_counts AS (
+    SELECT hadm_id,
+           COUNT(DISTINCT icd_code) AS code_count
+    FROM mimic.diagnoses_icd
+    WHERE icd_version = 10
+    GROUP BY hadm_id
+)
+SELECT AVG(code_count) AS avg_icd10_codes_per_adm
+FROM code_counts;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code to compute the average number of ICD-10 codes per admission.}
+\label{fig:sql11_avg_codes_per_admission}
+\end{figure}
+
+% \begin{figure}[H]
+% \centering
+% \begin{minipage}{\textwidth}
+% \begin{verbatim}
+% -- Figure A.12: (Optional) Example of note length vs. code count
+% -- This type of query can gather correlation data,
+% -- though not shown in detail here.
+% -- SELECT ...
+% \end{verbatim}
+% \end{minipage}
+% \caption{An example placeholder for more specialized correlation queries (omitted details).}
+% \label{fig:sql12_note_length_vs_codes}
+% \end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{\textwidth}
+\begin{verbatim}
+-- Figure A.12: Merging discharge summaries with associated ICD-10 codes
+DROP TABLE IF EXISTS mimic.full_notes_with_codes;
+
+CREATE TABLE mimic.full_notes_with_codes AS
+SELECT
+    d.subject_id,
+    d.hadm_id,
+    d.text AS notes,
+    STRING_AGG(di.icd_code, ',') AS icd_codes
+FROM mimic.discharge AS d
+JOIN mimic.admissions AS a
+  ON d.subject_id = a.subject_id
+    AND d.hadm_id = a.hadm_id
+JOIN mimic.patients AS p
+  ON p.subject_id = d.subject_id
+JOIN mimic.diagnoses_icd AS di
+  ON di.subject_id = d.subject_id
+    AND di.hadm_id = d.hadm_id
+WHERE di.icd_version = 10  -- focusing on ICD-10-CM only
+GROUP BY
+    d.subject_id,
+    d.hadm_id,
+    d.text;
+\end{verbatim}
+\end{minipage}
+\caption{SQL code to create a consolidated table that pairs each discharge summary with its ICD-10 codes.}
+\label{fig:sql12_merge_notes_codes}
+\end{figure}
+
+\chapter{MinHash Pseudo-Code}
+\label{app:minhash}
+
+\begin{figure}[H]
+\centering
+\begin{verbatim}
+Algorithm 1: MinHash for Similar Document Detection
+
+Input:
+    - A collection of textual discharge summaries (D)
+    - Number of permutations (num_perm)
+    - Similarity threshold (t)
+
+Output:
+    - Set of document pairs whose Jaccard similarity exceeds t
+
+Procedure:
+1. Preprocess each document by:
+   a) Converting text to lowercase
+   b) Removing punctuation and non-alphanumeric characters
+   c) Eliminating stopwords
+2. Initialize an LSH index with threshold t and num_perm permutations.
+3. For each document d in D:
+   a) Create a MinHash object m with num_perm permutations
+   b) For each token in d, update m using m.update(token.encode('utf8'))
+   c) Insert the MinHash signature m into the LSH index
+4. For each document d in D:
+   a) Query the LSH index with d’s signature to obtain similar documents
+   b) Record document pairs that exceed the threshold
+5. Return all identified pairs of documents with similarity above t
+\end{verbatim}
+\caption{Pseudocode for the MinHash Similarity Detection Process}
+\end{figure}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Appendix: Pseudocode}
+
+\section{Ontology-Guided Synthetic Note Generation}
+\begin{figure}[H]
+\centering
+\caption{Algorithm 1: Ontology-Guided Synthetic Note Generation}
+\label{fig:algo1}
+\begin{verbatim}
+Input:
+  r: Rare ICD code
+  D: Disease cluster from ontology
+  L: Language model with retrieval augmentation
+
+Output:
+  S: Synthetic discharge summary
+
+Step 1:
+  context_docs = RetrieveRelevantText(D, knowledge_source)
+Step 2:
+  structured_prompt = GenerateStructuredPrompt(D, context_docs)
+  S_draft = L.generate(structured_prompt)
+Step 3:
+  for iteration in 1..MaxIter:
+    feedback = CriticEvaluate(S_draft)
+    if feedback indicates no major issues:
+      break
+    S_draft = L.refine(S_draft, feedback)
+Step 4:
+  if Validate(S_draft):
+    S = S_draft
+  else:
+    S = None
+\end{verbatim}
+\end{figure}
+
+\section{Hybrid Training with Rare-Aware Strategies}
+\begin{figure}[H]
+\centering
+\caption{Algorithm 2: Hybrid Training with Rare-Aware Strategies}
+\label{fig:algo2}
+\begin{verbatim}
+Input:
+  RealData = {(x_i, Y_i)}
+  SyntheticData = {(x_j*, Y_j*)}
+  Model parameters θ
+
+Output:
+  Trained model parameters θ
+
+Step 1:
+  TrainSet = RealData ∪ SyntheticData
+  Initialize θ
+
+Step 2:
+  for epoch in 1..max_epochs:
+    for batch B in WeightedSampleBatches(TrainSet):
+      (X_B, Y_B) = PrepareBatch(B)
+      if epoch >= epoch_focal_start:
+        loss = FocalLoss(θ, X_B, Y_B) + BCE(θ, X_B, Y_B)
+      else:
+        loss = WeightedBCE(θ, X_B, Y_B)
+      θ = θ - learning_rate * ∇_θ(loss)
+
+Step 3:
+  Evaluate on validation set and save best θ based on macro-F1.
+\end{verbatim}
+\end{figure}

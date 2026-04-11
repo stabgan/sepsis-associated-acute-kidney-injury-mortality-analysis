@@ -1,0 +1,34 @@
+\chapter{Results}
+\label{chap:results}
+
+We start with the outcomes of two preliminary investigations conducted to establish initial benchmarks and insights for automated ICD coding on the MIMIC-IV dataset. A simple \emph{K-Nearest Neighbors (KNN)} model was first implemented to observe how a straightforward algorithm manages the complexity of clinical text classification. Subsequently, a \emph{MinHash-based} similarity detection method was employed to reveal instances of near-duplicate discharge summaries and to estimate potential redundancy in the dataset. By examining these findings through a first-principles lens, the underlying causes—\emph{data imbalance, text intricacy, and recurring clinical narratives}—emerge clearly, along with their effects on model performance and dataset quality.
+
+\section{Baseline Model: K-Nearest Neighbors (KNN)}
+A KNN classifier was trained on discharge summaries that had been transformed into a TF-IDF vector space (limited to 5{,}000 features and incorporating both unigrams and bigrams). The \texttt{MultiLabelBinarizer} function was employed to accommodate the assignment of multiple ICD codes to each note. By design, KNN relies on calculating distances in the feature space to assign labels. However, due to the \emph{intrinsic imbalance of ICD codes} and the \emph{high-dimensional nature of clinical narratives}, the model’s ability to generalize was substantially constrained. This constraint directly resulted in a \emph{Macro F1-Score of 0.12}, revealing that frequent codes were mostly captured, whereas rare codes were systematically overlooked. The pronounced Hamming Loss further illustrated that the inherent sparsity and complexity of clinical text pose substantial challenges to naive distance-based approaches.
+
+\section{MinHash-Based Similarity Detection}
+A MinHash-based technique, coupled with \emph{Locality Sensitive Hashing (LSH)}, was subsequently introduced to identify closely matching or duplicate discharge summaries. This approach was motivated by the suspicion that repeated clinical narratives could bias model training and inflate performance metrics without truly advancing model robustness. The text was preprocessed through \emph{lowercasing, punctuation removal, and stopword filtration}, after which MinHash signatures were generated. These signatures were then indexed in an LSH structure to expedite the retrieval of pairs whose Jaccard similarity exceeded a user-defined threshold (e.g., 0.90).
+
+\emph{As a cause}, the repetition of routine sections within clinical notes (such as standardized instructions or procedural descriptions) led to the high similarity scores. \emph{In effect}, these observations underscore the necessity for careful dataset curation, including the removal or consolidation of near-duplicate entries. Moreover, the identified pairs highlight potential avenues for validating the realism of \emph{synthetic discharge notes}, since generated samples can be compared to authentic records through the same MinHash-based procedure.
+
+\section{Key Observations and Challenges}
+\begin{itemize}
+    \item \emph{Data Imbalance}:
+    The imbalance in ICD codes—where common diagnoses overshadow rarer ones—was a major factor contributing to the low Macro F1-Score of the KNN baseline.
+    \item \emph{Complex Clinical Texts}:
+    Clinical narratives often include technical jargon, abbreviations, and inconsistent structuring, which strains models that rely on straightforward vector distances.
+    \item \emph{Potential Data Redundancy}:
+    The MinHash experiment exposed considerable text overlap, suggesting that a portion of the dataset may not add genuinely novel information for model training.
+\end{itemize}
+
+Taken together, these findings confirm that simplistic algorithms and untreated redundancies limit the performance and reliability of automated ICD coding. It is therefore anticipated that refined methods—especially those involving \emph{transformer-based architectures} and \emph{knowledge-guided data augmentation}—will prove crucial for addressing rare codes, reducing the impact of repetitive content, and enhancing interpretability.
+
+\section{Rare Disease Co-Occurrence Pipeline}
+
+We developed an automated pipeline that extracts rare disease concepts from the ORDO ontology and maps them to SNOMED CT identifiers. Leveraging SNOMED CT concept and relationship files, a disease knowledge graph was built to capture clinically relevant associations between diseases. This graph was then traversed—using key relationships such as \texttt{is-a}, \texttt{associated with}, and \texttt{due to}—to identify groups of co-occurring conditions. Finally, SNOMED CT identifiers were translated to ICD-10-CM codes using a mapping file.
+
+For instance, one generated group is:
+\begin{center}
+\textbf{Group 1:} \quad ['Q00.0', 'I48.91', 'J45.909', 'I25.10']
+\end{center}
+Here, the rare disease with code \texttt{Q00.0} corresponds to \textbf{Marfan syndrome}, while the common conditions are identified as \textbf{Atrial fibrillation} (\texttt{I48.91}), \textbf{Asthma} (\texttt{J45.909}), and \textbf{Coronary artery disease} (\texttt{I25.10}). Further work is ongoing on this to extract an an exhaustive set of groups of co-occurring diseases. The next phase report will contain all the final results and the next steps.

@@ -1,0 +1,776 @@
+\begin{thebibliography}{105}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+
+\bibitem[{{Apollo 24x7}(2024)}]{ApolloCreatinine}
+{\bf {Apollo 24x7}} (2024).
+\newblock Serum creatinine test: Interpreting normal and abnormal ranges.
+\newblock
+  \urlprefix\url{https://www.apollo247.com/blog/article/creatinine-test-normal-range-guide-to-healthy-kidney-function}.
+
+\bibitem[{Author and Others(2021)}]{AnesthesiaHypotension}
+{\bf Author, A.} and {\bf Others} (2021).
+\newblock Heterogeneous impact of hypotension on organ perfusion and septic
+  shock: effects on outcomes.
+\newblock {\em Anaesthesia\/}.
+\newblock
+  \url{https://www.sciencedirect.com/science/article/pii/S000709122100458X}
+  (Accessed 2026-02-19).
+
+\bibitem[{Bengio {\em et~al.\/}(2009)Bengio, Louradour, Collobert, and
+  Weston}]{bengio2009curriculum}
+{\bf Bengio, Y.}, {\bf J.~Louradour}, {\bf R.~Collobert}, and {\bf J.~Weston},
+  Curriculum learning.
+\newblock {\em In\/} {\em Proceedings of the 26th Annual International
+  Conference on Machine Learning\/}. 2009.
+
+\bibitem[{Bernal and Wendon(2016)}]{ALT1000}
+{\bf Bernal, W.} and {\bf J.~Wendon} (2016).
+\newblock Blood alanine aminotransferase levels >1{,}000 iu/l -- causes and
+  outcomes.
+\newblock {\em Clinical Medicine\/}, {\bf 16}(6), 524--527.
+\newblock \urlprefix\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC4953107/}.
+
+\bibitem[{Blagus and Lusa(2013)}]{Blagus_2013}
+{\bf Blagus, R.} and {\bf L.~Lusa} (2013).
+\newblock Smote for high-dimensional class-imbalanced data.
+\newblock {\em BMC Bioinformatics\/}.
+\newblock
+  \urlprefix\url{https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-14-106}.
+
+\bibitem[{Blumberg {\em et~al.\/}(2023)}]{StatPearlsPlateletTx}
+{\bf Blumberg, N.} {\em et~al.\/}, {\em Platelet Transfusion\/}.
+\newblock StatPearls Publishing, Treasure Island, FL, 2023.
+\newblock \urlprefix\url{https://www.ncbi.nlm.nih.gov/books/NBK560632/}.
+
+\bibitem[{Bodenreider(2004)}]{bodenreider2004umls}
+{\bf Bodenreider, O.} (2004).
+\newblock The unified medical language system ({UMLS}): integrating biomedical
+  terminology.
+\newblock {\em Nucleic Acids Research\/}, {\bf 32}(Database issue), D267--D270.
+
+\bibitem[{Campbell and Giadresco(2020)}]{campbell2020computer}
+{\bf Campbell, S.} and {\bf K.~Giadresco} (2020).
+\newblock Computer-assisted clinical coding: A narrative review of the
+  literature on its benefits, limitations, implementation, and impact on
+  clinical coding professionals.
+\newblock {\em Health Information Management Journal\/}, {\bf 49}(1), 5--18.
+
+\bibitem[{Cao {\em et~al.\/}(2020)Cao, Chen, Liu, Zhao, Liu, and
+  Chong}]{cao2020hypercore}
+{\bf Cao, P.}, {\bf Y.~Chen}, {\bf K.~Liu}, {\bf J.~Zhao}, {\bf S.~Liu}, and
+  {\bf W.~Chong}, Hypercore: Hyperbolic and co-graph representation for
+  automatic {ICD} coding.
+\newblock {\em In\/} {\em Proceedings of the 58th Annual Meeting of the
+  Association for Computational Linguistics (ACL)\/}. 2020.
+
+\bibitem[{Chaudhary {\em et~al.\/}(2020)Chaudhary, Vaid, Duffy, Paranjpe,
+  Jaladanki, Paranjpe, Johnson, Gokhale, Pattharanitima, Chauhan, O'Hagan,
+  Van~Vleck, Coca, Cooper, Glicksberg, B{\"o}ttinger, Chan, and
+  Nadkarni}]{Chaudhary_2020_CJASN}
+{\bf Chaudhary, K.}, {\bf A.~Vaid}, {\bf {\'A}.~Duffy}, {\bf I.~Paranjpe}, {\bf
+  S.~Jaladanki}, {\bf M.~Paranjpe}, {\bf K.~Johnson}, {\bf A.~Gokhale}, {\bf
+  P.~Pattharanitima}, {\bf K.~Chauhan}, {\bf R.~O'Hagan}, {\bf T.~Van~Vleck},
+  {\bf S.~G. Coca}, {\bf R.~Cooper}, {\bf B.~Glicksberg}, {\bf E.~P.
+  B{\"o}ttinger}, {\bf L.~Chan}, and {\bf G.~N. Nadkarni} (2020).
+\newblock Utilization of deep learning for subphenotype identification in
+  sepsis-associated acute kidney injury.
+\newblock {\em Clinical Journal of the American Society of Nephrology\/}, {\bf
+  15}.
+
+\bibitem[{Chawla {\em et~al.\/}(2002)Chawla, Bowyer, Hall, and
+  Kegelmeyer}]{Chawla_2002}
+{\bf Chawla, N.~V.}, {\bf K.~W. Bowyer}, {\bf L.~O. Hall}, and {\bf W.~P.
+  Kegelmeyer} (2002).
+\newblock Smote: Synthetic minority over-sampling technique.
+\newblock {\em Journal of Artificial Intelligence Research\/}.
+\newblock
+  \urlprefix\url{https://www.jair.org/index.php/jair/article/view/10302}.
+
+\bibitem[{Chen {\em et~al.\/}(2025)Chen, Wu, Wu, Li, and Yan}]{Chen_2025}
+{\bf Chen, J.}, {\bf D.~Wu}, {\bf C.~Wu}, {\bf Y.~Li}, and {\bf J.~Yan} (2025).
+\newblock Machine learning-based prediction of {ICU} mortality in
+  sepsis-associated acute kidney injury patients using {MIMIC-IV} database with
+  validation from {eICU} database.
+\newblock {\em arXiv preprint arXiv:2502.17978\/}.
+\newblock \urlprefix\url{https://arxiv.org/abs/2502.17978}.
+
+\bibitem[{Chen and Guestrin(2016)}]{Chen_Guestrin_2016}
+{\bf Chen, T.} and {\bf C.~Guestrin}, Xgboost: A scalable tree boosting system.
+\newblock {\em In\/} {\em Proceedings of the 22nd ACM SIGKDD International
+  Conference on Knowledge Discovery and Data Mining\/}. ACM, 2016.
+
+\bibitem[{{Cleveland Clinic}(2024)}]{ClevelandPSVT}
+{\bf {Cleveland Clinic}} (2024).
+\newblock Paroxysmal supraventricular tachycardia (psvt).
+\newblock
+  \url{https://my.clevelandclinic.org/health/diseases/22232-paroxysmal-supraventricular-tachycardia-psvt}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{Costa {\em et~al.\/}(2019)}]{EJCRIM_SevereAnemia}
+{\bf Costa, M.} {\em et~al.\/} (2019).
+\newblock Surviving extreme anaemia.
+\newblock {\em European Journal of Case Reports in Internal Medicine\/}.
+\newblock
+  \urlprefix\url{https://www.ejcrim.com/index.php/EJCRIM/article/download/2357/2586?inline=1}.
+
+\bibitem[{Devlin {\em et~al.\/}(2019)Devlin, Chang, Lee, and
+  Toutanova}]{devlin2019bert}
+{\bf Devlin, J.}, {\bf M.-W. Chang}, {\bf K.~Lee}, and {\bf K.~Toutanova},
+  Bert: Pre-training of deep bidirectional transformers for language
+  understanding.
+\newblock {\em In\/} {\em Proceedings of NAACL-HLT\/}. 2019.
+
+\bibitem[{Donadello {\em et~al.\/}(2021)}]{pH6point68}
+{\bf Donadello, K.} {\em et~al.\/} (2021).
+\newblock Recovery from profound acidosis (ph 6.685) in multi-organ failure.
+\newblock {\em Journal of Emergency and Critical Care Medicine\/}.
+\newblock \urlprefix\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC7890753/}.
+
+\bibitem[{Dong {\em et~al.\/}(2022)Dong, Su\'arez-Paniagua, Whiteley, and
+  Wu}]{dong2022automated}
+{\bf Dong, H.}, {\bf V.~Su\'arez-Paniagua}, {\bf W.~Whiteley}, and {\bf H.~Wu}
+  (2022).
+\newblock Automated clinical coding: what, why, and where we are?
+\newblock {\em npj Digital Medicine\/}, {\bf 5}, 159.
+
+\bibitem[{Donnelly(2006)}]{donnelly2006snomedct}
+{\bf Donnelly, K.} (2006).
+\newblock {SNOMED CT}: The advanced terminology and coding system for ehealth.
+
+\bibitem[{Duque {\em et~al.\/}(2021)Duque, L{\'o}pez, and
+  Mart{\'\i}nez}]{duque2021knowledge}
+{\bf Duque, E.}, {\bf D.~L{\'o}pez}, and {\bf M.~Mart{\'\i}nez} (2021).
+\newblock A knowledge-driven approach to automatic icd-10 coding in spanish
+  clinical texts.
+\newblock {\em Journal of Biomedical Informatics\/}, {\bf 118}, 103749.
+\newblock \urlprefix\url{https://doi.org/10.1016/j.jbi.2021.103749}.
+
+\bibitem[{Edin {\em et~al.\/}(2024)Edin, Borgholt, Maistro {\em
+  et~al.\/}}]{edin2024unsupervised}
+{\bf Edin, J.}, {\bf L.~Borgholt}, {\bf M.~Maistro}, {\em et~al.\/} (2024).
+\newblock An unsupervised approach to achieve supervised-level explainability
+  in healthcare records.
+\newblock \url{https://arxiv.org/abs/2406.08958}.
+\newblock ArXiv preprint arXiv:2406.08958.
+
+\bibitem[{Edin {\em et~al.\/}(2023)Edin, Jensen, Sahlgren, L{\"o}vgren, and
+  Henriksson}]{edin2023automated}
+{\bf Edin, J.}, {\bf S.~M. Jensen}, {\bf M.~Sahlgren}, {\bf J.~L{\"o}vgren},
+  and {\bf A.~Henriksson}, Automated medical coding on {MIMIC-III} and
+  {MIMIC-IV}: a critical review and replicability study.
+\newblock {\em In\/} {\em Proceedings of the 46th International ACM SIGIR
+  Conference on Research and Development in Information Retrieval\/}. 2023.
+
+\bibitem[{Excoffier {\em et~al.\/}(2024)Excoffier, Roehr, Figueroa, Bressem,
+  and Ortala}]{excoffier2024generalist}
+{\bf Excoffier, J.-B.}, {\bf T.~Roehr}, {\bf A.~Figueroa}, {\bf K.~Bressem},
+  and {\bf M.~Ortala} (2024).
+\newblock Generalist embedding models are better at short-context clinical
+  semantic search than specialized embedding models.
+\newblock \url{https://arxiv.org/abs/2401.01943}.
+\newblock ArXiv preprint arXiv:2401.01943.
+
+\bibitem[{Falis {\em et~al.\/}(2022)Falis, Dong, Birch, and
+  Alex}]{falis2022horsestozebras}
+{\bf Falis, M.}, {\bf H.~Dong}, {\bf A.~Birch}, and {\bf B.~Alex}, Horses to
+  zebras: Ontology-guided data augmentation and synthesis for {ICD}-9 coding.
+\newblock {\em In\/} {\em Proceedings of the 21st Workshop on Biomedical
+  Language Processing (BioNLP)\/}. 2022.
+
+\bibitem[{Falis {\em et~al.\/}(2024)Falis, Gema, Dong, Daines, Bassetti, Wong,
+  Penfold, Birch, and Alex}]{falis2024gpt35}
+{\bf Falis, M.}, {\bf A.~P. Gema}, {\bf H.~Dong}, {\bf L.~Daines}, {\bf
+  S.~Bassetti}, {\bf M.~H. Wong}, {\bf R.~S. Penfold}, {\bf A.~Birch}, and {\bf
+  B.~Alex} (2024).
+\newblock Can {GPT-3.5} generate and code discharge summaries?
+\newblock {\em Journal of the American Medical Informatics Association
+  (JAMIA)\/}, {\bf 31}(10), 2284--2293.
+
+\bibitem[{{Family Practice Notebook}(2024)}]{FPNotebookO2Sat}
+{\bf {Family Practice Notebook}} (2024).
+\newblock Oxygen saturation.
+\newblock \url{https://mobile.fpnotebook.com/Lung/Lab/OxygnStrtn.htm}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{Farkas and Szarvas(2008)}]{farkas2008automatic}
+{\bf Farkas, R.} and {\bf G.~Szarvas} (2008).
+\newblock Automatic construction of rule-based icd-9-cm coding systems.
+\newblock {\em BMC Bioinformatics\/}, {\bf 9}(1).
+
+\bibitem[{Fong and Khan(2012)}]{HypercalcemiaReview}
+{\bf Fong, J.} and {\bf A.~Khan} (2012).
+\newblock Hypercalcemia: A review.
+\newblock {\em Cureus\/}, {\bf 4}(10), e54.
+\newblock \urlprefix\url{https://pubmed.ncbi.nlm.nih.gov/36282253/}.
+
+\bibitem[{Gao {\em et~al.\/}(2021)Gao, Alawad, Young, Gounley,
+  Schaefferkoetter, Yoon {\em et~al.\/}}]{gao2021limitations}
+{\bf Gao, S.}, {\bf M.~Alawad}, {\bf M.~T. Young}, {\bf J.~Gounley}, {\bf
+  N.~Schaefferkoetter}, {\bf H.~J. Yoon}, {\em et~al.\/} (2021).
+\newblock Limitations of transformers on clinical text classification.
+\newblock {\em IEEE Journal of Biomedical and Health Informatics\/}, {\bf
+  25}(9), 3596--3607.
+
+\bibitem[{Geiping and Goldstein(2023)}]{geiping2023cramming}
+{\bf Geiping, J.} and {\bf T.~Goldstein}, Cramming: Training a language model
+  on a single gpu in one day.
+\newblock {\em In\/} {\em Proceedings of the International Conference on
+  Machine Learning\/}. 2023.
+
+\bibitem[{{Guy's and St Thomas' Specialist Care}(2023)}]{GSTTStages}
+{\bf {Guy's and St Thomas' Specialist Care}} (2023).
+\newblock The four stages of hypertension.
+\newblock
+  \url{https://guysandstthomasspecialistcare.co.uk/news/the-four-stages-of-hypertension/}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{Haeckel and Wosniok(2010)}]{Haeckel_2010}
+{\bf Haeckel, R.} and {\bf W.~Wosniok} (2010).
+\newblock Observed, unknown distributions of clinical chemical quantities
+  should be considered to be log-normal: a proposal.
+\newblock {\em Clinical Chemistry and Laboratory Medicine\/}.
+\newblock \urlprefix\url{https://doi.org/10.1515/CCLM.2010.273}.
+
+\bibitem[{He {\em et~al.\/}(2008)He, Bai, Garcia, and Li}]{He_2008}
+{\bf He, H.}, {\bf Y.~Bai}, {\bf E.~A. Garcia}, and {\bf S.~Li}, Adasyn:
+  Adaptive synthetic sampling approach for imbalanced learning.
+\newblock {\em In\/} {\em IEEE International Joint Conference on Neural
+  Networks (IJCNN)\/}. 2008.
+\newblock \urlprefix\url{https://doi.org/10.1109/IJCNN.2008.4633969}.
+
+\bibitem[{He {\em et~al.\/}(2021)He, Lin, and Duan}]{He_2021_FrontMed}
+{\bf He, J.}, {\bf J.~Lin}, and {\bf M.~Duan} (2021).
+\newblock Application of machine learning to predict acute kidney disease in
+  patients with sepsis associated acute kidney injury.
+\newblock {\em Frontiers in Medicine\/}, {\bf 8}, 792974.
+
+\bibitem[{Heo {\em et~al.\/}(2022)Heo, Jo, Yoo, Lee, Park, and
+  Kim}]{heo2022medical}
+{\bf Heo, T.-S.}, {\bf B.~Jo}, {\bf Y.~Yoo}, {\bf K.~Lee}, {\bf Y.~Park}, and
+  {\bf K.~Kim}, Medical code prediction from discharge summary: Document to
+  sequence bert using sequence attention.
+\newblock {\em In\/} {\em Proceedings of the 2022 International Conference on
+  Electronics, Information, and Communication (ICEIC)\/}. 2022.
+
+\bibitem[{Hochreiter and Schmidhuber(1997)}]{hochreiter1997long}
+{\bf Hochreiter, S.} and {\bf J.~Schmidhuber} (1997).
+\newblock Long short-term memory.
+\newblock {\em Neural Computation\/}, {\bf 9}(8), 1735--1780.
+
+\bibitem[{Holzinger {\em et~al.\/}(2017)Holzinger, Dehmer, and
+  Jurisica}]{holzinger2017we}
+{\bf Holzinger, A.}, {\bf M.~Dehmer}, and {\bf I.~Jurisica} (2017).
+\newblock What do we need to build explainable ai systems for the medical
+  domain?
+\newblock \url{https://arxiv.org/abs/1712.09923}.
+\newblock ArXiv preprint arXiv:1712.09923.
+
+\bibitem[{Hu {\em et~al.\/}(2021)Hu, Li, Zhang, Sha, Huang, Guo, An, Chen, and
+  Zeng}]{Hu_2021}
+{\bf Hu, H.}, {\bf L.~Li}, {\bf Y.~Zhang}, {\bf T.~Sha}, {\bf Q.~Huang}, {\bf
+  X.~Guo}, {\bf S.~An}, {\bf Z.~Chen}, and {\bf Z.~Zeng} (2021).
+\newblock A prediction model for assessing prognosis in critically ill patients
+  with sepsis-associated acute kidney injury.
+\newblock {\em Shock\/}, {\bf 56}(4), 564--572.
+\newblock \urlprefix\url{https://pubmed.ncbi.nlm.nih.gov/33847475/}.
+
+\bibitem[{Huang {\em et~al.\/}(2022)Huang, Tsai, and Chen}]{huang2022plm}
+{\bf Huang, C.-W.}, {\bf S.-C. Tsai}, and {\bf Y.-N. Chen}, Plm-icd: Automatic
+  icd coding with pre-trained language models.
+\newblock {\em In\/} {\em Proceedings of the 4th Clinical Natural Language
+  Processing Workshop\/}. 2022.
+
+\bibitem[{Hylek {\em et~al.\/}(1998)}]{INRHighBleeding}
+{\bf Hylek, E.~M.} {\em et~al.\/} (1998).
+\newblock Bleeding risks and response to therapy in patients with inr higher
+  than 9.0.
+\newblock {\em Annals of Internal Medicine\/}, {\bf 128}(11), 896--899.
+
+\bibitem[{Ji {\em et~al.\/}(2021)Ji, H\"{o}ltt\"{a}, and
+  Marttinen}]{ji2021bert}
+{\bf Ji, S.}, {\bf P.~H\"{o}ltt\"{a}}, and {\bf P.~Marttinen} (2021).
+\newblock Does the magic of bert apply to medical code assignment? a
+  quantitative study.
+\newblock {\em Artificial Intelligence in Medicine\/}, {\bf 117}, 102081.
+
+\bibitem[{Jiang {\em et~al.\/}(2025)Jiang, Le, Tran, Ta, Le, Mai, and
+  Duong}]{Le_2025}
+{\bf Jiang, Y.}, {\bf S.~Le}, {\bf T.~Tran}, {\bf T.~Ta}, {\bf H.~Le}, {\bf
+  D.~Mai}, and {\bf T.~Duong} (2025).
+\newblock Explainable machine learning model for predicting persistent
+  sepsis-associated acute kidney injury: Development and validation study.
+\newblock {\em Journal of Medical Internet Research\/}, {\bf 27}, e62932.
+\newblock ISSN 1438-8871.
+
+\bibitem[{Johnson {\em et~al.\/}(2023{\natexlab{{\em a\/}}})Johnson,
+  Bulgarelli, Shen, Gayles, Shammout, Horng, Pollard, Hao, Moody, Gow, Lehman,
+  Celi, and Mark}]{johnson2023mimicivscidata}
+{\bf Johnson, A.~E.~W.}, {\bf L.~Bulgarelli}, {\bf L.~Shen}, {\bf A.~Gayles},
+  {\bf A.~Shammout}, {\bf S.~Horng}, {\bf T.~J. Pollard}, {\bf S.~Hao}, {\bf
+  B.~Moody}, {\bf B.~Gow}, {\bf L.~H. Lehman}, {\bf L.~A. Celi}, and {\bf R.~G.
+  Mark} (2023{\natexlab{{\em a\/}}}).
+\newblock Mimic-iv, a freely accessible electronic health record dataset.
+\newblock {\em Scientific Data\/}, {\bf 10}(1), 1.
+
+\bibitem[{Johnson {\em et~al.\/}(2023{\natexlab{{\em b\/}}})Johnson,
+  Bulgarelli, Shen, Gayles, Shammout, Horng, Pollard, Celi, and
+  Mark}]{Johnson_2023_MIMIC}
+{\bf Johnson, A. E.~W.}, {\bf L.~Bulgarelli}, {\bf L.-w. Shen}, {\bf
+  A.~Gayles}, {\bf A.~Shammout}, {\bf S.~Horng}, {\bf T.~J. Pollard}, {\bf
+  L.~A. Celi}, and {\bf R.~G. Mark} (2023{\natexlab{{\em b\/}}}).
+\newblock {MIMIC-IV}, a freely accessible electronic health record dataset.
+\newblock {\em Scientific Data\/}, {\bf 10}(1), 1.
+\newblock ISSN 2052-4463.
+
+\bibitem[{Johnson {\em et~al.\/}(2016)Johnson, Pollard, Shen {\em
+  et~al.\/}}]{johnson2016mimic}
+{\bf Johnson, A.~E.~W.}, {\bf T.~J. Pollard}, {\bf L.~Shen}, {\em et~al.\/}
+  (2016).
+\newblock Mimic-iii, a freely accessible critical care database.
+\newblock {\em Scientific Data\/}, {\bf 3}(160035).
+
+\bibitem[{Kang and Yoon(2023)}]{Kang_Yoon_2023}
+{\bf Kang, J.~S.} and {\bf H.~J. Yoon} (2023).
+\newblock Current challenges in adopting machine learning to critical care and
+  emergency medicine.
+\newblock {\em Acute and Critical Care\/}, {\bf 38}(1), 1--9.
+\newblock ISSN 2586-6052.
+
+\bibitem[{Kantola {\em et~al.\/}(2025)Kantola, Navas~Blanco, and
+  Keeley}]{Kantola_2025}
+{\bf Kantola, A.}, {\bf J.~Navas~Blanco}, and {\bf J.~Keeley} (2025).
+\newblock Procalcitonin as a biomarker of acute kidney injury in patients with
+  suspected bacterial sepsis in the acute care setting.
+\newblock Poster, Anesthesiology and Peri-Operative Medicine, Beaumont Health
+  Scholarly Works and Archives.
+\newblock
+  \urlprefix\url{https://scholarlyworks.beaumont.org/cgi/viewcontent.cgi?article=1005\&context=anesthesiology\_posters}.
+
+\bibitem[{{Kidney Disease: Improving Global Outcomes (KDIGO) Acute Kidney
+  Injury Work Group}(2012)}]{KDIGO_2012}
+{\bf {Kidney Disease: Improving Global Outcomes (KDIGO) Acute Kidney Injury
+  Work Group}} (2012).
+\newblock {KDIGO} clinical practice guideline for acute kidney injury.
+\newblock {\em Kidney International Supplements\/}, {\bf 2}, 1--138.
+
+\bibitem[{Kim(2014)}]{kim2014convolutional}
+{\bf Kim, Y.}, Convolutional neural networks for sentence classification.
+\newblock {\em In\/} {\em Proceedings of the 2014 Conference on Empirical
+  Methods in Natural Language Processing (EMNLP)\/}. 2014.
+
+\bibitem[{Kitabchi {\em et~al.\/}(2023)}]{StatPearlsHHS}
+{\bf Kitabchi, A.~E.} {\em et~al.\/}, {\em Hyperosmolar Hyperglycemic
+  Syndrome\/}.
+\newblock StatPearls Publishing, Treasure Island, FL, 2023.
+\newblock \urlprefix\url{https://www.ncbi.nlm.nih.gov/books/NBK482142/}.
+
+\bibitem[{Knaus {\em et~al.\/}(1991)}]{APACHEIII}
+{\bf Knaus, W.~A.} {\em et~al.\/} (1991).
+\newblock The apache iii prognostic system. risk prediction of hospital
+  mortality for critically ill hospitalized adults.
+\newblock {\em Chest\/}, {\bf 100}(6), 1619--1636.
+
+\bibitem[{Kraljevic {\em et~al.\/}(2021)Kraljevic, Searle, Shek {\em
+  et~al.\/}}]{kraljevic2021multi}
+{\bf Kraljevic, Z.}, {\bf T.~Searle}, {\bf A.~Shek}, {\em et~al.\/} (2021).
+\newblock Multi-domain clinical natural language processing with medcat: The
+  medical concept annotation toolkit.
+\newblock {\em Artificial Intelligence in Medicine\/}, {\bf 117}, 102083.
+
+\bibitem[{Krawczyk(2016)}]{Krawczyk_2016}
+{\bf Krawczyk, B.} (2016).
+\newblock Learning from imbalanced data: open challenges and future directions.
+\newblock {\em Progress in Artificial Intelligence\/}.
+\newblock
+  \urlprefix\url{https://link.springer.com/article/10.1007/s13748-016-0094-0}.
+
+\bibitem[{Kumichev {\em et~al.\/}(2024)Kumichev, Blinov, Kuzkina {\em
+  et~al.\/}}]{kumichev2024medsyn}
+{\bf Kumichev, G.}, {\bf P.~Blinov}, {\bf Y.~Kuzkina}, {\em et~al.\/} (2024).
+\newblock Medsyn: Llm-based synthetic medical text generation framework.
+\newblock \url{https://arxiv.org/abs/2408.02056}.
+\newblock ArXiv preprint arXiv:2408.02056.
+
+\bibitem[{LeCun {\em et~al.\/}(2015)LeCun, Bengio, and Hinton}]{lecun2015deep}
+{\bf LeCun, Y.}, {\bf Y.~Bengio}, and {\bf G.~Hinton} (2015).
+\newblock Deep learning.
+\newblock {\em Nature\/}, {\bf 521}(7553), 436--444.
+
+\bibitem[{Lee(2008)}]{ALF_Acet}
+{\bf Lee, W.~M.} (2008).
+\newblock Acute liver failure including acetaminophen overdose.
+\newblock {\em Seminars in Respiratory and Critical Care Medicine\/}, {\bf
+  29}(1), 82--93.
+\newblock \urlprefix\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC2504411/}.
+
+\bibitem[{L\'evy {\em et~al.\/}(2021)}]{TargetPO2}
+{\bf L\'evy, B.} {\em et~al.\/} (2021).
+\newblock Target arterial po$_2$ according to the underlying pathology.
+\newblock {\em Annals of Translational Medicine\/}, {\bf 9}(9), 805.
+\newblock \urlprefix\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC8170650/}.
+
+\bibitem[{Levy and Evans(2021)}]{AAFPSepsisLactate}
+{\bf Levy, M.~M.} and {\bf L.~E. Evans} (2021).
+\newblock Serum lactate testing to predict mortality in patients with sepsis.
+\newblock {\em American Family Physician\/}, {\bf 103}(5), 309--310.
+\newblock
+  \urlprefix\url{https://www.aafp.org/pubs/afp/issues/2021/0301/p309.html}.
+
+\bibitem[{Li and Yu(2020)}]{li2020multi}
+{\bf Li, F.} and {\bf H.~Yu}, Icd coding from clinical text using multi-filter
+  residual convolutional neural network.
+\newblock {\em In\/} {\em Proceedings of the AAAI Conference on Artificial
+  Intelligence\/}, volume~34. 2020.
+
+\bibitem[{Li {\em et~al.\/}(2023)Li, Huang, Geng, Li, Li, and
+  Wang}]{Li_2023_SciRep}
+{\bf Li, Y.}, {\bf R.~Huang}, {\bf Y.~Geng}, {\bf T.~Li}, {\bf W.~Li}, and {\bf
+  J.~Wang} (2023).
+\newblock Machine learning algorithm to predict mortality in critically ill
+  patients with sepsis-associated acute kidney injury.
+\newblock {\em Scientific Reports\/}, {\bf 13}(1), 4893.
+
+\bibitem[{Lin {\em et~al.\/}(2025)Lin, Gao, Chen, Hong, Li, Chen, and
+  Shang}]{Lin_2025_IMU}
+{\bf Lin, Y.}, {\bf J.~Gao}, {\bf L.~Chen}, {\bf Y.~Hong}, {\bf M.~Li}, {\bf
+  P.~Chen}, and {\bf X.~Shang} (2025).
+\newblock An interpretable {XGBoost} model for risk prediction of progression
+  from sepsis-associated acute kidney injury to chronic kidney disease.
+\newblock {\em Informatics in Medicine Unlocked\/}, {\bf 58}, 101685.
+
+\bibitem[{Lundberg and Lee(2017)}]{Lundberg_Lee_2017}
+{\bf Lundberg, S.~M.} and {\bf S.-I. Lee} (2017).
+\newblock A unified approach to interpreting model predictions.
+\newblock {\em Advances in Neural Information Processing Systems\/}, {\bf 30}.
+
+\bibitem[{Luo {\em et~al.\/}(2022)Luo, Li, Li, and Wang}]{Luo_2022}
+{\bf Luo, J.}, {\bf Y.~Li}, {\bf J.~Li}, and {\bf F.~Wang} (2022).
+\newblock Development and validation of machine learning models for real-time
+  mortality prediction in critically ill patients with sepsis-associated acute
+  kidney injury.
+\newblock {\em Frontiers in Medicine\/}, {\bf 9}.
+\newblock ISSN 2296-858X.
+
+\bibitem[{{Mayo Clinic}(2024{\natexlab{{\em a\/}}})}]{MayoALP}
+{\bf {Mayo Clinic}} (2024{\natexlab{{\em a\/}}}).
+\newblock Alkaline phosphatase (alp) blood test.
+\newblock
+  \url{https://www.mayoclinic.org/tests-procedures/alkaline-phosphatase-alp-blood-test/about/pac-20587036}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{{Mayo Clinic}(2024{\natexlab{{\em b\/}}})}]{MayoHypoxemia}
+{\bf {Mayo Clinic}} (2024{\natexlab{{\em b\/}}}).
+\newblock Low blood oxygen (hypoxemia).
+\newblock
+  \url{https://www.mayoclinic.org/symptoms/hypoxemia/basics/definition/sym-20050930}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{{MedicalNewsToday}(2018)}]{MedNewsUremia}
+{\bf {MedicalNewsToday}} (2018).
+\newblock Uremia: Treatment, symptoms, and causes.
+\newblock \url{https://www.medicalnewstoday.com/articles/320398}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{{Medscape}(2024)}]{MedscapeRespAcidosis}
+{\bf {Medscape}} (2024).
+\newblock Respiratory acidosis: Background, pathophysiology, etiology.
+\newblock \url{https://emedicine.medscape.com/article/906545-overview}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{{Merck Manuals Professional Edition}(2023)}]{MerckHypocalcemia}
+{\bf {Merck Manuals Professional Edition}} (2023).
+\newblock Hypocalcemia -- endocrine and metabolic disorders.
+\newblock
+  \url{https://www.merckmanuals.com/professional/endocrine-and-metabolic-disorders/electrolyte-disorders/hypocalcemia}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{Mullenbach {\em et~al.\/}(2018)Mullenbach, Wiegreffe, Duke, Sun, and
+  Eisenstein}]{mullenbach2018explainable}
+{\bf Mullenbach, J.}, {\bf S.~Wiegreffe}, {\bf J.~Duke}, {\bf J.~Sun}, and {\bf
+  J.~Eisenstein}, Explainable prediction of medical codes from clinical text.
+\newblock {\em In\/} {\em Proceedings of the 2018 Conference of the North
+  American Chapter of the Association for Computational Linguistics\/}. 2018.
+
+\bibitem[{Nguyen {\em et~al.\/}(2023)Nguyen, Schlegel, Kashyap, Winkler, Huang,
+  Liu, and Lin}]{nguyen2023mimicivicd}
+{\bf Nguyen, T.-T.}, {\bf V.~Schlegel}, {\bf A.~Kashyap}, {\bf S.~Winkler},
+  {\bf S.-S. Huang}, {\bf J.-J. Liu}, and {\bf C.-J. Lin}, Mimic-iv-icd: A new
+  benchmark for extreme multi-label classification.
+\newblock {\em In\/} {\em Proceedings of the 61st Annual Meeting of the
+  Association for Computational Linguistics\/}. 2023.
+
+\bibitem[{Nicholson {\em et~al.\/}(2023)Nicholson, Wolmarans, and
+  Park}]{StatPearlsAlbumin}
+{\bf Nicholson, J.~P.}, {\bf M.~R. Wolmarans}, and {\bf G.~R. Park}, {\em
+  Physiology, Albumin\/}.
+\newblock StatPearls Publishing, Treasure Island, FL, 2023.
+\newblock \urlprefix\url{https://www.ncbi.nlm.nih.gov/books/NBK459198/}.
+
+\bibitem[{Nickel and Kiela(2017)}]{nickel2017poincare}
+{\bf Nickel, M.} and {\bf D.~Kiela}, Poincar{\'e} embeddings for learning
+  hierarchical representations.
+\newblock {\em In\/} {\em Advances in Neural Information Processing Systems\/}.
+  2017.
+
+\bibitem[{Nong {\em et~al.\/}(2024)Nong, Qu, and Gao}]{Qu_2024}
+{\bf Nong, Q.}, {\bf C.~Qu}, and {\bf X.~Gao} (2024).
+\newblock Machine learning-based prediction of in-hospital mortality for
+  critically ill patients with sepsis-associated acute kidney injury.
+\newblock {\em Renal Failure\/}, {\bf 46}(1).
+\newblock ISSN 1525-6049.
+
+\bibitem[{Nussbaum {\em et~al.\/}(2024)Nussbaum, Morris, Duderstadt, and
+  Mulyar}]{nussbaum2024nomicbert}
+{\bf Nussbaum, Z.}, {\bf J.~X. Morris}, {\bf B.~Duderstadt}, and {\bf
+  A.~Mulyar} (2024).
+\newblock Nomicbert: Training a reproducible long context text embedder.
+\newblock \url{https://arxiv.org/abs/2402.01613}.
+\newblock ArXiv preprint arXiv:2402.01613.
+
+\bibitem[{Organization(2019)}]{who2019icd11}
+{\bf Organization, W.~H.} (2019).
+\newblock International classification of diseases 11th revision (icd-11).
+
+\bibitem[{Padmanabhan {\em et~al.\/}(2020)}]{HighHbMerits}
+{\bf Padmanabhan, A.} {\em et~al.\/} (2020).
+\newblock Retrospective study of high hemoglobin levels in 56 young adults.
+\newblock {\em International Journal of Applied and Basic Medical Research\/}.
+\newblock \urlprefix\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC7155863/}.
+
+\bibitem[{Peerapornratana {\em et~al.\/}(2019)Peerapornratana,
+  Manrique-Caballero, Gómez, and Kellum}]{Peerapornratana_2019}
+{\bf Peerapornratana, S.}, {\bf C.~L. Manrique-Caballero}, {\bf H.~Gómez}, and
+  {\bf J.~A. Kellum} (2019).
+\newblock Acute kidney injury in sepsis: a narrative review.
+\newblock {\em Critical Care\/}, {\bf 21}(1).
+\newblock ISSN 1364-8535.
+
+\bibitem[{Perotte {\em et~al.\/}(2014)Perotte, Wood, Simma, Braverman, Elhadad,
+  and Ghosh}]{perotte2014diagnosis}
+{\bf Perotte, A.}, {\bf F.~Wood}, {\bf A.~Simma}, {\bf M.~Braverman}, {\bf
+  N.~Elhadad}, and {\bf S.~Ghosh} (2014).
+\newblock Diagnosis code assignment: models and evaluation metrics.
+\newblock {\em Journal of the American Medical Informatics Association\/}, {\bf
+  21}(2), 231--237.
+
+\bibitem[{{Physiopedia}(2024)}]{PhysiopediaSOFA}
+{\bf {Physiopedia}} (2024).
+\newblock Sequential organ failure assessment score.
+\newblock
+  \url{https://www.physio-pedia.com/Sequential\_Organ\_Failure\_Assessment\_Score}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{Pollard {\em et~al.\/}(2018)Pollard, Johnson, Raffa, Celi, Mark,
+  Moody {\em et~al.\/}}]{pollard2018eicu}
+{\bf Pollard, T.~J.}, {\bf A.~E. Johnson}, {\bf J.~D. Raffa}, {\bf L.~A. Celi},
+  {\bf R.~G. Mark}, {\bf B.~Moody}, {\em et~al.\/} (2018).
+\newblock The eicu collaborative research database, a freely available
+  multi-center database for critical care research.
+\newblock {\em Scientific Data\/}, {\bf 5}, 180178.
+\newblock \urlprefix\url{https://doi.org/10.1038/sdata.2018.178}.
+
+\bibitem[{Portes {\em et~al.\/}(2023)Portes, Trott, Havens {\em
+  et~al.\/}}]{portes2023mosaicbert}
+{\bf Portes, J.}, {\bf A.~Trott}, {\bf S.~Havens}, {\em et~al.\/}, Mosaicbert:
+  A bidirectional encoder optimized for fast pretraining.
+\newblock {\em In\/} {\em Advances in Neural Information Processing Systems\/},
+  volume~36. 2023.
+
+\bibitem[{Poston and Koyner(2019)}]{Poston_Koyner_2019}
+{\bf Poston, J.~T.} and {\bf J.~L. Koyner} (2019).
+\newblock Sepsis associated acute kidney injury.
+\newblock {\em BMJ\/}, {\bf 364}, k4891.
+\newblock ISSN 1756-1833.
+
+\bibitem[{Ren {\em et~al.\/}(2022)Ren, Zeng, Wu, Zhu, and
+  Krishnan}]{ren2022hicu}
+{\bf Ren, W.}, {\bf R.~Zeng}, {\bf T.~Wu}, {\bf T.~Zhu}, and {\bf R.~G.
+  Krishnan}, Hicu: Leveraging hierarchy for curriculum learning in automated
+  icd coding.
+\newblock {\em In\/} {\em Proceedings of the Machine Learning for Healthcare
+  Conference\/}. 2022.
+
+\bibitem[{{Respiratory Therapy Magazine}(2020)}]{PermissiveHypercapnia}
+{\bf {Respiratory Therapy Magazine}} (2020).
+\newblock Permissive hypercapnia.
+\newblock
+  \url{https://respiratory-therapy.com/disorders-diseases/chronic-pulmonary-disorders/asthma/permissive-hypercapnia/}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{Rios and Kavuluru(2018)}]{rios2018few}
+{\bf Rios, A.} and {\bf R.~Kavuluru}, Few-shot and zero-shot multi-label
+  learning for structured label spaces.
+\newblock {\em In\/} {\em Proceedings of the 2018 Conference on Empirical
+  Methods in Natural Language Processing\/}. 2018.
+
+\bibitem[{Rockenschaub {\em et~al.\/}(2024)Rockenschaub, Hilbert, Kossen,
+  Elbers, von Dincklage, Madai, and Frey}]{Rockenschaub_2024}
+{\bf Rockenschaub, P.}, {\bf A.~Hilbert}, {\bf T.~Kossen}, {\bf P.~Elbers},
+  {\bf F.~von Dincklage}, {\bf V.~I. Madai}, and {\bf D.~Frey} (2024).
+\newblock The impact of multi-institution datasets on the generalizability of
+  machine learning prediction models in the icu.
+\newblock {\em Critical Care Medicine\/}.
+\newblock
+  \urlprefix\url{https://journals.lww.com/ccmjournal/fulltext/2024/11000/the\_impact\_of\_multi\_institution\_dataset\_on\_the.5.aspx}.
+
+\bibitem[{Roknaldin {\em et~al.\/}(2024)Roknaldin, Zhang, Xu, Alaei, and
+  Pishgar}]{Roknaldin_2024_arXiv}
+{\bf Roknaldin, A.}, {\bf Z.~Zhang}, {\bf J.~Xu}, {\bf K.~Alaei}, and {\bf
+  M.~Pishgar} (2024).
+\newblock Utilizing machine learning models to predict acute kidney injury in
+  septic patients from {MIMIC}-{III} database.
+\newblock {\em arXiv\/}.
+\newblock \urlprefix\url{https://arxiv.org/abs/2412.03737}.
+\newblock Version 1.
+
+\bibitem[{Savova {\em et~al.\/}(2010)Savova, Masanz, Ogren, Zheng, Sohn,
+  Kipper-Schuler, and Chute}]{savova2010ctakes}
+{\bf Savova, G.~K.}, {\bf J.~J. Masanz}, {\bf P.~V. Ogren}, {\bf J.~Zheng},
+  {\bf S.~Sohn}, {\bf K.~C. Kipper-Schuler}, and {\bf C.~G. Chute} (2010).
+\newblock Mayo clinical text analysis and knowledge extraction system
+  ({cTAKES}): architecture, component evaluation and applications.
+\newblock {\em Journal of the American Medical Informatics Association\/}, {\bf
+  17}(5), 507--513.
+
+\bibitem[{Scheurwegs {\em et~al.\/}(2017)Scheurwegs, Luyckx, Luyten, and
+  Daelemans}]{scheurwegs2017data}
+{\bf Scheurwegs, E.}, {\bf K.~Luyckx}, {\bf L.~Luyten}, and {\bf W.~Daelemans}
+  (2017).
+\newblock Data integration of structured and unstructured sources for assigning
+  clinical codes to patient stays.
+\newblock {\em Journal of the American Medical Informatics Association\/}, {\bf
+  24}(e1), e68--e76.
+
+\bibitem[{Singer {\em et~al.\/}(2016)Singer, Deutschman, Seymour, Shankar-Hari,
+  Annane, Bauer, Bellomo, Bernard, Chiche, Coopersmith, Hotchkiss, Levy,
+  Marshall, Martin, Opal, Rubenfeld, van~der Poll, Vincent, and
+  Angus}]{Singer_2016}
+{\bf Singer, M.}, {\bf C.~S. Deutschman}, {\bf C.~W. Seymour}, {\bf
+  M.~Shankar-Hari}, {\bf D.~Annane}, {\bf M.~Bauer}, {\bf R.~Bellomo}, {\bf
+  G.~R. Bernard}, {\bf J.-D. Chiche}, {\bf C.~M. Coopersmith}, {\bf R.~S.
+  Hotchkiss}, {\bf M.~M. Levy}, {\bf J.~C. Marshall}, {\bf G.~S. Martin}, {\bf
+  S.~M. Opal}, {\bf G.~D. Rubenfeld}, {\bf T.~van~der Poll}, {\bf J.-L.
+  Vincent}, and {\bf D.~C. Angus} (2016).
+\newblock The third international consensus definitions for sepsis and septic
+  shock (sepsis-3).
+\newblock {\em JAMA\/}, {\bf 315}(8), 801--810.
+\newblock ISSN 1538-3598.
+
+\bibitem[{Sáez {\em et~al.\/}(2015)Sáez, Luengo, Stefanowski, and
+  Herrera}]{Saez_2015}
+{\bf Sáez, J.~A.}, {\bf J.~Luengo}, {\bf J.~Stefanowski}, and {\bf F.~Herrera}
+  (2015).
+\newblock Smote–ipf: Addressing the noisy and borderline examples problem in
+  imbalanced classification by a re-sampling method with filtering.
+\newblock {\em Information Sciences\/}.
+\newblock
+  \urlprefix\url{https://sci2s.ugr.es/sites/default/files/files/TematicWebSites/noisydata/2015-INS-Saez.pdf}.
+
+\bibitem[{Teng {\em et~al.\/}(2020)Teng, Yang, Chen, Huang, and
+  Xu}]{teng2020explainable}
+{\bf Teng, F.}, {\bf W.~Yang}, {\bf L.~Chen}, {\bf L.~Huang}, and {\bf Q.~Xu}
+  (2020).
+\newblock Explainable prediction of medical codes with knowledge graphs.
+\newblock {\em Frontiers in Bioengineering and Biotechnology\/}, {\bf 8}, 867.
+
+\bibitem[{{The Royal Children's Hospital Melbourne}(2024)}]{DKAGuideline}
+{\bf {The Royal Children's Hospital Melbourne}} (2024).
+\newblock Clinical practice guidelines: Diabetic ketoacidosis.
+\newblock
+  \url{https://www.rch.org.au/clinicalguide/guideline\_index/Diabetic\_Ketoacidosis/}.
+\newblock Accessed 2026-02-19.
+
+\bibitem[{Vasavada {\em et~al.\/}(2023)}]{StatPearlsHAGMA}
+{\bf Vasavada, B.} {\em et~al.\/}, {\em High Anion Gap Metabolic Acidosis\/}.
+\newblock StatPearls Publishing, Treasure Island, FL, 2023.
+\newblock \urlprefix\url{https://www.ncbi.nlm.nih.gov/books/NBK448090/}.
+
+\bibitem[{Vu {\em et~al.\/}(2020{\natexlab{{\em a\/}}})Vu, Nguyen, and
+  Nguyen}]{vu2020label}
+{\bf Vu, T.}, {\bf D.~Q. Nguyen}, and {\bf A.~Nguyen} (2020{\natexlab{{\em
+  a\/}}}).
+\newblock A label attention model for icd coding from clinical text.
+\newblock {\em Journal of Biomedical Informatics\/}, {\bf 102}, 103381.
+
+\bibitem[{Vu {\em et~al.\/}(2020{\natexlab{{\em b\/}}})Vu, Luu, Le, Nguyen,
+  Atasoy, and Bousquet}]{vu2020ijcai}
+{\bf Vu, X. Y.~H.}, {\bf A.~T. Luu}, {\bf M.~Le}, {\bf T.~N. Nguyen}, {\bf
+  T.~Atasoy}, and {\bf O.~Bousquet}, A label attention model for icd coding
+  from clinical text.
+\newblock {\em In\/} {\em Proceedings of the 29th International Joint
+  Conference on Artificial Intelligence (IJCAI)\/}. 2020{\natexlab{{\em b\/}}}.
+
+\bibitem[{Wang {\em et~al.\/}(2024)Wang, Zhuang, Zhang, Liu, Li, Wang, and
+  Liu}]{Wang_2024}
+{\bf Wang, X.}, {\bf J.~Zhuang}, {\bf W.~Zhang}, {\bf Y.~Liu}, {\bf M.~Li},
+  {\bf L.~Wang}, and {\bf S.~Liu} (2024).
+\newblock Machine learning prediction models for mortality risk in
+  sepsis-associated acute kidney injury: evaluating early versus late {CRRT}
+  initiation.
+\newblock {\em Frontiers in Medicine\/}, {\bf 11}.
+\newblock ISSN 2296-858X.
+
+\bibitem[{Warner {\em et~al.\/}(2024)Warner, Chaffin, Clavi{\'e} {\em
+  et~al.\/}}]{warner2024modernbert}
+{\bf Warner, B.}, {\bf A.~Chaffin}, {\bf B.~Clavi{\'e}}, {\em et~al.\/} (2024).
+\newblock Smarter, better, faster, longer: A modern bidirectional encoder for
+  fast, memory efficient, and long context finetuning and inference.
+\newblock \url{https://arxiv.org/abs/2309.16609}.
+\newblock ArXiv preprint arXiv:2309.16609.
+
+\bibitem[{Wegmann {\em et~al.\/}(2020)}]{PMCThrombocythemia}
+{\bf Wegmann, K.} {\em et~al.\/} (2020).
+\newblock Extreme levels of platelet count in essential thrombocythemia.
+\newblock {\em Hemasphere\/}.
+\newblock \urlprefix\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC7315211/}.
+
+\bibitem[{Wrenn {\em et~al.\/}(2010)Wrenn, Stein, Bakken, and
+  Stetson}]{wrenn2010quantifying}
+{\bf Wrenn, J.~O.}, {\bf D.~M. Stein}, {\bf S.~Bakken}, and {\bf P.~D. Stetson}
+  (2010).
+\newblock Quantifying clinical narrative redundancy in an electronic health
+  record.
+\newblock {\em Journal of the American Medical Informatics Association\/}, {\bf
+  17}, 49--53.
+
+\bibitem[{Wu {\em et~al.\/}(2018)Wu, Fan, Li, Massoudi, Cushen, Dobson, and
+  Taylor}]{wu2018semehr}
+{\bf Wu, H.}, {\bf J.~Fan}, {\bf J.~Li}, {\bf J.~Massoudi}, {\bf D.~Cushen},
+  {\bf R.~J.~B. Dobson}, and {\bf F.~C.~G. Taylor} (2018).
+\newblock {SemEHR}: A general-purpose semantic search system to surface
+  semantic data from clinical notes for tailored care, trial recruitment, and
+  clinical research.
+\newblock {\em Journal of the American Medical Informatics Association\/}, {\bf
+  25}(5), 530--537.
+
+\bibitem[{Xie {\em et~al.\/}(2019)Xie, Xiong, Yu, and Zhu}]{xie2019ehr}
+{\bf Xie, X.}, {\bf Y.~Xiong}, {\bf P.~S. Yu}, and {\bf Y.~Zhu}, Ehr coding
+  with multi-scale feature attention and structured knowledge graph
+  propagation.
+\newblock {\em In\/} {\em Proceedings of the 28th ACM International Conference
+  on Information and Knowledge Management\/}. 2019.
+
+\bibitem[{Yang {\em et~al.\/}(2023)Yang, Kwon, Yao, and
+  Yu}]{yang2023fewshoticd}
+{\bf Yang, Z.}, {\bf S.~Kwon}, {\bf Z.~Yao}, and {\bf H.~Yu}, Multi-label
+  few-shot {ICD} coding as autoregressive generation with prompt.
+\newblock {\em In\/} {\em Proceedings of the 37th AAAI Conference on Artificial
+  Intelligence (AAAI)\/}. 2023.
+
+\bibitem[{Yuan {\em et~al.\/}(2022)Yuan, Tan, and Huang}]{yuan2022codesynonyms}
+{\bf Yuan, Z.}, {\bf C.~Tan}, and {\bf S.~Huang}, Code synonyms do matter:
+  Multiple synonyms matching network for automatic {ICD} coding.
+\newblock {\em In\/} {\em Proceedings of the 60th Annual Meeting of the
+  Association for Computational Linguistics (ACL) -- Volume 2: Short Papers\/}.
+  2022.
+
+\bibitem[{Zhang {\em et~al.\/}(2024)Zhang, Zhang, Long, and Xie}]{zhang2024gte}
+{\bf Zhang, X.}, {\bf Y.~Zhang}, {\bf D.~Long}, and {\bf W.~Xie}, Gte-en-mlm:
+  Generalized long-context text representation for retrieval tasks.
+\newblock {\em In\/} {\em Proceedings of the 2024 Conference on Empirical
+  Methods in Natural Language Processing\/}. 2024.
+
+\end{thebibliography}

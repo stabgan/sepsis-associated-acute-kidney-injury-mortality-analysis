@@ -1,0 +1,39 @@
+{\bfseries Figure} \hfill {\bfseries Caption} \hfill {\bfseries Page}\par 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces A histogram revealing a right-skewed distribution of anchor ages, with many individuals in their 20s and 30s.}}{67}{figure.caption.60}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces A boxplot illustrating how anchor age varies across different admission types.}}{69}{figure.caption.61}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces A bar chart showing the number of admissions categorized by approximate calendar year groups.}}{70}{figure.caption.62}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces A horizontal bar chart showing the most common ICD-10 codes among admissions.}}{71}{figure.caption.63}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces A heatmap illustrating how frequently pairs of the top 15 ICD-10 codes co-occur within the same admission.}}{72}{figure.caption.64}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces A scatter plot highlighting the relationship between note length (in characters) and the number of ICD-10 codes.}}{73}{figure.caption.65}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces A violin plot representing how the distribution of total ICD-10 codes per admission varies across anchor year groups.}}{74}{figure.caption.66}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces A line plot tracking average discharge summary lengths over five anchor year group intervals.}}{75}{figure.caption.67}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces A horizontal bar chart showing the top ten admission types (e.g., emergency, elective, urgent).}}{76}{figure.caption.68}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces A stacked bar chart displaying the occurrence of each top-15 ICD-10 code within different anchor year groups.}}{77}{figure.caption.69}%
+\contentsline {figure}{\numberline {5.11}{\ignorespaces MIMIC--IV data universe leveraged in this study.}}{79}{figure.caption.70}%
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Ontology crosswalk linking SNOMED~CT $\rightarrow $ UMLS CUIs $\rightarrow $ RxNorm ingredients, with ATC cross-reference.}}{79}{figure.caption.71}%
+\contentsline {figure}{\numberline {5.13}{\ignorespaces CONSORT-style flow of cohort construction with key exclusions.}}{81}{figure.caption.72}%
+\contentsline {figure}{\numberline {5.14}{\ignorespaces Clinical rule components used for cohort labeling.}}{82}{figure.caption.74}%
+\contentsline {figure}{\numberline {5.15}{\ignorespaces Illustrative patient journey with T0--T24 feature window, infection window, Sepsis onset, and AKI onset; the SA--AKI link is $\pm $48\,h around Sepsis onset.}}{82}{figure.caption.76}%
+\contentsline {figure}{\numberline {5.16}{\ignorespaces Statistical significance of key clinical variables between survivor and non-survivor groups, confirming that the selected features carry a strong prognostic signal ($p < 0.001$, Mann-Whitney U test).}}{83}{figure.caption.80}%
+\contentsline {figure}{\numberline {5.17}{\ignorespaces Distributions of key clinical variables in the training set, stratified by mortality outcome. Non-survivors consistently show distributions shifted towards higher severity.}}{85}{figure.caption.84}%
+\contentsline {figure}{\numberline {5.18}{\ignorespaces Top 30 features with the strongest positive (red) and negative (blue) correlation with in-hospital mortality in the training set.}}{86}{figure.caption.85}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces (\textbf {a}) Confusion matrix of the final model on the test set at the optimal threshold (0.2704). (\textbf {b}) ROC curve for the final model on the test set, showing an AUC of 0.75.}}{92}{figure.caption.91}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces SHAP beeswarm summary plot for the top 20 features. Each dot represents a patient. The feature's value is indicated by color (red=high, blue=low), and its impact on the mortality prediction is shown on the x-axis.}}{93}{figure.caption.93}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Forest plot of hazard ratios for the top 20 predictors in the final CoxPH model. Values to the right of the dashed line (HR > 1) indicate an increased risk of death.}}{99}{figure.caption.100}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Kaplan-Meier survival curves for the test set, stratified by risk quartiles predicted by the CoxPH model, demonstrating effective risk stratification.}}{100}{figure.caption.101}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Kaplan-Meier survival curves for the test set, stratified by risk tertiles predicted by the DeepSurv model.}}{100}{figure.caption.103}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Calibration plots for the DeepSurv model at 90, 180, and 365 hours.}}{101}{figure.caption.104}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Decision Curve Analysis for the DeepSurv model at a 180-hour horizon, demonstrating positive net benefit across a range of clinically relevant risk thresholds.}}{101}{figure.caption.105}%
+\addvspace {10\p@ }
+\def \@chapapp {\appendixname }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

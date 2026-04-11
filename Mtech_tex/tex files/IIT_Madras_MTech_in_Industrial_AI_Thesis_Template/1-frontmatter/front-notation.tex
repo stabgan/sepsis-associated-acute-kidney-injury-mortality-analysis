@@ -1,0 +1,110 @@
+% ============================================
+% notations.tex  (pdflatex-2021 safe)
+% Requires: \usepackage{nomencl} \usepackage{amsmath} \makenomenclature
+% Include this file AFTER packages, BEFORE \printnomenclature
+% All math in DESCRIPTIONS is wrapped with $...$
+% ============================================
+
+% --- Sets, partitions, indices ---
+\nomenclature{$\mathcal{D}$}{Full dataset of SA--AKI ICU stays}
+\nomenclature{$\mathcal{D}_{\mathrm{train}}$}{Training partition (80\%)}
+\nomenclature{$\mathcal{D}_{\mathrm{val}}$}{Validation partition (10\%)}
+\nomenclature{$\mathcal{D}_{\mathrm{test}}$}{Test partition (10\%)}
+\nomenclature{$n,\,n_{\mathrm{train}},\,n_{\mathrm{val}},\,n_{\mathrm{test}}$}{Counts of observations in full and split sets}
+\nomenclature{$p$}{Number of predictors (features)}
+\nomenclature{$i$}{$\text{Index for patient/stay, } i=1,\dots,n$}
+\nomenclature{$\mathcal{H}$}{Hypothesis class / model family}
+\nomenclature{$\Lambda$}{Hyperparameter search space}
+
+% --- Time, clocks, windows, information ---
+\nomenclature{$t$}{Time since ICU admission (hours)}
+\nomenclature{$T_{\mathrm{obs}}$}{Observation horizon (first 24 h after ICU admission)}
+\nomenclature{$\mathcal{I}_i(T)$}{$\text{Information set for patient } i \text{ up to time } T$}
+\nomenclature{$t_{\mathrm{sepsis}}$}{Sepsis onset time per Sepsis--3 (cohort definition only)}
+\nomenclature{$t_{\mathrm{aki}}$}{AKI onset time per KDIGO (cohort definition only)}
+\nomenclature{$[0,\,T_{\mathrm{obs}}]$}{Early window used for predictor construction (T0--T24)}
+
+% --- Feature construction and preprocessing ---
+\nomenclature{$x_i\in\mathbb{R}^p$}{T0--T24 feature vector for patient $i$}
+\nomenclature{$\mathcal{A}$}{$\text{Set of summary functionals over } [0,\,T_{\mathrm{obs}}] \text{ (e.g., mean, last, min, max, slope, variance)}$}
+\nomenclature{$m_{ij}\in\{0,1\}$}{$\text{Missingness indicator for feature } j \text{ of patient } i \text{ (1=missing)}$}
+\nomenclature{$\mathcal{M}$}{Imputation operator fitted on training data}
+\nomenclature{$\mathcal{S}$}{Scaling/standardization operator fitted on training data}
+\nomenclature{$\mathcal{E}$}{Encoding operator (e.g., one-hot) fitted on training data}
+\nomenclature{$\mathcal{P}$}{$\text{End-to-end preprocessing pipeline } \mathcal{E}\circ\mathcal{S}\circ\mathcal{M}$}
+
+% --- Labels, models, calibration ---
+\nomenclature{$y_i\in\{0,1\}$}{$\text{In-hospital death label for patient } i \text{ (1=death)}$}
+\nomenclature{$f_{\theta}$}{$\text{Predictive model mapping } x\mapsto[0,1]\text{, parameters } \theta$}
+\nomenclature{$\hat p_i=f_{\theta}(x_i)$}{$\text{Predicted probability of death for patient } i$}
+\nomenclature{$\mathrm{logit}(p)$}{$\text{Log-odds transform } \log\left(\frac{p}{1-p}\right)$}
+\nomenclature{$\sigma(z)$}{$\text{Logistic function } 1/(1+e^{-z})$}
+\nomenclature{$c$}{Probability calibrator (Platt sigmoid or isotonic)}
+\nomenclature{$\tilde p_i$}{$\text{Calibrated probability for patient } i\text{, } \tilde p_i = (c\circ f_{\theta})(x_i)$}
+\nomenclature{$\tau$}{Classification threshold for decision making}
+\nomenclature{$\delta_{\tau}(x)$}{$\text{Decision rule } \mathbb{I}\{\tilde p(x)\ge \tau\}$}
+\nomenclature{$w_{+},\,w_{-}$}{Class weights for positive and negative classes}
+
+% --- Losses, metrics, decision analysis, inference ---
+\nomenclature{$\ell(\theta)$}{Average negative log-likelihood (cross-entropy) on training}
+\nomenclature{$\mathrm{AUROC}$}{Area under the ROC curve}
+\nomenclature{$\mathrm{AUPRC}$}{Area under the precision--recall curve}
+\nomenclature{$\mathrm{BS}$}{Brier score (mean squared probabilistic error)}
+\nomenclature{$\mathrm{ECE}$}{Expected calibration error}
+\nomenclature{$B$}{Number of bins used in calibration/ECE}
+\nomenclature{$n_b$}{$\text{Number of samples in bin } b$}
+\nomenclature{$\mathrm{acc}(b)$}{$\text{Observed event rate in bin } b$}
+\nomenclature{$\mathrm{conf}(b)$}{$\text{Average predicted probability in bin } b$}
+\nomenclature{$\mathrm{TP},\,\mathrm{FP},\,\mathrm{TN},\,\mathrm{FN}$}{Confusion-matrix counts}
+\nomenclature{$\mathrm{TPR},\,\mathrm{TNR},\,\mathrm{FPR},\,\mathrm{FNR}$}{Sensitivity, specificity, false positive/negative rates}
+\nomenclature{$\mathrm{PPV},\,\mathrm{NPV}$}{Positive and negative predictive values}
+\nomenclature{$\mathrm{F1}$}{F1 score}
+\nomenclature{$\pi$}{Prevalence of the positive class}
+\nomenclature{$p_t$}{Risk threshold interpreted as probability (decision curves)}
+\nomenclature{$\mathrm{NB}(p_t)$}{$\text{Net benefit at threshold } p_t; \text{ weight } \frac{p_t}{1-p_t}$}
+
+\nomenclature{$\widehat{\mathrm{Var}}_{\mathrm{DeLong}}$}{DeLong variance estimator for AUROC}
+\nomenclature{$\mathrm{CI}_{1-\alpha}$}{$(1-\alpha) \text{ confidence interval, e.g., via bootstrap}$}
+
+% --- Survival analysis (time to in-hospital death) ---
+\nomenclature{$T$}{Event/censoring time from ICU admission (generic)}
+\nomenclature{$\delta$}{Event indicator (1=event observed, 0=censored)}
+\nomenclature{$T^{\mathrm{death}},\,\delta^{\mathrm{death}}$}{Time to in-hospital death and event indicator}
+\nomenclature{$S(t\mid x)$}{$\text{Survival function } \mathbb{P}[T>t \mid X=x]$}
+\nomenclature{$H(t\mid x)$}{Cumulative hazard function}
+\nomenclature{$h(t\mid x)$}{Hazard function}
+\nomenclature{$h_0(t)$}{Baseline hazard (Cox model)}
+\nomenclature{$\beta$}{Cox proportional-hazards coefficient vector}
+\nomenclature{$\widehat{S}_{\mathrm{KM}}(t)$}{Kaplan--Meier estimator of survival}
+\nomenclature{$\widehat{H}_{\mathrm{NA}}(t)$}{Nelson--Aalen estimator of cumulative hazard}
+\nomenclature{$\mathrm{HR}$}{$\text{Hazard ratio } =\exp\{\beta^\top \Delta x\}$}
+\nomenclature{$r^{\mathrm{Sch}}(t)$}{$\text{Schoenfeld residual at time } t$}
+\nomenclature{$C$}{Harrell’s concordance index}
+\nomenclature{$\mathrm{IBS}$}{Integrated Brier score over a time horizon}
+
+% --- Unsupervised learning / embeddings / clustering ---
+\nomenclature{$\phi:\mathcal{X}\to\mathbb{R}^d$}{Low-dimensional embedding (e.g., UMAP)}
+\nomenclature{$\kappa:\mathbb{R}^d\to\{1,\dots,K\}\cup\{\mathrm{outlier}\}$}{Clustering map (e.g., HDBSCAN)}
+\nomenclature{$\Pi=\{C_k\}_{k=1}^{K}$}{Cluster partition of the feature space}
+\nomenclature{$C_0$}{Outlier set under density-based clustering}
+\nomenclature{$d(\cdot,\cdot)$}{Distance metric (e.g., Euclidean in embedding space)}
+\nomenclature{$\mu_k$}{$\text{Cluster representative/centroid for cluster } C_k$}
+\nomenclature{$s$}{Silhouette coefficient}
+
+% --- SHAP explanations ---
+\nomenclature{$\phi_j(x)$}{$\text{SHAP attribution of feature } j \text{ for case } x$}
+\nomenclature{$g(x)$}{$\text{Additive explanation for prediction at } x\text{, } g(x)=\phi_0 + \sum_{j=1}^{p}\phi_j(x)$}
+\nomenclature{$\phi_0$}{Model baseline (expected prediction) used in SHAP}
+
+% --- Clinical/physiologic symbols used in cohort rules ---
+\nomenclature{$\Delta\mathrm{SOFA}$}{Increase in daily SOFA score relative to baseline}
+\nomenclature{$\mathrm{SCr}$}{Serum creatinine}
+\nomenclature{$\mathrm{UO}$}{Urine output (mL/kg/h)}
+\nomenclature{$\mathrm{eGFR}$}{Estimated glomerular filtration rate}
+
+% --- Miscellaneous mathematical notation ---
+\nomenclature{$\mathbb{I}\{\cdot\}$}{Indicator function (1 if condition holds, else 0)}
+\nomenclature{$\mathbb{P}[\cdot],\,\mathbb{E}[\cdot],\,\mathrm{Var}[\cdot]$}{Probability, expectation, and variance}
+\nomenclature{$\mathbb{R},\,\mathbb{R}_+$}{Real numbers; nonnegative reals}
+\nomenclature{$K$}{Number of folds in cross-validation}
+\nomenclature{$\lambda$}{Generic regularization strength (e.g., $L_2$ penalty)}

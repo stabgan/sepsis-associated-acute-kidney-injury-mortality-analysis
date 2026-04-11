@@ -1,0 +1,175 @@
+~ \hfill {\bfseries Page}\par 
+\contentsline {chapter}{\nonumberline \MakeUppercase []{Abstract}}{ii}{chapter*.3}%
+\contentsline {chapter}{\nonumberline \MakeUppercase []{List of Tables}}{vii}{chapter*.5}%
+\contentsline {chapter}{\nonumberline \MakeUppercase []{List of Figures}}{viii}{chapter*.6}%
+\contentsline {chapter}{\numberline {\MakeUppercase []{Chapter~1}}\MakeUppercase []{Introduction}}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Clinical Decision Support and the MIMIC-IV Foundation}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Problem 1: Automated ICD Code Prediction for Rare Diseases}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Problem 2: Clinical Background and Motivation}{7}{section.1.3}%
+\contentsline {section}{\numberline {1.4}What the Literature Has Tried and Where It Falls Short}{7}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Problem Focus and Research Objectives}{9}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Proposed Approach and Evaluation Plan}{9}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Chapter Roadmap}{10}{section.1.7}%
+\contentsline {chapter}{\numberline {\MakeUppercase []{Chapter~2}}\MakeUppercase []{Literature Review}}{12}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Part I: Automated ICD Coding}{12}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Introduction and the Evolution of ICD Coding}{12}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Early Approaches to Automated ICD Coding}{13}{subsection.2.1.2}%
+\contentsline {subsubsection}{\nonumberline Rule-Based Systems and Traditional Machine Learning}{13}{subsubsection*.7}%
+\contentsline {subsubsection}{\nonumberline Limitations and Motivation for Deep Learning}{14}{subsubsection*.8}%
+\contentsline {subsection}{\numberline {2.1.3}Deep Learning for Automated ICD Coding}{14}{subsection.2.1.3}%
+\contentsline {subsubsection}{\nonumberline Convolutional and Recurrent Neural Network Approaches}{14}{subsubsection*.9}%
+\contentsline {subsection}{\numberline {2.1.4}Transformer-Based Architectures and Extensions}{16}{subsection.2.1.4}%
+\contentsline {subsubsection}{\nonumberline Standard Transformers and Clinical Adaptations}{16}{subsubsection*.10}%
+\contentsline {subsubsection}{\nonumberline Modern BERT-Based Encoders for ICD Coding}{17}{subsubsection*.11}%
+\contentsline {subsection}{\numberline {2.1.5}Curriculum Learning and Hierarchical Knowledge Integration}{17}{subsection.2.1.5}%
+\contentsline {subsection}{\numberline {2.1.6}Challenges in Automated ICD Coding}{18}{subsection.2.1.6}%
+\contentsline {subsubsection}{\nonumberline Data Imbalance and Rare Codes}{18}{subsubsection*.12}%
+\contentsline {subsubsection}{\nonumberline Processing Long and Complex Clinical Documents}{19}{subsubsection*.13}%
+\contentsline {subsubsection}{\nonumberline Explainability and Interpretability}{19}{subsubsection*.14}%
+\contentsline {subsubsection}{\nonumberline Embedding Models and Clinical Semantic Search}{20}{subsubsection*.15}%
+\contentsline {subsubsection}{\nonumberline Knowledge-Based Methods and Symbolic Integration}{21}{subsubsection*.16}%
+\contentsline {subsection}{\numberline {2.1.7}Synthetic Data Generation for Rare ICD-10-CM Codes}{21}{subsection.2.1.7}%
+\contentsline {subsubsection}{\nonumberline Motivation and Techniques}{21}{subsubsection*.17}%
+\contentsline {subsubsection}{\nonumberline Ethical and Practical Considerations}{22}{subsubsection*.18}%
+\contentsline {subsection}{\numberline {2.1.8}Benchmarks and Evaluation Metrics}{22}{subsection.2.1.8}%
+\contentsline {subsubsection}{\nonumberline Public Datasets and Benchmarks}{22}{subsubsection*.19}%
+\contentsline {subsubsection}{\nonumberline Common Evaluation Metrics}{23}{subsubsection*.20}%
+\contentsline {subsection}{\numberline {2.1.9}Summary of ICD Coding Literature}{24}{subsection.2.1.9}%
+\contentsline {section}{\numberline {2.2}Part II: SA-AKI Mortality Prediction}{25}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Clinical definitions and epidemiological context}{25}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Conventional severity indices and early warning systems}{25}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Datasets and cohort construction in SA--AKI modeling}{26}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Feature engineering, selection, and leakage risks}{26}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}Missing data mechanisms and imputation choices}{27}{subsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.2.6}Class imbalance, evaluation strategy, and thresholding}{27}{subsection.2.2.6}%
+\contentsline {subsection}{\numberline {2.2.7}Model classes, tuning, calibration, and interpretability}{28}{subsection.2.2.7}%
+\contentsline {subsection}{\numberline {2.2.8}External validity, transportability, and deployment timing}{28}{subsection.2.2.8}%
+\contentsline {subsection}{\numberline {2.2.9}Detailed appraisal of representative studies}{29}{subsection.2.2.9}%
+\contentsline {subsubsection}{\nonumberline Chen et al.\ (2025): SA--AKI mortality in MIMIC--IV}{29}{subsubsection*.21}%
+\contentsline {subsubsection}{\nonumberline Li et al.\ (2023): SA--AKI mortality in MIMIC--IV}{31}{subsubsection*.22}%
+\contentsline {subsubsection}{\nonumberline Hu et al.\ (2021): survival analysis in MIMIC--III}{31}{subsubsection*.23}%
+\contentsline {subsubsection}{\nonumberline Roknaldin et al.\ (2024): sepsis to AKI prediction in MIMIC--III}{32}{subsubsection*.24}%
+\contentsline {subsubsection}{\nonumberline Chaudhary et al.\ (2020): phenotype discovery in MIMIC--III}{33}{subsubsection*.25}%
+\contentsline {subsubsection}{\nonumberline Lin et al.\ (2025): progression to chronic kidney disease in MIMIC--IV}{33}{subsubsection*.26}%
+\contentsline {subsubsection}{\nonumberline He et al.\ (2021): acute kidney disease after SA--AKI}{34}{subsubsection*.27}%
+\contentsline {subsubsection}{\nonumberline Kantola et al.\ (2025): admission procalcitonin and risk of AKI}{34}{subsubsection*.28}%
+\contentsline {subsection}{\numberline {2.2.10}Synthesis and implications for this thesis}{34}{subsection.2.2.10}%
+\contentsline {section}{\numberline {2.3}Synthesis: Machine Learning for Clinical Decision Support Using MIMIC-IV}{35}{section.2.3}%
+\contentsline {chapter}{\numberline {\MakeUppercase []{Chapter~3}}\MakeUppercase []{Problem Definition and Formulation}}{38}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Problem 1: Automated ICD-10-CM Code Prediction}{38}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Scope of the Problem}{38}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Central Challenges}{39}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Mathematical Formulation of the Task}{39}{subsection.3.1.3}%
+\contentsline {subsubsection}{\nonumberline Defining the Space of Clinical Narratives}{39}{subsubsection*.29}%
+\contentsline {subsubsection}{\nonumberline Defining the Label Space of ICD Codes}{40}{subsubsection*.30}%
+\contentsline {subsubsection}{\nonumberline Labeled Dataset Construction}{40}{subsubsection*.31}%
+\contentsline {subsubsection}{\nonumberline Function Definition}{40}{subsubsection*.32}%
+\contentsline {subsubsection}{\nonumberline Objective: Composite Metric Maximization}{41}{subsubsection*.33}%
+\contentsline {subsection}{\numberline {3.1.4}Significance of Rare Codes}{41}{subsection.3.1.4}%
+\contentsline {subsubsection}{\nonumberline Definition and Challenges}{41}{subsubsection*.34}%
+\contentsline {subsubsection}{\nonumberline Impact of Rare Code Misclassification}{42}{subsubsection*.35}%
+\contentsline {subsubsection}{\nonumberline Recall and Precision Constraints for Rare Codes}{42}{subsubsection*.36}%
+\contentsline {subsubsection}{\nonumberline Analytical Example of Class Imbalance}{42}{subsubsection*.37}%
+\contentsline {subsection}{\numberline {3.1.5}Proposed Methodological Focus}{43}{subsection.3.1.5}%
+\contentsline {subsection}{\numberline {3.1.6}Evaluation Framework}{43}{subsection.3.1.6}%
+\contentsline {section}{\numberline {3.2}Problem 2: SA-AKI Early Mortality Risk Stratification}{44}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Clinical decision and scope}{44}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Observational unit, clocks, and information sets}{45}{subsection.3.2.2}%
+\contentsline {paragraph}{\nonumberline Target population and case definition.}{46}{paragraph*.38}%
+\contentsline {subsection}{\numberline {3.2.3}Data–generating view and notation}{46}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Sub-problem A (Unsupervised): Exploratory Analysis and Phenotyping}{46}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Sub-problem B (Supervised, Primary): Early–Window Mortality Risk}{47}{subsection.3.2.5}%
+\contentsline {subsubsection}{\nonumberline Label and objective}{47}{subsubsection*.39}%
+\contentsline {subsubsection}{\nonumberline Performance targets}{47}{subsubsection*.40}%
+\contentsline {subsubsection}{\nonumberline Decision rule and operating point}{47}{subsubsection*.41}%
+\contentsline {subsubsection}{\nonumberline Hypothesis classes and regularization}{48}{subsubsection*.42}%
+\contentsline {subsubsection}{\nonumberline Interpretability requirement}{48}{subsubsection*.43}%
+\contentsline {paragraph}{\nonumberline Constraints and guardrails.}{48}{paragraph*.44}%
+\contentsline {subsection}{\numberline {3.2.6}Sub-problem C (Survival): Early–Covariate Time to Death}{48}{subsection.3.2.6}%
+\contentsline {subsection}{\numberline {3.2.7}Evaluation protocol}{49}{subsection.3.2.7}%
+\contentsline {subsection}{\numberline {3.2.8}Assumptions and risks}{49}{subsection.3.2.8}%
+\contentsline {subsection}{\numberline {3.2.9}Compact statement of aims}{49}{subsection.3.2.9}%
+\contentsline {chapter}{\numberline {\MakeUppercase []{Chapter~4}}\MakeUppercase []{Methodology}}{51}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Problem 1: ICD Code Prediction Methodology (Proposed)}{51}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Introduction and Scope}{51}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Ontology-Based Disease Grouping}{51}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Synthetic Discharge Summary Generation}{52}{subsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.1.4}Deep Learning Model Training and Testing}{53}{subsection.4.1.4}%
+\contentsline {subsection}{\numberline {4.1.5}Evaluation Metrics and Analysis}{54}{subsection.4.1.5}%
+\contentsline {subsection}{\numberline {4.1.6}Processing MIMIC-IV as the Test Dataset}{55}{subsection.4.1.6}%
+\contentsline {subsubsection}{\nonumberline Data Extraction and Integration}{55}{subsubsection*.45}%
+\contentsline {subsubsection}{\nonumberline Text Standardization and Cleaning}{55}{subsubsection*.46}%
+\contentsline {subsubsection}{\nonumberline Handling Duplicates and Missing Data}{56}{subsubsection*.47}%
+\contentsline {subsubsection}{\nonumberline Code Distribution and Rare Labels}{56}{subsubsection*.48}%
+\contentsline {subsubsection}{\nonumberline Database Management and Version Control}{56}{subsubsection*.49}%
+\contentsline {subsubsection}{\nonumberline Security and Compliance}{56}{subsubsection*.50}%
+\contentsline {section}{\numberline {4.2}Problem 2: SA-AKI Mortality Prediction Methodology}{57}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Overview}{57}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Data Sources, ETL, and Cohort (T0--T24)}{57}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Data Split and Leakage Control}{58}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Preprocessing and Feature Engineering (Train-Only)}{59}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Exploratory Data Analysis and Phenotyping (Training Only)}{59}{subsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.2.6}Supervised Binary Mortality Prediction (Primary)}{60}{subsection.4.2.6}%
+\contentsline {subsection}{\numberline {4.2.7}Survival Analysis (Time to Death)}{61}{subsection.4.2.7}%
+\contentsline {subsection}{\numberline {4.2.8}Adherence to TRIPOD Guidelines}{61}{subsection.4.2.8}%
+\contentsline {subsubsection}{\nonumberline Data Leakage: Definition, Mechanisms, and Mitigation}{61}{subsubsection*.51}%
+\contentsline {subsubsection}{\nonumberline The 24-Hour Window: Rationale, Strengths, and Heterogeneity Considerations}{62}{subsubsection*.52}%
+\contentsline {chapter}{\numberline {\MakeUppercase []{Chapter~5}}\MakeUppercase []{Dataset Understanding and EDA}}{65}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Part I: MIMIC-IV for ICD Coding (Problem 1)}{65}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Overview of MIMIC-IV}{65}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}SQL Query Results and Data Highlights}{66}{subsection.5.1.2}%
+\contentsline {subsubsection}{\nonumberline Patient and Admission Volumes}{66}{subsubsection*.53}%
+\contentsline {subsubsection}{\nonumberline Multiple Admissions per Patient}{66}{subsubsection*.54}%
+\contentsline {subsubsection}{\nonumberline Discharge Summaries}{66}{subsubsection*.55}%
+\contentsline {subsubsection}{\nonumberline Characterizing Note Length}{66}{subsubsection*.56}%
+\contentsline {subsubsection}{\nonumberline ICD-9 vs. ICD-10 Utilization}{67}{subsubsection*.57}%
+\contentsline {subsubsection}{\nonumberline Long-Tailed Code Distribution}{67}{subsubsection*.58}%
+\contentsline {subsubsection}{\nonumberline Codes Per Admission}{67}{subsubsection*.59}%
+\contentsline {subsection}{\numberline {5.1.3}Visual Explorations of MIMIC-IV}{67}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.4}Key Insights}{77}{subsection.5.1.4}%
+\contentsline {subsection}{\numberline {5.1.5}Final Data Preparation}{77}{subsection.5.1.5}%
+\contentsline {section}{\numberline {5.2}Part II: SA-AKI Cohort (Problem 2)}{78}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Overview}{78}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Source Tables and Warehouse Context}{78}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Ontology-Driven Concept Identification}{78}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Cohort Construction (Counts and Exclusions)}{80}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.2.5}Clinical Labeling Rules and Time Anchors}{80}{subsection.5.2.5}%
+\contentsline {subsubsection}{\nonumberline Sepsis--3 and AKI Logic (Compact View)}{80}{subsubsection*.73}%
+\contentsline {subsubsection}{\nonumberline Timeline Conventions and Windows}{80}{subsubsection*.75}%
+\contentsline {subsection}{\numberline {5.2.6}Data Harmonization and Initial Statistics}{80}{subsection.5.2.6}%
+\contentsline {subsection}{\numberline {5.2.7}Exploratory Analysis and Phenotyping of the Training Cohort}{80}{subsection.5.2.7}%
+\contentsline {subsubsection}{\nonumberline Statistical Validation of Data Integrity}{80}{subsubsection*.79}%
+\contentsline {subsubsection}{\nonumberline Analysis of Missing Data Patterns}{84}{subsubsection*.81}%
+\contentsline {subsubsection}{\nonumberline Clinical Phenotypes of Survivor vs. Non-Survivor Groups}{84}{subsubsection*.83}%
+\contentsline {chapter}{\numberline {\MakeUppercase []{Chapter~6}}\MakeUppercase []{Results}}{87}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Problem 1: ICD Coding Partial Results}{87}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Baseline Model: KNN}{87}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}MinHash-Based Similarity Detection}{88}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Key Observations and Challenges}{88}{subsection.6.1.3}%
+\contentsline {subsection}{\numberline {6.1.4}Rare Disease Co-Occurrence Pipeline}{89}{subsection.6.1.4}%
+\contentsline {paragraph}{\nonumberline Note on Completion Status.}{89}{paragraph*.86}%
+\contentsline {section}{\numberline {6.2}Problem 2: SA-AKI Mortality Prediction Results}{90}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Supervised Mortality Prediction}{90}{subsection.6.2.1}%
+\contentsline {subsubsection}{\nonumberline Model Benchmarking and Selection}{90}{subsubsection*.87}%
+\contentsline {subsubsection}{\nonumberline Final Model Performance on the Test Set}{91}{subsubsection*.89}%
+\contentsline {subsubsection}{\nonumberline Model Interpretability with SHAP}{92}{subsubsection*.92}%
+\contentsline {subsubsection}{\nonumberline Why LightGBM Outperforms Other Model Classes}{94}{subsubsection*.94}%
+\contentsline {subsubsection}{\nonumberline Evidence for Trustworthiness and Clinical Credibility}{95}{subsubsection*.95}%
+\contentsline {subsubsection}{\nonumberline Comparison with Prior Work and the Case for a Realistic Benchmark}{96}{subsubsection*.96}%
+\contentsline {subsubsection}{\nonumberline Limitations: External Validation and Dataset Scope}{97}{subsubsection*.98}%
+\contentsline {subsection}{\numberline {6.2.2}Time-to-Event (Survival) Analysis}{98}{subsection.6.2.2}%
+\contentsline {subsubsection}{\nonumberline Cox Proportional Hazards Model}{98}{subsubsection*.99}%
+\contentsline {subsubsection}{\nonumberline DeepSurv Model}{99}{subsubsection*.102}%
+\contentsline {subsubsection}{\nonumberline Synthesis of Survival Analysis}{100}{subsubsection*.106}%
+\contentsline {chapter}{\numberline {\MakeUppercase []{Chapter~7}}\MakeUppercase []{Conclusions and Future Work}}{102}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Summary of Problem 1: ICD Code Prediction}{102}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Summary of Problem 2: SA-AKI Mortality Prediction}{103}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Future Work}{104}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Problem 1: Remaining Steps}{104}{subsection.7.3.1}%
+\contentsline {subsection}{\numberline {7.3.2}Problem 2: Future Directions}{104}{subsection.7.3.2}%
+\def \@chapapp {\appendixname }
+\contentsline {chapter}{\numberline {\MakeUppercase []{Appendix~A}}\MakeUppercase []{Clinically Plausible Values}}{107}{appendix.A}%
+\contentsline {paragraph}{\nonumberline Implementation.}{112}{paragraph*.119}%
+\contentsline {chapter}{\numberline {\MakeUppercase []{Appendix~B}}\MakeUppercase []{Feature Dictionary and Descriptive Tables}}{113}{appendix.B}%
+\contentsline {chapter}{\nonumberline \MakeUppercase []{Bibliography}}{120}{chapter*.128}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

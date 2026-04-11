@@ -1,0 +1,373 @@
+\documentclass[12pt,a4paper]{article} 
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+
+\usepackage{graphicx} % support the \includegraphics command and options
+\graphicspath{ {./Figures/} }
+
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+% ADDITIONAL PACKAGES	
+\usepackage{float}
+\usepackage{indentfirst} % indenting the first paragraph
+\usepackage[left=2.54 cm, right=2.54 cm, top=2cm, bottom = 2 cm]{geometry} % Set page margins
+\usepackage{mcite} % multiple citations
+\usepackage{dirtytalk}
+\usepackage{tocloft} % dots in table of contents
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % dots in table of contents
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage[version=4]{mhchem}
+\usepackage{array}
+\usepackage{adjustbox}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\argmax}{argmax}
+\DeclareMathOperator{\argmin}{argmin}
+\usepackage{tikz,pgfplots}
+\pgfplotsset{compat=1.18} 
+\usepackage{titlesec}
+\usepackage{sectsty}
+\usepackage{enumitem}
+\titleformat{\section}
+  {\normalfont\fontsize{12}{15}\bfseries}{\thesection}{1em}{}
+\usepackage[noadjust]{cite}
+\usepackage{amsmath,blkarray,booktabs,bigstrut}
+%%% END Article customizations
+
+\begin{document}
+
+
+\section*{\centering{Rebuttal Report in Response to Comments from Examiners}}
+
+\vspace{\baselineskip}
+
+\section*{Thesis and Candidate Details}
+
+\vspace{\baselineskip}
+
+\begin{enumerate}
+    \item \textbf{Thesis Title:} Mortality Analysis of Patients with Sepsis-Associated Acute Kidney Injury (SA-AKI) Cohort from MIMIC-IV Dataset
+    \item \textbf{Student Name:} Kaustabh Ganguly
+    \item \textbf{Roll Number:} CH23M514
+    \item \textbf{Degree:} Master of Technology in Industrial Artificial Intelligence
+    \item \textbf{Previous Viva Date:} March 13, 2025
+    \item \textbf{Phase in Previous Viva:} Phase 2
+    \item \textbf{Mentor Name(s):}
+        \begin{enumerate}[label=(\roman*)]
+            \item Mentor 1: Samyabrata Chakraborty
+            \item Mentor 2: Debopam Nanda
+        \end{enumerate}
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+\noindent\textbf{Preliminary Note on Project Continuity}
+
+\vspace{0.5\baselineskip}
+
+\noindent The feedback from the Phase 2 viva referred to a prior project that was discontinued. As communicated during the viva, the current thesis represents an entirely new research project commenced in March 2025, focused on mortality prediction in Sepsis-Associated Acute Kidney Injury (SA-AKI) using the MIMIC-IV dataset. The work presented in this report and the accompanying thesis is the product of approximately one year of independent research. Incorporating the discontinued prior work into the current thesis would misrepresent the research and compromise the scientific integrity of the document. The current thesis is therefore a self-contained, complete report of the new project, covering all stages from data engineering and cohort construction through exploratory analysis, supervised classification, and survival modeling.
+
+\newpage
+
+\section*{\centering{Response to Comments by Examiner}}
+
+\begin{flushleft}
+\large{\textbf{Examiner Name:}} Prof. Ramakrishna
+
+\vspace{\baselineskip}
+
+% -----------------------------------------------------------------------
+% REPORT FEEDBACK
+% -----------------------------------------------------------------------
+
+\subsection*{Report Feedback}
+
+\vspace{\baselineskip}
+
+\textbf{Comment A (Report):} Phase 3 report should be a complete report that includes Phase 1, Phase 2, and Phase 3 work. Student should write a single report containing all the work done in Phase 1, Phase 2, and Phase 3.
+
+\vspace{\baselineskip}
+
+\textbf{Response:} This comment is acknowledged and understood in its intent. However, as explained in the preliminary note above and as communicated during the viva, the project undertaken in Phase 1 and Phase 2 was discontinued and replaced with an entirely new research direction beginning in March 2025. The current thesis is the result of that new project. Merging the discontinued prior work into the current thesis would create a scientifically incoherent document, as the two projects address different problems, use different datasets, and employ different methodologies. The current thesis is a complete, standalone report covering all stages of the new project: data engineering and ontology integration (equivalent to Phase 1 scope), exploratory data analysis and cohort construction (equivalent to Phase 2 scope), and full model development, calibration, and evaluation (Phase 3). The thesis therefore satisfies the spirit of the requirement -- a single complete report of all work done -- within the context of the new project.
+
+\vspace{\baselineskip}
+
+\textbf{Thesis Changes:} No changes were made in response to this comment, as merging the discontinued prior project would compromise the scientific integrity of the current work.
+
+\vspace{\baselineskip}
+
+\hrule
+
+\vspace{\baselineskip}
+
+\textbf{Comment B (Report):} Title page is not in correct format.
+
+\vspace{\baselineskip}
+
+\textbf{Response:} The title page has been corrected to conform to the IIT Madras MTech dissertation format. The title, student name, roll number, degree, department, and institute name are now formatted according to the prescribed template.
+
+\vspace{\baselineskip}
+
+\textbf{Thesis Changes:}
+\begin{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Title Page (pre-matter, before Chapter 1)
+        \item Page number: Page 1 (cover page)
+        \item Change: Title page reformatted to match the IIT Madras MTech dissertation template, including correct placement of institute logo, thesis title, student name, roll number, degree, department, and submission year.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+\hrule
+
+\vspace{\baselineskip}
+
+\textbf{Comment C (Report):} Certificate page is missing.
+
+\vspace{\baselineskip}
+
+\textbf{Response:} The certificate page was missing in the Phase 2 submission. It has been added to the current thesis.
+
+\vspace{\baselineskip}
+
+\textbf{Thesis Changes:}
+\begin{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Certificate (pre-matter)
+        \item Page number: Page 2
+        \item Change: A certificate page has been added, signed by the thesis supervisors, attesting that the work is original and carried out by the candidate under their guidance.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+\hrule
+
+\vspace{\baselineskip}
+
+\textbf{Comment D (Report):} Fonts are very small in Figures 5.1, 5.3, 5.4, 5.5, 5.6, and 6.3.
+
+\vspace{\baselineskip}
+
+\textbf{Response:} The figures in question are pipeline and logic diagrams (Figures 5.1, 5.3, 5.4, 5.5, 5.6) and a hazard ratio forest plot (Figure 6.3). The small font appearance arose because the original source diagrams were designed with text labels that were too small relative to the figure canvas. Simply scaling the figures in LaTeX enlarges the canvas proportionally but does not improve the legibility of the labels at the printed page size. To address this, all six affected figures were completely redesigned from scratch with significantly larger fonts, bolder labels, and improved visual clarity. The redesigned figures were exported at 300 DPI and embedded as high-resolution PDFs (for the pipeline and logic diagrams) or PNGs (for the forest plot and statistical testing figure). The LaTeX inclusion widths were also adjusted to ensure the figures occupy the full text width where appropriate. The figures now render with clearly legible labels at the printed page size.
+
+\vspace{\baselineskip}
+
+\textbf{Thesis Changes:}
+\begin{enumerate}
+    \item
+    \begin{enumerate}
+        \item Figure 5.1 (MIMIC-IV data universe): Page 33. Figure completely redesigned with larger fonts and clearer labels. Exported at 300 DPI and embedded as PDF. Figure included at \texttt{width=1.1\textbackslash linewidth} with \texttt{\textbackslash makebox} centering.
+    \end{enumerate}
+    \item
+    \begin{enumerate}
+        \item Figure 5.3 (CONSORT flow diagram): Page 35. Figure completely redesigned with larger fonts and improved readability. Same inclusion treatment applied.
+    \end{enumerate}
+    \item
+    \begin{enumerate}
+        \item Figure 5.4 (Sepsis-3 logic and urine output sessionization, two-panel): Page 36. Both subfigures redesigned with larger text labels. Subfigure widths set to \texttt{0.48\textbackslash linewidth} to prevent overflow.
+    \end{enumerate}
+    \item
+    \begin{enumerate}
+        \item Figure 5.5 (patient timeline): Page 37. Figure redesigned with larger fonts and exported at 300 DPI as PDF.
+    \end{enumerate}
+    \item
+    \begin{enumerate}
+        \item Figure 5.6 (statistical testing results): Page 39. Figure redesigned with larger fonts and clearer axis labels. Replaced as a high-resolution PNG.
+    \end{enumerate}
+    \item
+    \begin{enumerate}
+        \item Figure 6.3 (Cox PH forest plot): Page 51. Figure redesigned with larger fonts and bolder labels. Replaced as a high-resolution PNG. LaTeX inclusion width set to \texttt{0.85\textbackslash textwidth}.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+% -----------------------------------------------------------------------
+% PRESENTATION FEEDBACK
+% -----------------------------------------------------------------------
+
+\subsection*{Presentation Feedback}
+
+\vspace{\baselineskip}
+
+\textbf{Comment E (Presentation):} The data leakage phenomenon can be explained better.
+
+\vspace{\baselineskip}
+
+\textbf{Response:} The original thesis stated that leakage was avoided but did not explain what data leakage is, why it matters, or how each specific form of it was prevented. A dedicated subsection has been added to Chapter 4 that defines data leakage formally and explains three distinct mechanisms through which it can enter a clinical prediction pipeline: (1) temporal leakage, where features derived from post-prediction-horizon measurements (e.g., whole-stay laboratory aggregates, or total ICU length of stay as a proxy for time-to-death) encode the patient's future trajectory; (2) preprocessing leakage, where imputation, scaling, or feature selection is fitted on the full dataset before the train-test split, allowing test-set statistics to influence the training pipeline; and (3) selection leakage, where feature screening is performed across all records so that the selected predictor set carries information from evaluation data. For each mechanism, the specific safeguard implemented in this thesis is stated: all features are restricted to the T0--T24 window with a scripted audit; all data-dependent transformers are fitted exclusively on the training partition; and all feature screening is confined to training data. The test set was used exactly once for final evaluation.
+
+\vspace{\baselineskip}
+
+\textbf{Thesis Changes:}
+\begin{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Chapter 4, Section 4.8, Subsection 4.8.1 ``Data Leakage: Definition, Mechanisms, and Mitigation''
+        \item Page and Paragraph: Pages 25--26, paragraphs 1--5 (new subsection added)
+        \item Change: New subsection added defining data leakage and explaining temporal leakage, preprocessing leakage, and selection leakage, with the specific mitigation applied in this work for each.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+\hrule
+
+\vspace{\baselineskip}
+
+\textbf{Comment F (Presentation):} What is holistic about the 24-hour data collection? Patients may arrive in ICUs at different stages -- how does that impact the findings?
+
+\vspace{\baselineskip}
+
+\textbf{Response:} This is a valid methodological concern. A fixed 24-hour window anchored to ICU admission introduces heterogeneity because patients arrive at different stages of their illness trajectory. A patient admitted directly from the emergency department at sepsis onset and a patient transferred from a general ward after several days of deterioration will have very different clinical pictures within the same T0--T24 window, even if their eventual outcomes are similar. This heterogeneity is a genuine limitation of any admission-anchored design. However, it also reflects the conditions under which a bedside prediction tool would actually be used: a clinician querying the model at the 24-hour mark has access only to information accumulated since admission, regardless of the patient's prior trajectory. The thesis now explicitly acknowledges this limitation and explains how four features in the model partially account for the variation: the APACHE III score (integrates acute physiology and chronic health status, capturing elements of the pre-ICU trajectory), the SOFA score at 24 hours (reflects cumulative organ dysfunction regardless of when it began), the Charlson comorbidity index components (provide context about baseline vulnerability), and the first/last/delta/slope feature suffixes on time-varying measurements (encode within-window dynamics that differ between early and late presenters). Future work proposing stratified analyses by admission source and an alternative window anchored to sepsis onset is also discussed.
+
+\vspace{\baselineskip}
+
+\textbf{Thesis Changes:}
+\begin{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Chapter 4, Section 4.8, Subsection 4.8.2 ``The 24-Hour Window: Rationale, Strengths, and Heterogeneity Considerations''
+        \item Page and Paragraph: Pages 26--28, paragraphs 1--4 (new subsection added)
+        \item Change: New subsection added explaining the clinical rationale for T0--T24, explicitly acknowledging the admission-stage heterogeneity problem, explaining how model features partially compensate, and proposing future stratified analyses.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+% -----------------------------------------------------------------------
+% OVERALL FEEDBACK
+% -----------------------------------------------------------------------
+
+\subsection*{Overall Feedback}
+
+\vspace{\baselineskip}
+
+\textbf{Comment G (Overall):} The objectives of the project have been brought out quite well. However, more details with respect to various datasets being used to frame the degree of risk within the first 24 hours need to be collected. Optionally, some Monte Carlo methods can be designed to generate more synthetic data with reasonably good accuracy.
+
+\vspace{\baselineskip}
+
+\textbf{Response:} Two points are addressed here.
+
+\textit{Multi-dataset risk framing.} The concern is that the risk estimates derived from a single dataset (MIMIC-IV) may not be representative of the true degree of risk within the first 24 hours across diverse patient populations. This is a well-founded concern: MIMIC-IV reflects the patient population, clinical practices, and documentation patterns of a single tertiary-care center (Beth Israel Deaconess Medical Center, Boston). To address this, the thesis now includes a dedicated discussion of multi-database risk framing as a future research direction. Specifically, the Amsterdam UMCdb (a European single-center ICU database), the HiRID dataset (Bern University Hospital, Switzerland), and the ANZICS Adult Patient Database (covering Australian and New Zealand ICUs) are identified as complementary sources. A federated or meta-analytic approach across these databases would provide stronger evidence for the universality of the 24-hour risk signal and would help disentangle center-specific effects from genuine physiological predictors. The immediate next step -- external validation on the eICU Collaborative Research Database (covering over 200 US hospitals) -- is also described in detail, including the specific protocol: re-applying Sepsis-3 and KDIGO cohort definitions to eICU, re-deriving T0--T24 features from its schema, and evaluating the frozen model without retraining.
+
+\textit{Monte Carlo synthetic data augmentation.} The suggestion to use Monte Carlo methods to generate synthetic patient data is incorporated as a future work direction. The thesis proposes copula-based simulation or parametric bootstrap approaches to sample realistic feature vectors from the estimated multivariate distribution of T0--T24 measurements, preserving the correlation structure among biomarkers, vital signs, and severity scores. This approach would serve two purposes: augmenting the training set to improve model stability for underrepresented subgroups, and enabling sensitivity analyses under perturbations of the input distribution. The thesis notes that unlike SMOTE or ADASYN, which operate in feature space without regard to clinical plausibility, a Monte Carlo approach grounded in domain-specific distributional assumptions (e.g., log-normal distributions for creatinine and bilirubin) would generate physiologically coherent synthetic patients. Generative adversarial networks and variational autoencoders are also mentioned as more flexible alternatives.
+
+\vspace{\baselineskip}
+
+\textbf{Thesis Changes:}
+\begin{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Chapter 6, Section 6.1.7 ``Limitations: External Validation and Dataset Scope''
+        \item Page and Paragraph: Pages 48--50, paragraphs 1--4
+        \item Change: New subsection added discussing the single-center limitation of MIMIC-IV, identifying eICU as the primary external validation target with a specific validation protocol, and discussing the need for recalibration on the target population.
+    \end{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Chapter 7, Section 7.2 ``Future Work''
+        \item Page and Paragraph: Pages 54--55, paragraphs 2--3
+        \item Change: Two new future work directions added: (a) Monte Carlo simulation for synthetic data augmentation using copula-based methods, with comparison to GANs and VAEs; (b) multi-database risk framing using Amsterdam UMCdb, HiRID, and ANZICS databases in a federated or meta-analytic framework.
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{\baselineskip}
+
+\hrule
+
+\vspace{\baselineskip}
+
+\textbf{Comment H (Overall):} Why does LightGBM perform better? What is the AUROC score? You say it is more trustworthy, but what is the evidence and why should a clinician believe it? What is the dataset on which this is validated? What is the external database?
+
+\vspace{\baselineskip}
+
+\textbf{Response:} This comment raises four distinct questions, each addressed in turn.
+
+\textit{Why does LightGBM perform better?} LightGBM outperforms linear models (Logistic Regression, Ridge, Lasso, ElasticNet) and other ensembles (Random Forest, XGBoost) in this task for four reasons that are now explained in a dedicated subsection. First, its leaf-wise tree growth strategy concentrates splitting effort on the leaves that yield the largest reduction in loss, which is particularly effective when the feature space contains a mixture of continuous biomarkers with skewed distributions and sparse binary indicators (comorbidity flags, missingness indicators). Second, tree ensembles natively capture the higher-order interactions that characterize SA-AKI mortality -- the joint configuration of organ dysfunction scores, hemodynamic instability, and metabolic derangement -- without requiring explicit feature engineering, whereas linear models are limited to additive main effects. Third, the built-in \texttt{class\_weight=`balanced'} mechanism proved more effective than synthetic oversampling (SMOTE, ADASYN) for this dataset, as oversampling inflated recall without improving overall discrimination. Fourth, Optuna-based hyperparameter search explored a richer space than grid search, including regularization parameters, tree depth, minimum child samples, and feature/bagging fractions, which collectively controlled overfitting.
+
+\textit{What is the AUROC score?} The final calibrated LightGBM model achieved an AUROC of 0.749 on the held-out test set (n = 2,008 patients, 26.7\% mortality). The complete performance metrics are reported in Table 6.2 of the thesis: Accuracy 0.665, Precision 0.422, Recall 0.685, F1-score 0.522. The model benchmark across all algorithms is reported in Table 6.1.
+
+\textit{Why should a clinician trust this model?} Five complementary lines of evidence are now presented in a dedicated subsection. (1) Methodological integrity: the AUROC of 0.749 was obtained under strict anti-leakage conditions -- all preprocessing fitted on training data only, no post-T24 information in the feature set, test set used exactly once. Prior studies reporting AUROC 0.79--0.88 for SA-AKI mortality included length of stay as a predictor, performed feature selection on the full dataset, or used whole-stay aggregation windows. When these methodological advantages are removed, the achievable discrimination for a genuine early warning system is expected to be lower, and the result obtained here is consistent with that expectation. (2) Calibration: predicted probabilities were explicitly calibrated using isotonic regression, so that a predicted 30\% risk corresponds to approximately 30\% observed mortality in that probability bin. Many prior studies did not report calibration at all. (3) Clinical face validity: SHAP analysis confirmed that the top predictors (SOFA score, RDW, APACHE III, age, BUN, urine output) are established clinical risk factors for ICU mortality. (4) Decision-curve analysis: the survival models demonstrated positive net benefit over treat-all and treat-none strategies across a clinically relevant range of risk thresholds (8--30\%). (5) Cross-model concordance: LightGBM (AUROC 0.749), CoxPH (C-index 0.693), and DeepSurv (C-index 0.688) all yield consistent results, making a spurious leakage-driven signal unlikely.
+
+\textit{What is the external database?} The model was developed and validated exclusively on MIMIC-IV. External validation has not yet been performed, and this is explicitly acknowledged as the primary limitation of the current work. The most natural candidate for external validation is the eICU Collaborative Research Database, covering over 200 hospitals across the United States. The specific validation protocol is described in Section 6.1.7 of the thesis. Until external validation is completed, the model's predictions should be interpreted as internally valid risk estimates specific to the MIMIC-IV population.
+
+\vspace{\baselineskip}
+
+\textbf{Thesis Changes:}
+\begin{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Chapter 6, Section 6.1.4 ``Why LightGBM Outperforms Other Model Classes''
+        \item Page and Paragraph: Pages 45--46, paragraphs 1--4 (new subsection added)
+        \item Change: New subsection added explaining the four algorithmic properties of LightGBM that contribute to its advantage in this task.
+    \end{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Chapter 6, Section 6.1.5 ``Evidence for Trustworthiness and Clinical Credibility''
+        \item Page and Paragraph: Pages 46--48, paragraphs 1--5 (new subsection added)
+        \item Change: New subsection added presenting five lines of evidence for clinical credibility: methodological integrity, calibration, SHAP-based face validity, decision-curve analysis, and cross-model concordance.
+    \end{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Chapter 6, Section 6.1.6 ``Comparison with Prior Work and the Case for a Realistic Benchmark''
+        \item Page and Paragraph: Pages 48--49, paragraphs 1--2 and Table 6.3
+        \item Change: New subsection added with a structured comparison table (Table 6.3) showing methodological differences against Chen (2025), Li (2023), and Hu (2021) across seven criteria: feature window, LOS as predictor, train-only preprocessing, missingness indicators, explicit calibration, separate validation set, and reported AUROC/C-index.
+    \end{enumerate}
+    \item
+    \begin{enumerate}
+        \item Section: Chapter 6, Section 6.1.7 ``Limitations: External Validation and Dataset Scope''
+        \item Page and Paragraph: Pages 49--50, paragraphs 1--4
+        \item Change: New subsection added explicitly stating the single-center limitation, identifying eICU as the external validation target, describing the validation protocol, and noting that recalibration on the target population would be required before clinical deployment.
+    \end{enumerate}
+\end{enumerate}
+
+\end{flushleft}
+
+\newpage
+
+\section*{References}
+
+\begin{enumerate}
+    \item Johnson, A.E.W., et al. (2023). MIMIC-IV, a freely accessible electronic health record dataset. \textit{Scientific Data}, 10, 1.
+    \item Singer, M., et al. (2016). The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). \textit{JAMA}, 315(8), 801--810.
+    \item KDIGO AKI Work Group (2012). KDIGO Clinical Practice Guideline for Acute Kidney Injury. \textit{Kidney International Supplements}, 2(1), 1--138.
+    \item Rockenschaub, P., et al. (2024). Opportunities for patient stratification in ICU prediction models. \textit{Critical Care Medicine}.
+    \item Chen, X., et al. (2025). Machine learning-based mortality prediction in SA-AKI using MIMIC-IV. \textit{[Journal reference as cited in thesis]}.
+    \item Li, Y., et al. (2023). Prediction of in-hospital mortality in SA-AKI patients. \textit{Scientific Reports}.
+    \item Kang, M., \& Yoon, J. (2023). Pitfalls of data leakage in clinical prediction models. \textit{[Journal reference as cited in thesis]}.
+    \item Blagus, R., \& Lusa, L. (2013). SMOTE for high-dimensional class-imbalanced data. \textit{BMC Bioinformatics}, 14, 106.
+\end{enumerate}
+
+\end{document}

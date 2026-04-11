@@ -1,0 +1,145 @@
+\chapter{Problem Definition and Formulation}
+\label{chap:problemdefinition}
+
+\section{Scope of the Problem}
+Accurate labeling of clinical notes with \emph{International Classification of Diseases (ICD)} codes is recognized as a critical task in contemporary healthcare documentation. Clinical narratives, however, often manifest as lengthy, highly unstructured text that contains abbreviations, domain-specific terminology, and nuanced clinical indicators. A further complication arises when only a small fraction of ICD codes—here termed ``rare codes''—occurs so infrequently that very few labeled instances are available for machine learning models. These codes frequently remain under-detected, which can diminish overall coding accuracy and potentially undermine large-scale health analytics. The objective of the present work is to automate the assignment of \emph{multiple ICD codes} to each clinical document, with a specific focus on \emph{improving predictive effectiveness for rare labels}.
+
+Failure to correctly classify clinical narratives or to assign all relevant labels can have far-reaching consequences. At the institutional level, coding errors may result in imprecise billing processes and resource misallocation. At the individual level, a missed or erroneous diagnosis code may obscure a patient’s condition or hamper effective disease management. On a broader scale, large-scale analytics that rely on aggregated administrative data may not capture the true incidence or prevalence of rare medical conditions, causing gaps in research and healthcare policy.
+
+\section{Central Challenges}
+Although recent advances in machine learning have significantly improved automated ICD coding, several formidable obstacles persist:
+
+\begin{itemize}
+    \item \textbf{Long-Tail Distribution:} The majority of available data is dominated by a few frequent codes, leaving rare diagnoses severely underrepresented.
+    \item \textbf{High-Dimensional Label Space:} Each clinical document may include multiple ICD codes, and semantic interdependencies among these labels complicate multi-label classification.
+    \item \textbf{Textual Complexity:} The unstructured nature of clinical notes, featuring inconsistent formatting and heavy use of abbreviations and domain-specific jargon, complicates text processing.
+    \item \textbf{Knowledge Integration:} Existing ontologies contain valuable domain knowledge, but straightforward classification pipelines often overlook hierarchical or semantic relationships among medical codes.
+    \item \textbf{Explainability Needs:} Models designed for clinical applications must be comprehensible to end-users, who require transparency and trust when evaluating automatic code assignments.
+\end{itemize}
+
+These challenges pose general difficulties for all ICD codes, but the detrimental effects are exacerbated for rare labels. Systems that perform well for frequently observed diagnoses often fail to capture low-frequency conditions, an omission that motivates the development of strategies tailored to address class imbalance and explainability gaps.
+
+\section{Mathematical Formulation of the Task}
+\label{sec:mathformulation}
+
+A concise mathematical formulation is presented below to clarify how a trained model should transform unstructured clinical text into accurate ICD predictions.
+
+\subsection{Defining the Space of Clinical Narratives}
+Let \(\mathcal{X}\) represent the collection of all possible clinical narratives. Each element \(x \in \mathcal{X}\) is a textual record describing a patient's clinical episode. In practice, \(x\) may include:
+
+\begin{itemize}
+    \item \emph{Admission notes} reflecting the circumstances motivating a patient's hospitalization.
+    \item \emph{Discharge summaries} documenting final diagnoses, interventions, and follow-up steps.
+    \item \emph{Progress notes} covering daily clinical updates for extended hospital stays.
+\end{itemize}
+
+Despite a variety of internal structures and formats, each \(x\) can be treated as a string of tokens (or words) for classification purposes. Thus, the set \(\mathcal{X}\) defines the \emph{input space} over which the model operates.
+
+\subsection{Defining the Label Space of ICD Codes}
+Let \(\mathcal{L} = \{\ell_1, \ell_2, \dots, \ell_{|\mathcal{L}|}\}\) be the full set of ICD codes. The notation \(|\mathcal{L}|\) denotes the number of distinct codes, which can be large in real-world applications:
+
+\begin{itemize}
+    \item Major ICD revisions (ICD-9, ICD-10, ICD-11) contain thousands of codes.
+    \item Many codes represent specialized conditions (subtypes or sub-phenotypes).
+\end{itemize}
+
+Since multiple diagnoses are commonly documented for a single admission, the label space is multi-label in nature, allowing each clinical document to be assigned any subset of \(\mathcal{L}\).
+
+\subsection{Labeled Dataset Construction}
+Assume that a set of \(N\) labeled clinical narratives is available:
+\[
+D = \{ (x_i, Y_i)\}_{i=1}^N,
+\]
+where \(x_i \in \mathcal{X}\) and \(Y_i \subseteq \mathcal{L}\). Each pair \((x_i, Y_i)\) consists of a discharge summary (or similar record) and the corresponding ICD codes assigned by professional coders. This dataset \(D\) forms the basis for supervised learning.
+
+\subsection{Function Definition}
+The goal is to learn a function
+\begin{equation}
+f: \mathcal{X} \;\longrightarrow\; 2^{\mathcal{L}},
+\label{eq:fundefinition}
+\end{equation}
+where \(f(x) = \hat{Y}\) for \(\hat{Y} \subseteq \mathcal{L}\). Here, \(2^{\mathcal{L}}\) represents the power set of \(\mathcal{L}\). For any clinical document \(x\), the prediction \(\hat{Y}\) is the subset of codes that the model deems relevant. In principle, \(\hat{Y}\) can be empty, although that outcome is uncommon in practical medical scenarios.
+
+In most current architectures, a multi-label classification approach is adopted. Specifically, the model generates a probability or score for each code in \(\mathcal{L}\), and thresholding (or a related method) is then applied to map those scores to a predicted subset.
+
+\subsection{Objective: Composite Metric Maximization}
+A composite performance metric \(\Omega\) is introduced to reflect the importance of both overall correctness and the accurate identification of rare labels. In formal terms, the aim is:
+
+\begin{equation}
+\underset{f}{\text{maximize}}\;\;\; \Omega(\text{Accuracy of } f,\;\text{Rare-Codes Metrics}).
+\label{eq:objomega}
+\end{equation}
+
+Depending on institutional priorities, \(\Omega\) may combine measures such as micro-F1 or micro-AUC (evaluating overall performance across all codes) with macro-F1 or a specialized metric that focuses on rare codes. A weighted sum or a multi-objective formulation can be employed. This dual emphasis on both frequent and rare diagnoses ensures that gains do not come at the expense of clinically significant but infrequent conditions.
+
+\section{Significance of Rare Codes}
+\label{sec:rare_codes}
+
+Rare codes pose a particular challenge due to limited representation in real-world data, yet these codes often signal clinically important conditions.
+
+\subsection{Definition and Challenges}
+A rare code may appear only a few times in a large dataset. Let \(\mathcal{L}_{\mathrm{rare}} \subseteq \mathcal{L}\) be the set of codes whose frequencies fall below a chosen threshold \(\tau\):
+\[
+\mathcal{L}_{\text{rare}} 
+= 
+\{\ell \in \mathcal{L} \,\mid\, \text{Frequency}(\ell) < \tau\}.
+\]
+
+Typical values for \(\tau\) might be a fixed count (e.g., 50) or a percentile (e.g., the bottom 10\%). Learning to detect rare codes is complicated by these labels’ scarcity in training data and the specialized language often observed in notes that reference such conditions. Overall loss functions tend to favor frequent labels, marginalizing rare ones.
+
+\subsection{Impact of Rare Code Misclassification}
+Misclassification of rare diagnoses can produce substantial adverse effects:
+
+\begin{itemize}
+    \item \textbf{Clinical Impact:} A rare but critical diagnosis, if missed by an automated system, may affect patient care when clinicians rely on coded data for decision support.
+    \item \textbf{Research Bias:} Underrepresentation of rare conditions in large-scale analyses can mask the true disease burden.
+    \item \textbf{Billing and Compliance:} Inaccurate coding for rare conditions can lead to underpayment or claim denial, as well as potential auditing complexities.
+\end{itemize}
+
+Consequently, rare code detection forms a key component of robust automated coding systems.
+
+\subsection{Recall and Precision Constraints for Rare Codes}
+For a clinical note \(x\) with true codes \(Y\), where \(Y \cap \mathcal{L}_{\text{rare}} \neq \emptyset\), recall and precision for the rare portion are of particular concern. Low recall implies a failure to capture rare conditions, whereas low precision may yield an excess of false positives for these labels. Either error type can be problematic in a medical context, emphasizing the importance of balanced metrics.
+
+\subsection{Analytical Example of Class Imbalance}
+A simple numerical illustration can clarify the issue. Consider 5,000 labeled notes, and suppose:
+\begin{itemize}
+    \item A frequent code \(\ell_{\mathrm{common}}\) appears in 1,200 notes.
+    \item A rare code \(\ell_{\mathrm{rare}}\) appears in 20 notes.
+\end{itemize}
+A classifier that never predicts \(\ell_{\mathrm{rare}}\) incurs only 20 false negatives on a base of 5,000, so the impact on the global accuracy may be less than 1\%. Such a result can inadvertently encourage ignoring rare codes. This outcome underscores the need for targeted strategies addressing low-frequency classes.
+
+\section{Proposed Methodological Focus}
+Several methodological approaches are planned to mitigate performance deficits in both frequent and rare ICD codes:
+
+\begin{enumerate}
+    \item \textbf{Data Augmentation for Rare Codes:} Synthetic data generation or specialized oversampling strategies that boost representation of low-frequency labels.
+    \item \textbf{Advanced Multi-Label Architectures:} Network designs that incorporate hierarchical embeddings and structured label representations, taking advantage of semantic relationships within the ICD taxonomy.
+    \item \textbf{Integration of External Knowledge:} Leveraging medical ontologies (e.g., SNOMED, UMLS) to enhance label embeddings and encourage clinically consistent classification.
+    \item \textbf{Model Interpretability:} Developing explainable frameworks where predicted ICD codes can be traced back to their textual justifications, thereby fostering user trust.
+\end{enumerate}
+
+Each of these elements seeks to address the data imbalance inherent in ICD coding tasks while preserving or improving performance on all relevant labels, including those with scarce training instances.
+
+\section{Evaluation Framework}
+Evaluation in this domain requires a range of measures to capture overall performance and rare-code outcomes:
+
+\begin{itemize}
+    \item \textbf{Micro-F1}: Reflects globally aggregated precision and recall. 
+    \item \textbf{Macro-F1}: Averages precision and recall across codes, thereby placing additional emphasis on rare labels.
+    \item \textbf{Recall@k}: Indicates how effectively the model recovers correct codes in its top-\(k\) predictions, a practical measure for coding assistance tools.
+    \item \textbf{Rare-Code Metrics}: Tracks performance (e.g., precision, recall, F-score) on the subset \(\mathcal{L}_{\mathrm{rare}}\), ensuring improvements are realized for both frequent and rare labels.
+\end{itemize}
+
+A balanced presentation of both micro- and macro-level metrics is essential, given the skewed distribution of ICD codes. It is possible for a model to exhibit strong micro-F1 yet fail to detect many rare diagnoses, which would be revealed by a lower macro-F1 or poor rare-code metrics.
+
+\section{Constraints and Objectives}
+Practical constraints and overarching objectives guide this research:
+
+\begin{itemize}
+    \item \textbf{Data Privacy}: Clinical text is sensitive, and synthetic data or augmentation techniques must preserve confidentiality.
+    \item \textbf{Computational Resources}: Many clinical institutions have limited hardware, thus requiring solutions that balance accuracy with feasible computational costs.
+    \item \textbf{Transparency and Adoption}: Models must present interpretable outputs so that clinical personnel can audit and trust the system, particularly for high-stakes or unfamiliar diagnoses.
+\end{itemize}
+
+Consequently, the proposed methods will be designed to accommodate these practical considerations, alongside the main objective of enhancing performance for both common and infrequent ICD codes.

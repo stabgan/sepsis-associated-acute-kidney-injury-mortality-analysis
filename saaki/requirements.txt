@@ -1,0 +1,49 @@
+# Core Data Science
+pandas
+numpy
+scipy
+scikit-learn
+
+# Statistical Analysis
+statsmodels
+pingouin
+lifelines
+
+# Survival Analysis
+scikit-survival
+
+# Machine Learning
+xgboost
+lightgbm
+catboost
+
+# Plotting & Visualization
+matplotlib
+seaborn
+plotly
+
+# Medical/Clinical Data Processing
+openpyxl
+xlrd
+
+# Feature Engineering & Selection
+feature-engine
+boruta
+mlxtend
+
+# Model Interpretation & Explainability
+shap
+lime
+
+# Hyperparameter Optimization
+optuna
+
+# Utilities
+tqdm
+joblib
+
+# Imbalanced Learning
+imbalanced-learn
+
+# Preprocessing
+category-encoders

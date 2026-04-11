@@ -1,0 +1,216 @@
+\chapter{Feature Dictionary and Descriptive Tables}\label{app:feature-dictionary}
+
+\noindent An annotated data dictionary for the sepsis–associated acute kidney injury (SA–AKI) cohort has been compiled to summarize the first 24 hours of intensive care and to support time–to–event analyses. The final build comprises \textit{n}=$10{,}036$ stays and $p=162$ features. All variables have been harmonized to target units before aggregation, and binary encodings have been standardized as indicated. Overall cohort characteristics were observed to include in–hospital mortality of 26.7% (2{,}684/10{,}036), male sex of 53.0% (5{,}322/10{,}036), and creatinine–triggered AKI attribution of 40.7% (4{,}087/10{,}036). Day–1 therapy prevalences were recorded as invasive mechanical ventilation 53.0%, vasopressor exposure 36.6%, renal replacement therapy 69.0%, and estimated (vs.\ observed) baseline creatinine 0.1%. Unless otherwise noted, counts and fractions were calculated over non–missing observations.
+
+\medskip
+\noindent Endpoints and anchor times were defined as in Table~\ref{app:tab-endpoint-times}. The in–hospital death indicator was coded as \textbf{1=death}, 0=censored, with time measured from ICU admission to death or last known alive. Onset times for AKI (KDIGO), Sepsis–3, first invasive ventilation, and first vasopressor use were stored in hours from admission. Demographics included age (years) and a sex indicator (\textbf{1=male}, 0=female); harmonized admission weight (kg) was retained for indexing of fluid and urine features. The AKI trigger variable encoded the primary detection pathway (\textbf{1=creatinine}, 0=urine output).
+
+\medskip
+\noindent Binary flags for therapies and day–1 exposures were defined as summarized in Table~\ref{app:tab-therapies} and encoded as 1/0. Charlson comorbidity components and the total points were represented as separate indicators (Table~\ref{app:tab-charlson}), with component–wise prevalences reported for the full cohort.
+
+\medskip
+\noindent Vital–sign bases and their canonical units were enumerated in Table~\ref{app:tab-vitals}. Day–1 statistics were derived through a common suffix system (Table~\ref{app:tab-suffixes}), where \textit{first}, \textit{last}, \textit{median}, \textit{iqr}, \textit{rng}, \textit{delta}, \textit{auc}, \textit{slope}, and \textit{n} reflected, respectively, the first/last value, 24\,h median, interquartile range, range, change (last$-$first), trapezoidal area–under–curve, per–hour linear slope, and observation count. For derivatives (\textit{delta}, \textit{slope}), a requirement of $n\ge2$ was imposed; otherwise, values were set to \texttt{NULL} while the companion count was preserved. The ShockIndex (HR/SBP) was stored as a dimensionless derived signal.
+
+\medskip
+\noindent Fluid balance and urine output features were recorded for the initial 24\,hours (Table~\ref{app:tab-fluids-uo}), with both absolute and weight–indexed forms (mL and mL/kg). Net fluid balance was calculated as total inputs minus outputs across all documented sources.
+
+\medskip
+\noindent Laboratory and gas–exchange features were organized by base analyte with curated units and aggregates (Tables~\ref{app:tab-labs-a-m}–\ref{app:tab-labs-n-z}). 
+Unit normalization was performed \emph{prior} to any quality control or statistical aggregation. Representative conversions included glucose mmol/L$\to$mg/dL ($\times18$), albumin and hemoglobin g/L$\to$g/dL ($\div10$), calcium mmol/L$\to$mg/dL ($\times4.0$), chloride mg/dL$\to$mmol/L ($\div3.545$), lactate mg/dL$\to$mmol/L ($\div9$), blood gases kPa$\to$mmHg ($\times7.5$), bilirubin \textmu mol/L$\to$mg/dL ($\div17.104$), magnesium mmol/L$\to$mg/dL ($\times2.433$), phosphate mmol/L$\to$mg/dL ($\times3.097$), troponin ng/L$\to$ng/mL ($\div1000$), and BNP/NT–proBNP ng/L$\equiv$pg/mL. 
+
+For each analyte, day–1 summaries were produced using count, median, minima, maxima, and, where specified, dynamics (\textit{delta}) or terminal value (\textit{last}). Quality–control fractions were retained when available: the share outside the reported reference interval (\texttt{\_outofref\_frac}), the share labeled abnormal by the lab system (\texttt{\_abn\_frac}), and the share of urgent orders (\texttt{*\_stat\_frac}). 
+
+All fractions were bounded to $[0,1]$ with the analyte–specific $n$ as denominator. Clinically plausible guardrails were applied only for plausibility checks and out–of–range tallies (e.g., electrolytes, gases, bilirubin, hematology, CRP, LDH, troponin, BNP), rather than for winsorization.
+
+\medskip
+\noindent Oxygenation was further characterized through a PaO$_2$/FiO$_2$ ratio (PF). FiO$_2$ measurements were normalized to a fraction within $[0.21,1.0]$ from charted percent or fraction entries, and PaO$_2$ values were standardized to mmHg. Each PaO$_2$ was paired to the nearest FiO$_2$ within a $\pm2$\,hour window; pairs with implausible or missing FiO$_2$ were discarded. For each stay, the PF count, median, and minimum were aggregated over the 0--24\,hour window.
+
+\medskip
+\noindent Construction of the feature table was supported by an indexed cohort window. ICU stays with a documented out--time and length of stay of at least 24\,hours were included. A 24\,hour window was anchored at the ICU \texttt{intime}; all day–1 features were restricted to timestamps in $[\texttt{intime},\texttt{intime}+24\text{h})$. Item–to–feature mappings were defined explicitly for core section–7 labs and label–driven for an extended panel. After normalization, per–analyte statistics were computed using exact medians (\texttt{PERCENTILE\_DISC(0.5)}), minima, maxima, and means of indicator flags to form QC fractions. First and last values were obtained via time–ordered selection, and changes (\textit{delta}) were computed only when at least two observations were available. Final curated panels were left–joined by \texttt{stay\_id} to assemble a single, primary–keyed table that retains \texttt{hadm\_id} and \texttt{subject\_id} for relational linkage.
+
+\medskip
+\noindent Naming conventions followed snake\_case with descriptive bases and standardized suffixes (Table~\ref{app:tab-suffixes}). Vital signs used canonical 24\,hour medians as default signals (additional suffix features were included where available). Therapy/exposure and Charlson variables were encoded as binary indicators with cohort–level prevalences documented. Where severity scores (e.g., APACHE~III; SOFA domain totals and overall) were present, values were stored as point totals consistent with their original scales.
+
+\vspace{0.75\baselineskip}
+\begin{table}[t]\centering
+{\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{6pt}%
+\caption{Endpoint and timing variables present in file.}
+\label{app:tab-endpoint-times}
+\begin{tabular}{P{0.32\linewidth} P{0.48\linewidth} P{0.08\linewidth}}
+\toprule
+\textbf{Column} & \textbf{Meaning (concise)} & \textbf{Unit}\\
+\midrule
+Death & In-hospital death indicator (\textbf{1=death}, 0=censored). & ---\\
+Time to death & Hours from ICU admit to death / last alive (censored). & h\\
+Time to AKI onset & Hours to AKI onset (KDIGO). & h\\
+Time to sepsis onset & Hours to first Sepsis--3 flag. & h\\
+Time to MV start & Hours to first invasive ventilation. & h\\
+Time to vasopressor start & Hours to first vasopressor. & h\\
+Age & Age at ICU admission. & y\\
+Gender & Biological sex (\textbf{1=male}, 0=female). & ---\\
+Admission weight & Documented admission weight (harmonized). & kg\\
+AKI trigger & Trigger type (\textbf{1=creatinine}, 0=urine output). & ---\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\vspace{0.75\baselineskip}
+\begin{table}[t]\centering
+{\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{6pt}%
+\caption{Therapy/exposure flags (definitions mirror Table~\ref{tab:therapies-prev}).}
+\label{app:tab-therapies}
+\begin{tabular}{P{0.38\linewidth} P{0.42\linewidth} P{0.08\linewidth}}
+\toprule
+\textbf{Column} & \textbf{Meaning (concise)} & \textbf{Unit}\\
+\midrule
+Mechanical ventilation 24\,h flag & Invasive mechanical ventilation within T0--T24 (1/0). & ---\\
+Vasopressor 24\,h flag & Any vasopressor within T0--T24 (1/0). & ---\\
+RRT 24\,h flag & Renal replacement therapy within T0--T24 (1/0). & ---\\
+Baseline creatinine estimated flag & Baseline creatinine was estimated (vs.\ observed) (1/0). & ---\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\vspace{0.75\baselineskip}
+\begin{table}[t]\centering
+{\footnotesize\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{3pt}%
+\caption{Charlson comorbidity flags (1/0) and prevalence in cohort.}
+\label{app:tab-charlson}
+\begin{tabular}{P{0.32\linewidth} P{0.34\linewidth} P{0.20\linewidth}}
+\toprule
+\textbf{Column} & \textbf{Meaning (concise)} & \textbf{Prevalence}\\
+\midrule
+MI flag        & History of myocardial infarction.                      & 12.8\% (1,282/10,036)\\
+CHF flag     & Congestive heart failure.                              & 11.8\% (1,187/10,036)\\
+PVD flag  & Peripheral vascular disease.                           & 7.9\% (789/10,036)\\
+CVD flag      & Stroke or TIA.                                         & 9.7\% (975/10,036)\\
+Dementia flag                     & Dementia.                                              & 4.1\% (412/10,036)\\
+Chronic pulm.\ disease flag    & Chronic pulmonary disease (e.g., COPD).                & 14.3\% (1,440/10,036)\\
+Rheumatic / CT flag& Connective tissue disease.                             & 2.1\% (214/10,036)\\
+Peptic ulcer flag         & Peptic ulcer disease.                                  & 2.6\% (256/10,036)\\
+Liver disease (mild) flag         & Mild liver disease.                                    & 10.4\% (1,043/10,036)\\
+Diabetes (uncomplicated) flag  & Diabetes without chronic complications.                & 18.6\% (1,866/10,036)\\
+Diabetes with complications flag  & Diabetes with end-organ complications.                 & 9.3\% (935/10,036)\\
+Renal disease flag                & Moderate--severe CKD.               & 14.2\% (1,421/10,036)\\
+Hemiplegia/paraplegia flag        & Hemiplegia or paraplegia.                              & 3.5\% (349/10,036)\\
+Cancer (no metastasis) flag       & Solid tumor within 5\,y, no metastasis.                & 8.9\% (894/10,036)\\
+Metastatic cancer flag            & Metastatic solid tumor.                                & 3.9\% (392/10,036)\\
+HIV/AIDS flag                     & HIV/AIDS.                                              & 0.4\% (36/10,036)\\
+Liver disease (mod/sev) flag & Moderate or severe liver disease.                    & 6.5\% (656/10,036)\\
+Charlson total                    & Sum of all Charlson flags (points).                    & points\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\vspace{0.75\baselineskip}
+\begin{table}[t]\centering
+{\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{6pt}%
+\caption{Vital-sign base names; day-1 statistics derived via suffixes where applicable.}
+\label{app:tab-vitals}
+\begin{tabular}{P{0.34\linewidth} P{0.40\linewidth} P{0.14\linewidth}}
+\toprule
+\textbf{Base name} & \textbf{Meaning (concise)} & \textbf{Unit}\\
+\midrule
+Heart rate & Day-1 aggregates (median, IQR, range, first/last, delta, slope, AUC, $n$). & beats/min\\
+Systolic BP & Systolic arterial blood pressure (non-/invasive). & mmHg\\
+Diastolic BP & Diastolic arterial blood pressure (non-/invasive). & mmHg\\
+Mean arterial pressure & Computed or recorded MAP. & mmHg\\
+Respiratory rate & Respiratory rate. & br/min\\
+Oxygen saturation & Peripheral SpO$_2$ (pulse oximetry). & \%\\
+ShockIndex & Derived ratio HR/SBP; higher reflects relative hypotension. & ---\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\vspace{0.75\baselineskip}
+\begin{table}[t]\centering
+{\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{6pt}%
+\caption{Fluid balance and urine output features.}
+\label{app:tab-fluids-uo}
+\begin{tabular}{P{0.40\linewidth} P{0.40\linewidth} P{0.10\linewidth}}
+\toprule
+\textbf{Column} & \textbf{Meaning (concise)} & \textbf{Unit}\\
+\midrule
+Fluid balance 24\,h & Net inputs minus outputs in first 24\,h (all sources). & mL\\
+Fluid balance 24\,h/kg & Weight-indexed net fluid balance (day~1). & mL/kg\\
+Urine output total 24\,h & Total urine in first 24\,h. & mL\\
+Urine output 24\,h/kg & Weight-indexed urine output (day~1). & mL/kg\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\vspace{0.75\baselineskip}
+\begin{table}[t]\centering
+{\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{6pt}%
+\caption{Laboratory and gas-exchange base names (A--M).}
+\label{app:tab-labs-a-m}
+\begin{tabular}{P{0.34\linewidth} P{0.44\linewidth} P{0.10\linewidth}}
+\toprule
+\textbf{Base name} & \textbf{Meaning (concise)} & \textbf{Unit}\\
+\midrule
+Albumin & Serum albumin. & g/dL\\
+Alkaline phosphatase & Alkaline phosphatase. & U/L\\
+Aspartate aminotransferase & AST. & U/L\\
+Anion gap & Serum anion gap. & mmol/L\\
+Bicarbonate & Serum bicarbonate (HCO$_3^-$). & mmol/L\\
+Blood urea nitrogen & BUN. & mg/dL\\
+Calcium (total) & Total serum calcium. & mg/dL\\
+Chloride & Serum chloride. & mmol/L\\
+Creatinine & Serum creatinine. & mg/dL\\
+Direct bilirubin & Direct bilirubin. & mg/dL\\
+Glucose & Plasma glucose. & mg/dL\\
+Hemoglobin & Hemoglobin concentration. & g/dL\\
+INR & International normalized ratio. & ratio\\
+Lactate & Serum lactate. & mmol/L\\
+LDH & Lactate dehydrogenase. & U/L\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\vspace{0.5\baselineskip}
+\begin{table}[t]\centering
+{\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{6pt}%
+\caption{Laboratory and gas-exchange base names (N--Z).}
+\label{app:tab-labs-n-z}
+\begin{tabular}{P{0.34\linewidth} P{0.44\linewidth} P{0.10\linewidth}}
+\toprule
+\textbf{Base name} & \textbf{Meaning (concise)} & \textbf{Unit}\\
+\midrule
+Magnesium & Serum magnesium. & mg/dL\\
+PaCO$_2$ & Arterial carbon dioxide (ABG). & mmHg\\
+PaO$_2$ & Arterial oxygen (ABG). & mmHg\\
+pH (arterial) & Arterial pH (ABG). & pH units\\
+PF ratio & PaO$_2$/FiO$_2$ ratio (derived). & mmHg\\
+Phosphate & Serum phosphate. & mg/dL\\
+Platelet count & Platelet count. & $10^{9}$/L\\
+Potassium & Serum potassium. & mmol/L\\
+RDW & Red cell distribution width. & \%\\
+Sodium & Serum sodium. & mmol/L\\
+Total bilirubin & Total bilirubin. & mg/dL\\
+Troponin & Cardiac troponin. & ng/mL\\
+White blood cell count & WBC. & $10^{9}$/L\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\vspace{0.75\baselineskip}
+\begin{table}[t]\centering
+{\small\renewcommand{\arraystretch}{1.12}\setlength{\tabcolsep}{6pt}%
+\caption{Suffix legend for time-series features.}
+\label{app:tab-suffixes}
+\begin{tabular}{P{0.14\linewidth} P{0.64\linewidth} P{0.10\linewidth}}
+\toprule
+\textbf{Suffix} & \textbf{Definition (first 24\,h)} & \textbf{Unit}\\
+\midrule
+\textit{first}  & First measurement in the window. & base\\
+\textit{last}   & Last measurement in the window. & base\\
+\textit{median} & Median of all readings over 24\,h. & base\\
+\textit{iqr}    & Inter-quartile range (Q3$-$Q1). & base\\
+\textit{rng}    & Range = max$-$min. & base\\
+\textit{delta}  & Change = last$-$first (requires $n\ge2$). & base\\
+\textit{auc}    & Trapezoidal area-under-curve (0--24\,h). & base$\cdot$h\\
+\textit{slope}  & Linear regression slope per hour (requires $n\ge2$). & base/h\\
+\textit{n}      & Number of discrete observations. & count\\
+\bottomrule
+\end{tabular}}
+\end{table}

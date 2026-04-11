@@ -1,0 +1,166 @@
+\chapter{Literature Review}
+
+\section{Introduction and the Evolution of ICD Coding}
+
+The automation of the International Classification of Diseases (ICD) coding process has long been recognized as a critical area of research in medical informatics and Natural Language Processing (NLP). The ICD system, maintained by the World Health Organization, is used worldwide to classify diseases and health conditions for epidemiological research, healthcare management, and clinical billing. Accurate and efficient coding is essential because ICD codes capture details of a patient's diagnosis, comorbidities, and complications, thereby supporting reliable record-keeping and reimbursement processes~\citep{who2019icd11}.
+
+Originally, the Ninth Revision (ICD-9) provided a limited number of disease categories. Over time, ICD-9 was phased out in favor of ICD-10, driven by the need for more specificity and additional capacity to accommodate new diseases~\citep{dong2022automated}. ICD-10-CM (Clinical Modification) expanded the code set substantially (from approximately 13,000 to 68,000 codes) and introduced alphanumeric codes capable of encoding disease severity, anatomical site, and laterality~\citep{edin2023automated}. Although this granularity supports more detailed patient records, it also increases complexity in manual coding workflows~\citep{farkas2008automatic}.
+
+The progression to ICD-11~\citep{who2019icd11} further reflects international efforts to enhance coding flexibility and align medical concepts more precisely with emerging public health priorities. Its hierarchical structure and additional extensions aim to capture nuances of disease presentation, enabling more robust epidemiological tracking. However, these regular revisions amplify the complexity for human coders, who must keep abreast of ever-expanding vocabularies and specialized rules~\citep{scheurwegs2017data}. The high stakes of accurate billing and statistical reporting underscore the importance of developing automated coding solutions that can function reliably, even when new codes and terminologies are introduced.
+
+This chapter reviews the broad spectrum of approaches and challenges that characterize automated ICD coding. Early rule-based and machine learning (ML) methods are summarized, followed by deep learning approaches that leverage convolutional, recurrent, and transformer-based architectures. Recent improvements in long-context transformer designs, modern BERT-like encoders, knowledge-based methods, and curriculum learning strategies are discussed, highlighting progress in handling the extensive and imbalanced ICD label space. The chapter also explores data imbalance and rare-code prediction, synthetic data generation for underrepresented diagnoses, interpretability, and the practical challenges of deploying automated ICD coding systems in real-world clinical environments. Relevant evaluation metrics and future research directions are presented to offer a holistic overview of current capabilities and ongoing developments in this domain.
+
+\section{Early Approaches to Automated ICD Coding}
+
+\subsection{Rule-Based Systems and Traditional Machine Learning}
+
+Early efforts to automate ICD coding primarily involved rule-based systems and traditional machine learning techniques. Rule-based systems utilized handcrafted linguistic rules, domain-specific ontologies, and keyword matching heuristics to assign ICD codes to clinical narratives~\citep{farkas2008automatic, scheurwegs2017data}. These systems often achieved high precision under narrowly defined contexts because medical experts designed rules explicitly targeting common or well-understood diagnoses. Nonetheless, maintaining rule-based systems for extensive code sets was difficult; an entire rule set would often need re-engineering whenever revisions to ICD or local documentation practices emerged~\citep{scheurwegs2017data}.
+
+Parallel to rule-based approaches, researchers applied supervised classifiers such as logistic regression, Decision Trees, or Support Vector Machines (SVMs) trained on bag-of-words or TF-IDF representations of clinical notes~\citep{perotte2014diagnosis}. Although these methods sometimes benefited from straightforward interpretability (e.g., top weighted words for each code), they struggled with the extremely large and imbalanced label space, as ICD-9-CM and ICD-10-CM collectively encompass thousands of possible codes. Traditional feature engineering often could not capture the subtle semantic patterns indicative of specific diagnoses, particularly when these patterns were distributed across long or unstructured notes. Moreover, such approaches did not perform well on rare codes, which had scant training examples~\citep{duque2021knowledge}. Despite these limitations, these early systems established important baselines and indicated that integrating domain knowledge (e.g., simple dictionaries of medical terms) could enhance precision.
+
+\subsection{Limitations and Motivation for Deep Learning}
+
+Although traditional ML solutions revealed the potential of automated ICD coding, they were often constrained by high-dimensional data, sparse features, and a lack of capacity to fully capture clinical context. The low coverage of rare codes and the complex textual nature of clinical documentation prompted researchers to investigate more robust methods that did not rely heavily on labor-intensive rule sets or shallow textual features. The subsequent shift toward deep learning was motivated by these challenges, as neural architectures offered new pathways for automatically learning hierarchical textual representations with minimal handcrafting~\citep{lecun2015deep}.
+
+\section{Deep Learning for Automated ICD Coding}
+
+\subsection{Convolutional and Recurrent Neural Network Approaches}
+
+Deep learning opened up new avenues for capturing semantic and syntactic nuances in clinical text. Convolutional Neural Networks (CNNs) were among the earliest neural architectures to be tested, owing to their effectiveness in extracting local n-gram features~\citep{kim2014convolutional}. In the context of ICD coding, Mullenbach et al.~\citep{mullenbach2018explainable} introduced the Convolutional Attention for Multi-Label classification (CAML) model. CAML employed a convolutional encoder to represent textual segments, followed by a label-specific attention mechanism that highlighted the most relevant tokens for each code prediction. The increased interpretability of this attention mechanism was particularly appealing for healthcare applications, where transparency is critical:
+
+\begin{equation}
+\alpha^{(l)} = \mathrm{softmax}(W^{(l)} h + b^{(l)}),
+\end{equation}
+
+where \(h\) denotes the hidden representations from the convolutional layers, and \(W^{(l)}\), \(b^{(l)}\) are label-specific parameters.
+
+Subsequent CNN-based models explored deeper architectures with residual connections and multi-filter designs. For instance, Li and Yu~\citep{li2020multi} proposed the Multi-Filter Residual Convolutional Neural Network (MultiResCNN), which combines different kernel sizes and residual pathways to capture diverse syntactic and semantic patterns in clinical text. These refinements demonstrated measurable gains in F1-scores on benchmarks like MIMIC-III and other hospital datasets.
+
+Recurrent Neural Networks (RNNs) offered an alternative strategy by encoding sequences of tokens in a step-by-step manner. Long Short-Term Memory (LSTM) networks~\citep{hochreiter1997long} and Gated Recurrent Units (GRUs) were particularly suited for capturing longer-range dependencies in clinical notes. Vu et al.~\citep{vu2020label, vu2020ijcai} employed a bidirectional LSTM with a label attention mechanism, where each label learned distinct attention weights over the text. This enabled more targeted coding decisions, accounting for the context needed by each diagnosis or procedure label. Although RNN models captured sequential information better than many CNN designs, they remained prone to vanishing gradients on very long documents and could be computationally expensive. 
+
+By the late 2010s, CNN- and RNN-based models had markedly outperformed traditional ML baselines~\citep{perotte2014diagnosis}, demonstrating that neural networks could automatically learn powerful text features. Nevertheless, these architectures often required careful truncation or sampling of long notes, and they still struggled under conditions of data imbalance or when handling thousands of rarely seen ICD codes~\citep{wrenn2010quantifying}.
+
+\section{Transformer-Based Architectures and Extensions}
+
+\subsection{Standard Transformers and Clinical Adaptations}
+
+Transformer-based models, especially BERT~\citep{devlin2019bert}, revolutionized NLP by replacing the sequential encoding of RNNs with self-attention over entire sequences. This design facilitated more direct capture of long-range dependencies. However, standard BERT has a typical input limit of 512 tokens, which poses a challenge in clinical coding, where notes can span thousands of tokens~\citep{gao2021limitations}. Early attempts to integrate BERT into ICD coding often truncated notes, losing critical data. 
+
+Huang et al.~\citep{huang2022plm} introduced the PLM-ICD model, which segments each discharge summary into manageable chunks and processes them with a pre-trained BERT. A label attention mechanism then aggregates chunk representations that are relevant to specific codes. Although such approaches allowed BERT-based solutions to outperform many CNN and RNN baselines on micro-F1 scores, truncated documents risked overlooking important evidence for certain diagnoses~\citep{dong2022automated}.
+
+Heo et al.~\citep{heo2022medical} addressed this long-text issue by proposing the Document-to-Sequence BERT (D2SBERT) framework. It divides the full document into multiple fixed-length segments and processes each segment independently through BERT. A sequence-level attention mechanism then merges these representations, capturing essential information across the entire document. This method outperformed various CNN-based benchmarks on MIMIC-III, demonstrating that transformer-based models can effectively handle extensive notes through segmenting and hierarchical attention.
+
+\subsection{Modern BERT-Based Encoders for ICD Coding}
+
+Researchers also investigated architectural modifications and domain-specific pretraining to accommodate larger input lengths, improve inference speeds, and address the domain-specific vocabularies of clinical notes. Several recent works introduce novel BERT-like encoders:
+
+\begin{itemize}
+    \item \textbf{MosaicBERT}~\citep{portes2023mosaicbert} and \textbf{CrammingBERT}~\citep{geiping2023cramming}: Optimize training efficiency, allowing them to achieve comparable BERT performance with shorter training times. They do not fundamentally resolve the difficulties associated with extremely long narrative texts but reduce overall resource demands.
+    \item \textbf{NomicBERT}~\citep{nussbaum2024nomicbert} and \textbf{GTE-en-MLM}~\citep{zhang2024gte}: Extend the maximum input length from 2k to 8k tokens and introduce advanced unpadding methods. These models exhibit modest performance improvements on retrieval tasks and partially address memory constraints by employing sparser attention patterns.
+    \item \textbf{ModernBERT}~\citep{warner2024modernbert}: Incorporates architectural innovations such as alternating local-global attention, Rotary Positional Embeddings (RoPE), and label-aware attention modules. ModernBERT consistently outperforms prior baselines on both short and long ICD coding tasks, while reducing inference memory usage up to 8k tokens. Its hardware-aware design exemplifies how targeted architectural choices can mitigate computational overhead.
+\end{itemize}
+
+Despite progress, BERT-like transformers continue to encounter difficulties with extreme class imbalance, especially for codes encountered infrequently. Hardware constraints remain challenging when notes exceed thousands of tokens. Nonetheless, these tailored encoder designs underscore that carefully balancing domain knowledge, input length, and memory efficiency can produce state-of-the-art clinical coding models.
+
+\section{Curriculum Learning and Hierarchical Knowledge Integration}
+
+The hierarchical structure of ICD codes naturally suggests a curriculum learning approach, where models are initially exposed to broad categories before proceeding to more granular ones. Bengio et al.~\citep{bengio2009curriculum} formally introduced curriculum learning as a strategy to improve model performance by scheduling examples from simple to difficult.
+
+Ren et al.~\citep{ren2022hicu} applied a hierarchical curriculum (HiCu) by organizing ICD codes into tree-like levels. During training, they gradually refined predictions from higher-level ICD groupings (e.g., “diseases of the circulatory system”) down to more specific subcodes. A hyperbolic embedding mechanism~\citep{nickel2017poincare} transferred knowledge from parent-level predictions to child-level nodes, enabling the model to leverage relationships among ICD codes. This approach mitigated some aspects of data imbalance, demonstrated by improved macro-F1 and macro-AUC scores, particularly for infrequent codes. Consequently, curriculum learning has emerged as a complementary strategy to neural architectures, aligning naturally with the structured taxonomies in ICD-9-CM, ICD-10-CM, and ICD-11.
+
+\section{Challenges in Automated ICD Coding}
+
+\subsection{Data Imbalance and Rare Codes}
+
+Automated ICD coding is inherently an extreme multi-label classification problem: a single patient note may contain multiple relevant codes among tens of thousands of possible labels. The distribution of ICD codes is typically long-tailed, where common chronic conditions such as hypertension or diabetes occur frequently, while countless rare conditions appear only a handful of times in training data~\citep{rios2018few}. In the MIMIC-III dataset, over 50\% of codes never appear or occur fewer than ten times~\citep{johnson2016mimic}, making it challenging for models to learn robust representations for infrequent diagnoses.
+
+This imbalance leads to a disparity in model performance: systems that do well on common labels often fail to recall rare codes. Edin et al.~\citep{edin2023automated} conducted a replicability study that exposed how certain train-test splits and suboptimal macro F1 calculations led to inflated performances for rare-code prediction. Their work emphasized fairer evaluation and transparent reporting of model limitations. Similarly, Nguyen et al.~\citep{nguyen2023mimicivicd} showed that MIMIC-IV features a more extreme code distribution, since it merges ICD-9 and ICD-10 subsets. Handling this imbalance remains a top priority, as rare codes can indicate serious or complex conditions requiring accurate documentation and billing.
+
+Curriculum learning strategies~\citep{ren2022hicu} partially address this issue by exploiting code hierarchies to share knowledge between parent and child labels. Additional techniques, such as oversampling and cost-sensitive learning, have also been tested, but they have been less effective at scale~\citep{scheurwegs2017data}. Consequently, novel approaches—particularly synthetic data augmentation—are garnering growing interest in mitigating the challenge of rare code prediction.
+
+\subsection{Processing Long and Complex Clinical Documents}
+
+Clinical narratives can be lengthy and may contain redundancies, inconsistencies, and a wide variety of clinical terminology. Early studies suggested that longer documents degrade model performance, but Edin et al.~\citep{edin2023automated} found the effect of length to be secondary to other factors such as code frequency. Nonetheless, managing long clinical notes remains computationally demanding.
+
+Transformer-based models often face input length constraints (e.g., 512 or 1024 tokens), necessitating strategies such as truncation~\citep{gao2021limitations}, chunking~\citep{huang2022plm}, or hierarchical encoding~\citep{heo2022medical}. Although advanced architectures like Longformer or BigBird can theoretically handle up to 8k tokens or more, they are memory-intensive and can be slow to train. Document summarization and section-based modeling present additional strategies but risk losing crucial detail about specific diagnoses. Finding scalable, efficient ways to represent entire discharge summaries remains an important research focus for real-world deployments.
+
+\subsection{ Explainability and Interpretability}
+
+Explainability is essential in clinical applications, where clinicians, auditors, and coding professionals must trust automated coding outputs~\citep{holzinger2017we}. Attention-based methods, such as CAML~\citep{mullenbach2018explainable} or LAAT~\citep{vu2020label}, highlight relevant text segments for each predicted code, providing intuitive evidence for model decisions. However, these attention weights only offer correlational explanations—further research is needed to establish more causal or structured forms of explainability.
+
+Edin et al.~\citep{edin2024unsupervised} proposed an unsupervised approach that can achieve supervised-level explanation quality, suggesting that external knowledge or adversarial training may produce rationale annotations without costly manual labeling. Additionally, researchers have explored knowledge graphs and symbolic reasoning to justify individual code predictions~\citep{teng2020explainable}. Although these methods can yield greater transparency, fully interpretable models that seamlessly integrate domain knowledge remain an open challenge.
+
+\section{Embedding Models and Clinical Semantic Search}
+
+Embedding models underlie many of the text representation and retrieval tasks in healthcare. They transform sparse textual data into dense vectors that encode semantic relationships among words, sentences, or entire documents. Excoffier et al.~\citep{excoffier2024generalist} compared generalist transformers (trained on broad corpora) to specialized clinical embeddings for ICD semantic search, observing that generalist embeddings were often more robust to minor text rephrasings. This finding implies that domain-specific pretraining might not always be superior if it narrows the model’s domain to patterns less frequent or less stylistically varied than the general language.
+
+Nevertheless, domain-adapted models like ClinicalBERT, BioBERT, and PubMedBERT have achieved better performance in several medical NLP tasks, including ICD coding~\citep{gao2021limitations, ji2021bert}. The discrepancy in outcomes suggests that training set size, the nature of clinical text, and the distribution of code descriptions can all influence whether generalist or specialized embeddings hold the advantage. Moreover, specialized strategies such as code-synonym expansion~\citep{yuan2022codesynonyms} and concept-level attention highlight how embedding-based approaches can leverage existing biomedical ontologies (e.g., UMLS~\citep{bodenreider2004umls}, SNOMED CT~\citep{donnelly2006snomedct}, or cTAKES~\citep{savova2010ctakes}) to improve both performance and explainability.
+
+\section{Knowledge-Based Methods and Symbolic Integration}
+
+Knowledge-based methods aim to incorporate medical ontologies, taxonomies, and domain rules into deep learning architectures. These techniques can address shortcomings in purely data-driven models by providing explicit relationships between diseases or leveraging synonyms and hierarchical groupings~\citep{xie2019ehr, teng2020explainable}. Such integration is especially valuable in ICD coding, where label space is inherently hierarchical, and textual evidence for certain diagnoses may be sparse.
+
+Ren et al.~\citep{ren2022hicu} demonstrated that hyperbolic embeddings capture hierarchical structure better than Euclidean embeddings, particularly for ICD codes. By representing codes in a hyperbolic space, parent-child relationships are learned with low distortion, and training proceeds from broader categories to finer levels. Similarly, Cao et al.~\citep{cao2020hypercore} proposed a hyperbolic co-graph representation that leveraged hierarchical information to enhance predictive performance. Knowledge-based approaches thus help unify symbolic reasoning with data-hungry neural models, thereby improving interpretability and filling gaps where training examples are limited.
+
+\section{Synthetic Data Generation for Rare ICD-10-CM Codes}
+
+\subsection{Motivation and Techniques}
+
+The extreme class imbalance of ICD codes—where many rare diagnoses have few or no training examples—has motivated synthetic data generation as a complementary strategy to curriculum learning and data augmentation. Large Language Models (LLMs), such as GPT-3.5, GPT-4, or fine-tuned LLaMA, are increasingly employed to create realistic clinical narratives for underrepresented diagnoses~\citep{kumichev2024medsyn, falis2024gpt35}. These synthetic notes preserve confidentiality while expanding the variety of text samples available for training models.
+
+Falis et al.~\citep{falis2024gpt35} examined the feasibility of prompting GPT-3.5 with specific ICD-10-CM codes and descriptions to generate discharge summaries. Adding these synthetic notes to real training data produced modest performance improvements on rare codes and helped the model avoid out-of-family misclassifications. However, these gains came at the cost of potentially overfitting to the style of generated text, which might be less diverse than real clinical documentation.
+
+Other augmentation methods include synonym replacement, back-translation, or adversarial generation of latent feature vectors, rather than raw text. Although these approaches are less computationally demanding than prompting large LLMs, they often provide smaller increases in coverage for rare labels. Hybrid strategies that combine knowledge-graph constraints with generative models have also been explored, ensuring that synthetic samples remain clinically plausible~\citep{falis2022horsestozebras}.
+
+\subsection{ Ethical and Practical Considerations}
+
+Synthetic data introduce potential advantages for privacy protection, as real patient identifiers can be omitted or obfuscated. Nevertheless, generative models might inadvertently reproduce sensitive or identifiable fragments if they encountered them during training. Ensuring high-fidelity clinical plausibility is also essential; simplistic or repetitive patterns within synthetic samples could bias the model toward unrepresentative language~\citep{pollard2018eicu}.
+
+In practice, synthetic notes appear to be most beneficial in few-shot or one-shot contexts, where the model has a handful of real examples for a rare code and gains additional variety through generation~\citep{rios2018few}. Full replacement of real data is typically detrimental. As a result, synthetic data remain a supplement rather than a primary information source, especially for regulating or auditing high-stakes billing environments.
+
+\section{Benchmarks and Evaluation Metrics}
+
+\subsection{Public Datasets and Benchmarks}
+
+The research community has benefited significantly from openly available clinical datasets such as MIMIC-III~\citep{johnson2016mimic} and MIMIC-IV~\citep{johnson2023mimicivscidata}. MIMIC-III focuses on ICD-9-CM codes, while MIMIC-IV provides a larger number of hospital admissions and reflects the transition to ICD-10-CM coding~\citep{nguyen2023mimicivicd}. Both datasets contain lengthy discharge summaries with manually assigned ICD codes, making them ideal for evaluating multi-label classification performance. The eICU Collaborative Research Database~\citep{pollard2018eicu} supplies additional notes and structured data across multiple hospital systems, enabling analyses of model generalizability.
+
+Benchmark initiatives standardize tasks, train-dev-test splits, and evaluation pipelines. This fosters comparability among different architectures (e.g., CNNs vs. BERT vs. hierarchical models) and clarifies progress in rare-code prediction. Replication studies have demonstrated that small variations in preprocessing or code filtering can materially affect reported metrics, emphasizing the need for consistent benchmark protocols~\citep{edin2023automated}.
+
+\subsection{Common Evaluation Metrics}
+
+Because automated ICD coding is a multi-label task, precision and recall must be balanced to capture different aspects of performance:
+
+\begin{itemize}
+    \item \textbf{Micro-F1}: Aggregates all predicted and true labels across the dataset, giving higher weight to frequently occurring codes. This is typically higher than macro-F1 and often used to illustrate a model’s overall performance on the bulk of common codes.
+    \item \textbf{Macro-F1}: Computes the F1-score per code and then averages across all codes, giving equal importance to rare and common labels. Macro-F1 is sensitive to performance on the long tail of infrequent codes and is usually much lower.
+    \item \textbf{Micro/Macro AUC}: Measures the area under the ROC curve, either pooling predictions across codes (micro) or taking a simple average of per-code AUC (macro). High AUC often indicates that, with careful threshold tuning, the model could achieve good recall and precision.
+    \item \textbf{Precision@K}: Assesses how many of the top \(K\) predicted codes match the ground truth. This metric is sometimes used in practical coding assistance tools to limit the suggestions displayed to human coders.
+    \item \textbf{Hierarchical Metrics}: Account for partial correctness if a model predicts a closely related code from the same family, as opposed to a completely unrelated code. Such metrics better reflect real-world coding tasks, where distinguishing the correct subtype can be secondary to identifying the right disease category.
+\end{itemize}
+
+Error analyses often examine whether incorrect predictions are at least within the correct organ system or parent node in the ICD hierarchy. Some studies also evaluate interpretability by checking if highlight-based explanations align with key phrases annotated by clinical experts~\citep{mullenbach2018explainable}. These deeper analyses provide a more nuanced picture of model behavior than a single F1 score.
+
+\section{Future Directions and Open Problems}
+
+Despite the substantial progress described thus far, automated ICD coding continues to face many open challenges:
+
+\paragraph{Self-Supervised and Domain-Adaptive Pretraining.} The majority of current models rely on supervised training with limited labeled data. Future systems may exploit large unlabeled clinical corpora through advanced self-supervised objectives or domain-adaptive methods~\citep{gururangan2020donotstop}. Domain-specific LLMs could capture complex medical language better than general-purpose ones, potentially reducing reliance on manually annotated data.
+
+\paragraph{Few-Shot and Zero-Shot ICD Coding.} The long-tailed distribution of ICD codes motivates the development of architectures that can accurately code new or rare labels with minimal training examples~\citep{rios2018few, yang2023fewshoticd}. Models that incorporate code definitions or hierarchical relations—along with advanced prompting techniques—could infer rare labels even when they appear infrequently or not at all in training data.
+
+\paragraph{Multimodal Integration.} Clinical decision-making involves not only unstructured text but also structured data (e.g., labs, vitals) and imaging findings~\citep{choi2016doctorai}. Effective multimodal architectures that combine textual discharge summaries with time-series or image-based signals remain under-explored but hold potential for more holistic coding.
+
+\paragraph{Interpretability and Interactive Learning.} Although attention-based and highlight-driven methods provide partial transparency, future research may explore causal explanations, prototype-based retrieval, or rationale generation to reinforce clinicians’ trust. Interactive AI coding assistants could prompt human coders for clarification, use that feedback to refine predictions, and thus achieve greater accuracy over time.
+
+\paragraph{Ethical and Regulatory Considerations.} Clinical data are sensitive, and large-scale LLM usage must comply with data protection laws. Synthetic generation can mitigate privacy concerns but raises questions about realism and potential bias. Regulatory acceptance may require robust auditing mechanisms, reproducible evaluation, and evidence that automated coding does not compromise patient safety or billing integrity.
+
+\paragraph{ICD-11 and Beyond.} The introduction of ICD-11 presents new structural and semantic complexities. Transferring knowledge from ICD-9 or ICD-10 to ICD-11 demands flexible architectures capable of adapting to new taxonomies. Approaches that use hierarchical embeddings and code-description modeling can help manage these shifts in labeling systems~\citep{gaebel2020changes}.
+
+\section{Summary of the Literature}
+
+Automated ICD coding presents a set of distinct technical and organizational challenges. Initial studies employed rule-based logic and feature-engineered machine learning but were constrained by scalability and the evolving nature of clinical vocabularies~\citep{scheurwegs2017data}. Deep neural architectures, particularly CNNs, RNNs, and transformers, provided significant accuracy improvements by learning hierarchical text representations without extensive manual engineering~\citep{mullenbach2018explainable, li2020multi, heo2022medical}.
+
+Transformer-based models and newer BERT-like encoders excel at capturing complex linguistic features in discharge summaries. However, they require careful handling of long documents, face persistent issues with rare diagnoses, and demand large computational resources. Curriculum learning, hierarchical embeddings, and synthetic data generation offer partial remedies, enhancing performance on uncommon codes and improving interpretability through structured knowledge infusion~\citep{ren2022hicu, falis2024gpt35}.
+
+Recent benchmarking efforts clarify that future progress lies in robust domain-specific pretraining, advanced handling of extreme multi-label imbalances, and deeper integration of medical ontologies. Additionally, evolving demands—such as ICD-11 coding—underline the importance of flexible systems that adapt to changing taxonomies. The development of interactive, interpretable coding assistants, combined with rigorous evaluation and continuous learning, is expected to guide the field toward reliable real-world implementation in clinical and administrative workflows.
+

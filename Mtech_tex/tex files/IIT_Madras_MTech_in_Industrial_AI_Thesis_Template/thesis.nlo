@@ -1,0 +1,83 @@
+\nomenclatureentry{a$\mathcal{D}$@[{$\mathcal{D}$}]\begingroup Full dataset of SA--AKI ICU stays\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{D}_{\mathrm{train}}$@[{$\mathcal{D}_{\mathrm{train}}$}]\begingroup Training partition (80\%)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{D}_{\mathrm{val}}$@[{$\mathcal{D}_{\mathrm{val}}$}]\begingroup Validation partition (10\%)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{D}_{\mathrm{test}}$@[{$\mathcal{D}_{\mathrm{test}}$}]\begingroup Test partition (10\%)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$n,\,n_{\mathrm{train}},\,n_{\mathrm{val}},\,n_{\mathrm{test}}$@[{$n,\,n_{\mathrm{train}},\,n_{\mathrm{val}},\,n_{\mathrm{test}}$}]\begingroup Counts of observations in full and split sets\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$p$@[{$p$}]\begingroup Number of predictors (features)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$i$@[{$i$}]\begingroup $\text{Index for patient/stay, } i=1,\dots,n$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{H}$@[{$\mathcal{H}$}]\begingroup Hypothesis class / model family\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\Lambda$@[{$\Lambda$}]\begingroup Hyperparameter search space\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$t$@[{$t$}]\begingroup Time since ICU admission (hours)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$T_{\mathrm{obs}}$@[{$T_{\mathrm{obs}}$}]\begingroup Observation horizon (first 24 h after ICU admission)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{I}_i(T)$@[{$\mathcal{I}_i(T)$}]\begingroup $\text{Information set for patient } i \text{ up to time } T$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$t_{\mathrm{sepsis}}$@[{$t_{\mathrm{sepsis}}$}]\begingroup Sepsis onset time per Sepsis--3 (cohort definition only)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$t_{\mathrm{aki}}$@[{$t_{\mathrm{aki}}$}]\begingroup AKI onset time per KDIGO (cohort definition only)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$[0,\,T_{\mathrm{obs}}]$@[{$[0,\,T_{\mathrm{obs}}]$}]\begingroup Early window used for predictor construction (T0--T24)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$x_i\in\mathbb{R}^p$@[{$x_i\in\mathbb{R}^p$}]\begingroup T0--T24 feature vector for patient $i$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{A}$@[{$\mathcal{A}$}]\begingroup $\text{Set of summary functionals over } [0,\,T_{\mathrm{obs}}] \text{ (e.g., mean, last, min, max, slope, variance)}$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$m_{ij}\in\{0,1\}$@[{$m_{ij}\in\{0,1\}$}]\begingroup $\text{Missingness indicator for feature } j \text{ of patient } i \text{ (1=missing)}$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{M}$@[{$\mathcal{M}$}]\begingroup Imputation operator fitted on training data\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{S}$@[{$\mathcal{S}$}]\begingroup Scaling/standardization operator fitted on training data\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{E}$@[{$\mathcal{E}$}]\begingroup Encoding operator (e.g., one-hot) fitted on training data\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathcal{P}$@[{$\mathcal{P}$}]\begingroup $\text{End-to-end preprocessing pipeline } \mathcal{E}\circ\mathcal{S}\circ\mathcal{M}$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$y_i\in\{0,1\}$@[{$y_i\in\{0,1\}$}]\begingroup $\text{In-hospital death label for patient } i \text{ (1=death)}$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$f_{\theta}$@[{$f_{\theta}$}]\begingroup $\text{Predictive model mapping } x\mapsto[0,1]\text{, parameters } \theta$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\hat p_i=f_{\theta}(x_i)$@[{$\hat p_i=f_{\theta}(x_i)$}]\begingroup $\text{Predicted probability of death for patient } i$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{logit}(p)$@[{$\mathrm{logit}(p)$}]\begingroup $\text{Log-odds transform } \log\left(\frac{p}{1-p}\right)$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\sigma(z)$@[{$\sigma(z)$}]\begingroup $\text{Logistic function } 1/(1+e^{-z})$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$c$@[{$c$}]\begingroup Probability calibrator (Platt sigmoid or isotonic)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\tilde p_i$@[{$\tilde p_i$}]\begingroup $\text{Calibrated probability for patient } i\text{, } \tilde p_i = (c\circ f_{\theta})(x_i)$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\tau$@[{$\tau$}]\begingroup Classification threshold for decision making\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\delta_{\tau}(x)$@[{$\delta_{\tau}(x)$}]\begingroup $\text{Decision rule } \mathbb{I}\{\tilde p(x)\ge \tau\}$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$w_{+},\,w_{-}$@[{$w_{+},\,w_{-}$}]\begingroup Class weights for positive and negative classes\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\ell(\theta)$@[{$\ell(\theta)$}]\begingroup Average negative log-likelihood (cross-entropy) on training\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{AUROC}$@[{$\mathrm{AUROC}$}]\begingroup Area under the ROC curve\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{AUPRC}$@[{$\mathrm{AUPRC}$}]\begingroup Area under the precision--recall curve\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{BS}$@[{$\mathrm{BS}$}]\begingroup Brier score (mean squared probabilistic error)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{ECE}$@[{$\mathrm{ECE}$}]\begingroup Expected calibration error\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$B$@[{$B$}]\begingroup Number of bins used in calibration/ECE\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$n_b$@[{$n_b$}]\begingroup $\text{Number of samples in bin } b$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{acc}(b)$@[{$\mathrm{acc}(b)$}]\begingroup $\text{Observed event rate in bin } b$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{conf}(b)$@[{$\mathrm{conf}(b)$}]\begingroup $\text{Average predicted probability in bin } b$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{TP},\,\mathrm{FP},\,\mathrm{TN},\,\mathrm{FN}$@[{$\mathrm{TP},\,\mathrm{FP},\,\mathrm{TN},\,\mathrm{FN}$}]\begingroup Confusion-matrix counts\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{TPR},\,\mathrm{TNR},\,\mathrm{FPR},\,\mathrm{FNR}$@[{$\mathrm{TPR},\,\mathrm{TNR},\,\mathrm{FPR},\,\mathrm{FNR}$}]\begingroup Sensitivity, specificity, false positive/negative rates\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{PPV},\,\mathrm{NPV}$@[{$\mathrm{PPV},\,\mathrm{NPV}$}]\begingroup Positive and negative predictive values\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{F1}$@[{$\mathrm{F1}$}]\begingroup F1 score\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\pi$@[{$\pi$}]\begingroup Prevalence of the positive class\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$p_t$@[{$p_t$}]\begingroup Risk threshold interpreted as probability (decision curves)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{NB}(p_t)$@[{$\mathrm{NB}(p_t)$}]\begingroup $\text{Net benefit at threshold } p_t; \text{ weight } \frac{p_t}{1-p_t}$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\widehat{\mathrm{Var}}_{\mathrm{DeLong}}$@[{$\widehat{\mathrm{Var}}_{\mathrm{DeLong}}$}]\begingroup DeLong variance estimator for AUROC\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{CI}_{1-\alpha}$@[{$\mathrm{CI}_{1-\alpha}$}]\begingroup $(1-\alpha) \text{ confidence interval, e.g., via bootstrap}$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$T$@[{$T$}]\begingroup Event/censoring time from ICU admission (generic)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\delta$@[{$\delta$}]\begingroup Event indicator (1=event observed, 0=censored)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$T^{\mathrm{death}},\,\delta^{\mathrm{death}}$@[{$T^{\mathrm{death}},\,\delta^{\mathrm{death}}$}]\begingroup Time to in-hospital death and event indicator\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$S(t\mid x)$@[{$S(t\mid x)$}]\begingroup $\text{Survival function } \mathbb{P}[T>t \mid X=x]$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$H(t\mid x)$@[{$H(t\mid x)$}]\begingroup Cumulative hazard function\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$h(t\mid x)$@[{$h(t\mid x)$}]\begingroup Hazard function\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$h_0(t)$@[{$h_0(t)$}]\begingroup Baseline hazard (Cox model)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\beta$@[{$\beta$}]\begingroup Cox proportional-hazards coefficient vector\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\widehat{S}_{\mathrm{KM}}(t)$@[{$\widehat{S}_{\mathrm{KM}}(t)$}]\begingroup Kaplan--Meier estimator of survival\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\widehat{H}_{\mathrm{NA}}(t)$@[{$\widehat{H}_{\mathrm{NA}}(t)$}]\begingroup Nelson--Aalen estimator of cumulative hazard\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{HR}$@[{$\mathrm{HR}$}]\begingroup $\text{Hazard ratio } =\exp\{\beta^\top \Delta x\}$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$r^{\mathrm{Sch}}(t)$@[{$r^{\mathrm{Sch}}(t)$}]\begingroup $\text{Schoenfeld residual at time } t$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$C$@[{$C$}]\begingroup Harrell’s concordance index\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{IBS}$@[{$\mathrm{IBS}$}]\begingroup Integrated Brier score over a time horizon\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\phi:\mathcal{X}\to\mathbb{R}^d$@[{$\phi:\mathcal{X}\to\mathbb{R}^d$}]\begingroup Low-dimensional embedding (e.g., UMAP)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\kappa:\mathbb{R}^d\to\{1,\dots,K\}\cup\{\mathrm{outlier}\}$@[{$\kappa:\mathbb{R}^d\to\{1,\dots,K\}\cup\{\mathrm{outlier}\}$}]\begingroup Clustering map (e.g., HDBSCAN)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\Pi=\{C_k\}_{k=1}^{K}$@[{$\Pi=\{C_k\}_{k=1}^{K}$}]\begingroup Cluster partition of the feature space\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$C_0$@[{$C_0$}]\begingroup Outlier set under density-based clustering\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$d(\cdot,\cdot)$@[{$d(\cdot,\cdot)$}]\begingroup Distance metric (e.g., Euclidean in embedding space)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mu_k$@[{$\mu_k$}]\begingroup $\text{Cluster representative/centroid for cluster } C_k$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$s$@[{$s$}]\begingroup Silhouette coefficient\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\phi_j(x)$@[{$\phi_j(x)$}]\begingroup $\text{SHAP attribution of feature } j \text{ for case } x$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$g(x)$@[{$g(x)$}]\begingroup $\text{Additive explanation for prediction at } x\text{, } g(x)=\phi_0 + \sum_{j=1}^{p}\phi_j(x)$\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\phi_0$@[{$\phi_0$}]\begingroup Model baseline (expected prediction) used in SHAP\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\Delta\mathrm{SOFA}$@[{$\Delta\mathrm{SOFA}$}]\begingroup Increase in daily SOFA score relative to baseline\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{SCr}$@[{$\mathrm{SCr}$}]\begingroup Serum creatinine\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{UO}$@[{$\mathrm{UO}$}]\begingroup Urine output (mL/kg/h)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathrm{eGFR}$@[{$\mathrm{eGFR}$}]\begingroup Estimated glomerular filtration rate\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathbb{I}\{\cdot\}$@[{$\mathbb{I}\{\cdot\}$}]\begingroup Indicator function (1 if condition holds, else 0)\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathbb{P}[\cdot],\,\mathbb{E}[\cdot],\,\mathrm{Var}[\cdot]$@[{$\mathbb{P}[\cdot],\,\mathbb{E}[\cdot],\,\mathrm{Var}[\cdot]$}]\begingroup Probability, expectation, and variance\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\mathbb{R},\,\mathbb{R}_+$@[{$\mathbb{R},\,\mathbb{R}_+$}]\begingroup Real numbers; nonnegative reals\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$K$@[{$K$}]\begingroup Number of folds in cross-validation\nomeqref {0}|nompageref}{ix}
+\nomenclatureentry{a$\lambda$@[{$\lambda$}]\begingroup Generic regularization strength (e.g., $L_2$ penalty)\nomeqref {0}|nompageref}{ix}

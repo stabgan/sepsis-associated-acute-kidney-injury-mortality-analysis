@@ -1,0 +1,28 @@
+{\bfseries Table} \hfill {\bfseries Caption} \hfill {\bfseries Page}\par 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Overall cohort snapshot (final build).}}{83}{table.caption.77}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Therapy/exposure prevalence in the first 24\,h (1/0 encoding).}}{83}{table.caption.78}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Top 10 most significant associations between missingness indicators and in-hospital mortality.}}{84}{table.caption.82}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {6.1}{\ignorespaces Best performance by algorithm type from the benchmarking experiments, sorted by ROC-AUC.}}{91}{table.caption.88}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces Performance of the final calibrated LightGBM model on the held-out test set.}}{92}{table.caption.90}%
+\contentsline {table}{\numberline {6.3}{\ignorespaces Methodological comparison with representative prior SA--AKI mortality studies.}}{97}{table.caption.97}%
+\addvspace {10\p@ }
+\def \@chapapp {\appendixname }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {B.1}{\ignorespaces Endpoint and timing variables present in file.}}{116}{table.caption.120}%
+\contentsline {table}{\numberline {B.2}{\ignorespaces Therapy/exposure flags (definitions mirror Table~\ref {tab:therapies-prev}).}}{116}{table.caption.121}%
+\contentsline {table}{\numberline {B.3}{\ignorespaces Charlson comorbidity flags (1/0) and prevalence in cohort.}}{117}{table.caption.122}%
+\contentsline {table}{\numberline {B.4}{\ignorespaces Vital-sign base names; day-1 statistics derived via suffixes where applicable.}}{117}{table.caption.123}%
+\contentsline {table}{\numberline {B.5}{\ignorespaces Fluid balance and urine output features.}}{118}{table.caption.124}%
+\contentsline {table}{\numberline {B.6}{\ignorespaces Laboratory and gas-exchange base names (A--M).}}{118}{table.caption.125}%
+\contentsline {table}{\numberline {B.7}{\ignorespaces Laboratory and gas-exchange base names (N--Z).}}{119}{table.caption.126}%
+\contentsline {table}{\numberline {B.8}{\ignorespaces Suffix legend for time-series features.}}{119}{table.caption.127}%
+\addvspace {10\p@ }
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

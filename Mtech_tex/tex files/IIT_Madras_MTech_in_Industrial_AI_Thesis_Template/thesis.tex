@@ -1,0 +1,79 @@
+%% See 'tutorial.pdf'
+\documentclass
+    [mtech,
+     smplmath]
+    {iitmdissertation}
+
+\usepackage{multirow}
+\usepackage{hyperref}
+\renewcommand\textupper[1]{\texorpdfstring{\MakeUppercase{#1}}{#1}}
+\usepackage{xcolor}
+\usepackage{array,booktabs}
+
+% Allow URLs to break at any character to prevent margin overflow
+\makeatletter
+\g@addto@macro{\UrlBreaks}{\UrlOrds}
+\makeatother
+\sloppy
+
+% Fix bibliography left margin: ensure numbered labels fit within margins
+\setlength{\bibhang}{0pt}
+\usepackage{pgfgantt}
+\usepackage{float}
+
+
+%--------
+
+
+\dissertationDepartment      {Department of Chemical Engineering}
+\dissertationAuthorName      {Kaustabh Ganguly}
+\dissertationDateOfBirth     {10 September 2025}
+\dissertationDegree          {Master Of Technology in Industrial Artificial Intelligence}
+\dissertationTitle           {Machine Learning for Clinical Decision Support: Automated ICD Code Prediction and Early Mortality Risk Stratification in the MIMIC-IV Dataset}
+\dissertationMonth           {February}
+\dissertationYear            {2026}
+\dissertationCertificateDate {February 2026}
+\dissertationType            {Thesis}
+\dissertationGuides          {Debopam Nanda \& Samyabrata Chakraborty}
+\dissertationCommitteeName   {Doctoral Committee}
+\dissertationImage           {}
+
+\setupGlossaryAbbreviationsDefinitions
+\begin{document}
+  \prematter
+      %\input 0-prematter/pre-quote
+      %\input 0-prematter/pre-dedication
+      \printCertificate
+      %\input 0-prematter/pre-list-of-publications
+%%
+%%
+%%
+  \begin{FrontMatter}
+      % enable this if you have abbrevations in your report
+      \printGlossaryAndAbbreviations
+      % use this  if you have notations in your report
+      \printNotation
+  \end{FrontMatter}
+%%
+%%
+%%
+  \begin{MainMatter}
+      \input 2-mainmatter/chapters/chap-1-introduction
+      \input 2-mainmatter/chapters/chap-2-literature-review
+      \input 2-mainmatter/chapters/chap-3-problem-definition
+      \input 2-mainmatter/chapters/chap-4-methodology
+      \input 2-mainmatter/chapters/chap-5-dataset-understanding
+      \input 2-mainmatter/chapters/chap-6-results
+      \input 2-mainmatter/chapters/chap-7-conclusions
+
+      \appendix
+      \input 2-mainmatter/appendices/appn-general-notes
+      \input 2-mainmatter/appendices/feature_list
+  \end{MainMatter}
+%%
+%%
+%%
+  \begin{BackMatter}
+      \printBibliographyReferences{references.bib}     
+  \end{BackMatter}
+\end{document}
