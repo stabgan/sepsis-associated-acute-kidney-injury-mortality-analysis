@@ -780,20 +780,21 @@ def build_context(payload: dict[str, object]) -> dict[str, str]:
 
 def table_block(filename: str, caption: str, label: str, *, wide: bool = False, size: str = "small") -> str:
     env = "table*" if wide else "table"
+    max_w = r"\textwidth" if wide else r"\linewidth"
     return (
         rf"\begin{{{env}}}[!t]" + "\n"
         r"\centering" + "\n"
         + rf"\{size}" + "\n"
         + rf"\caption{{{caption}}}" + "\n"
         + rf"\label{{{label}}}" + "\n"
-        + r"\begin{adjustbox}{max width=\textwidth}" + "\n"
+        + rf"\begin{{adjustbox}}{{max width={max_w}}}" + "\n"
         + rf"\input{{tables/{filename}}}" + "\n"
         + r"\end{adjustbox}" + "\n"
         + rf"\end{{{env}}}" + "\n"
     )
 
 
-def figure_block(filename: str, caption: str, label: str, *, width: str = r"\textwidth") -> str:
+def figure_block(filename: str, caption: str, label: str, *, width: str = r"\linewidth") -> str:
     return (
         r"\begin{figure}[!t]" + "\n"
         r"\centering" + "\n"
@@ -897,11 +898,24 @@ def write_refs_bib() -> None:
 
 def write_main_tex(context: dict[str, str]) -> None:
     template = TexTemplate(
-        r"""\documentclass[unnumsec,webpdf,contemporary,large,numbered]{oup-authoring-template}
+        r"""\documentclass[unnumsec,webpdf,contemporary,large,numbered,nocrop]{oup-authoring-template}
 \usepackage{booktabs}
 \usepackage{adjustbox}
 \usepackage{array}
+\usepackage{microtype}
 \graphicspath{{figures/}}
+% OUP class defines \state and \country but not \city (used in placeholder affiliations).
+\providecommand{\city}[1]{#1}
+% webpdf enables CropBox pdfmarks via PostScript \special; pdfTeX ignores them and warns.
+\makeatletter
+\AtBeginDocument{%
+  \let\shipout@@PageObjects\@@empty
+  \let\rest@@dvi@@pages\@@empty
+}%
+\makeatother
+\emergencystretch=2em
+% Contemporary opening header uses nested \hbox to \textwidth (OUP class); ~11.4pt overfull is intrinsic.
+\hfuzz=12pt
 
 \begin{document}
 

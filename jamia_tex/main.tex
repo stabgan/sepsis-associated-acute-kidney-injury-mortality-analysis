@@ -1,8 +1,21 @@
-\documentclass[unnumsec,webpdf,contemporary,large,numbered]{oup-authoring-template}
+\documentclass[unnumsec,webpdf,contemporary,large,numbered,nocrop]{oup-authoring-template}
 \usepackage{booktabs}
 \usepackage{adjustbox}
 \usepackage{array}
+\usepackage{microtype}
 \graphicspath{{figures/}}
+% OUP class defines \state and \country but not \city (used in placeholder affiliations).
+\providecommand{\city}[1]{#1}
+% webpdf enables CropBox pdfmarks via PostScript \special; pdfTeX ignores them and warns.
+\makeatletter
+\AtBeginDocument{%
+  \let\shipout@PageObjects\@empty
+  \let\rest@dvi@pages\@empty
+}%
+\makeatother
+\emergencystretch=2em
+% Contemporary opening header uses nested \hbox to \textwidth (OUP class); ~11.4pt overfull is intrinsic.
+\hfuzz=12pt
 
 \begin{document}
 
@@ -61,7 +74,7 @@ The analysis pipeline began with an audit and data-contract pass, followed by fe
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure1_workflow.pdf}
+\includegraphics[width=\linewidth]{figure1_workflow.pdf}
 \caption{Cohort definition and evaluation workflow.}
 \label{fig:workflow}
 \end{figure}
@@ -84,7 +97,7 @@ The main method is Mondrian conformal prediction.\cite{vovk2005algorithmic,angel
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure3_conformal_flow.pdf}
+\includegraphics[width=\linewidth]{figure3_conformal_flow.pdf}
 \caption{Conformal selective-triage decision flow.}
 \label{fig:conformal-flow}
 \end{figure}
@@ -95,7 +108,7 @@ The disagreement baseline translates model disagreement into an empirical defer 
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure4_disagreement_flow.pdf}
+\includegraphics[width=\linewidth]{figure4_disagreement_flow.pdf}
 \caption{Disagreement-based selective-triage comparator.}
 \label{fig:disagreement-flow}
 \end{figure}
@@ -116,7 +129,7 @@ Table~\ref{tab:cohort} summarizes the working cohort and the constraints that bo
 \small
 \caption{Cohort and data-contract summary.}
 \label{tab:cohort}
-\begin{adjustbox}{max width=\textwidth}
+\begin{adjustbox}{max width=\linewidth}
 \input{tables/table1_cohort.tex}
 \end{adjustbox}
 \end{table}
@@ -127,7 +140,7 @@ Figure~\ref{fig:ceiling} and Table~\ref{tab:benchmark} anchor the benchmark stor
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure2_prediction_ceiling.png}
+\includegraphics[width=\linewidth]{figure2_prediction_ceiling.png}
 \caption{Prediction ceiling and benchmark summary.}
 \label{fig:ceiling}
 \end{figure}
@@ -146,7 +159,7 @@ Figure~\ref{fig:ceiling} and Table~\ref{tab:benchmark} anchor the benchmark stor
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure7_clinical_utility_panel.png}
+\includegraphics[width=\linewidth]{figure7_clinical_utility_panel.png}
 \caption{Calibration and clinical-utility panel.}
 \label{fig:utility-panel}
 \end{figure}
@@ -172,7 +185,7 @@ Table~\ref{tab:conformal-main} summarizes repeated subject-grouped single-model 
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure5_conformal_operating_curve.png}
+\includegraphics[width=\linewidth]{figure5_conformal_operating_curve.png}
 \caption{Conformal operating-characteristic curve.}
 \label{fig:conformal-curve}
 \end{figure}
@@ -196,7 +209,7 @@ Table~\ref{tab:conformal-consensus} and Figure~\ref{fig:consensus} show the cons
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure6_consensus_tradeoff.png}
+\includegraphics[width=\linewidth]{figure6_consensus_tradeoff.png}
 \caption{Multi-model consensus trade-off panel.}
 \label{fig:consensus}
 \end{figure}
@@ -223,7 +236,7 @@ Table~\ref{tab:shift} and Figure~\ref{fig:shift} summarize robustness under simu
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure8_shift_panel.png}
+\includegraphics[width=\linewidth]{figure8_shift_panel.png}
 \caption{Robustness-under-shift panel.}
 \label{fig:shift}
 \end{figure}
@@ -247,7 +260,7 @@ Table~\ref{tab:subgroups} and Figure~\ref{fig:subgroups} summarize subgroup hete
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{figure9_subgroup_forest.png}
+\includegraphics[width=\linewidth]{figure9_subgroup_forest.png}
 \caption{Subgroup coverage and reliability forest plot.}
 \label{fig:subgroups}
 \end{figure}
@@ -297,7 +310,7 @@ Appendix~\ref{app:benchmarks} gathers the benchmark tables that support the main
 \small
 \caption{Appendix Table B1. Repeated grouped benchmark summary for the main tree-family comparison.}
 \label{tab:app-b1}
-\begin{adjustbox}{max width=\textwidth}
+\begin{adjustbox}{max width=\linewidth}
 \input{tables/appendix_b1_tree_benchmark.tex}
 \end{adjustbox}
 \end{table}
@@ -351,7 +364,7 @@ Grouped Optuna improved the LightGBM validation operating point (validation AURO
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{appendix_b1_roc_pr.png}
+\includegraphics[width=\linewidth]{appendix_b1_roc_pr.png}
 \caption{Appendix Figure B1. ROC and PR benchmark figure.}
 \label{fig:app-b1}
 \end{figure}
@@ -359,7 +372,7 @@ Grouped Optuna improved the LightGBM validation operating point (validation AURO
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{appendix_b2_calibration_curve.png}
+\includegraphics[width=\linewidth]{appendix_b2_calibration_curve.png}
 \caption{Appendix Figure B2. Calibration curve for the deployed baseline.}
 \label{fig:app-b2}
 \end{figure}
@@ -367,7 +380,7 @@ Grouped Optuna improved the LightGBM validation operating point (validation AURO
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{appendix_b3_decision_curve.png}
+\includegraphics[width=\linewidth]{appendix_b3_decision_curve.png}
 \caption{Appendix Figure B3. Decision curve for benchmark and fixed-policy comparators.}
 \label{fig:app-b3}
 \end{figure}
