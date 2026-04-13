@@ -8,8 +8,9 @@
 | Figure 4 | Disagreement-based selective-triage comparator | 02_methods.md (mermaid) | saaki/jamia_manuscript/02_methods.md |
 | Figure 5 | Conformal operating-characteristic curve | conformal_operating_curve.png | local_outputs/artifacts/conformal_operating_curve.png |
 | Figure 6 | Multi-model conformal consensus trade-off panel | conformal_consensus_tradeoff.png | local_outputs/artifacts/conformal_consensus_tradeoff.png |
-| Figure 7 | ROC and PR benchmark figure | roc_pr_benchmarks.png | local_outputs/artifacts/roc_pr_benchmarks.png |
+| Figure 7 | Calibration and clinical-utility panel | clinical_utility_panel.png | local_outputs/artifacts/clinical_utility_panel.png |
 | Figure 8 | Robustness-under-shift panel | conformal_shift_panel.png | local_outputs/artifacts/conformal_shift_panel.png |
 | Figure 9 | Subgroup coverage and reliability forest plot | conformal_subgroup_forest.png | local_outputs/artifacts/conformal_subgroup_forest.png |
-| Appendix Figure B1 | Calibration curve for the deployed baseline | calibration_curve.png | local_outputs/artifacts/calibration_curve.png |
-| Appendix Figure B2 | Decision curve for the deployed baseline | decision_curve.png | local_outputs/artifacts/decision_curve.png |
+| Appendix Figure B1 | ROC and PR benchmark figure | roc_pr_benchmarks.png | local_outputs/artifacts/roc_pr_benchmarks.png |
+| Appendix Figure B2 | Calibration curve for the deployed baseline | calibration_curve.png | local_outputs/artifacts/calibration_curve.png |
+| Appendix Figure B3 | Decision curve for benchmark and fixed-policy comparators | decision_curve.png | local_outputs/artifacts/decision_curve.png |

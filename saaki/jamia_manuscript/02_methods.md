@@ -23,7 +23,9 @@ flowchart LR
 
 ## Baselines
 
-Conventional baselines included logistic regression, LightGBM, and XGBoost. Calibration was selected on grouped validation data using the main pipeline. We also retained score-only comparators based on `SOFA` and `APACHE-III` if those columns were present, treating them as single-feature logistic baselines under the same grouped protocol.
+Conventional baselines included logistic regression, LightGBM, and XGBoost. Calibration was selected on grouped validation data by benchmarking `sigmoid` and `isotonic` recalibration on the held-out grouped validation split. We also retained score-only comparators based on `SOFA` and `APACHE-III` if those columns were present, treating them as single-feature logistic baselines under the same grouped protocol.
+
+To close the remaining methodological rigor gap from earlier drafts, we added a grouped Optuna search for the main LightGBM benchmark. The search used `40` trials and optimized a deployment-oriented objective that combined AUROC, recall at `PPV >= 0.50`, and Brier score on grouped validation data. The tuned LightGBM configuration was then frozen and carried into the repeated grouped benchmark. We also added CatBoost as a benchmark-only diversity comparator to test whether a distinct gradient-boosting family materially changed the model-selection story.
 
 The disagreement-based selective-triage comparator follows the earlier project draft. A process-enriched full model and a physiology-severity model are trained on the same grouped split. Cases are actionable only when the two models agree closely enough on grouped validation data.
 
@@ -67,4 +69,8 @@ flowchart TD
 
 ## Metrics And Statistical Analysis
 
-We reported AUROC, AUPRC, Brier score, expected calibration error, calibration intercept, calibration slope, recall at `PPV >= 0.50`, alert burden, and low-risk coverage. For conformal selective triage we reported coverage, certain-decision fraction, defer rate, alert PPV, clear NPV, and miss count. Subject-aware uncertainty was summarized with clustered bootstrap confidence intervals. Shift robustness was assessed by random missingness injection and by dropout of measurement-process and care-process feature families. Secondary horizon performance was also exported for the journal package.
+We reported AUROC, AUPRC, Brier score, expected calibration error, calibration intercept, calibration slope, recall at `PPV >= 0.50`, alert burden, and low-risk coverage. For conformal selective triage we reported coverage, certain-decision fraction, defer rate, alert PPV, clear NPV, and miss count. Subject-aware uncertainty was summarized with clustered bootstrap confidence intervals, and headline conformal estimates were repeated across `21` grouped seeds. Shift robustness was assessed by random missingness injection and by dropout of measurement-process and care-process feature families. Clinical utility was summarized with decision-curve analysis against `APACHE-III`, `SOFA`, treat-all, treat-none, and fixed-policy comparators. The primary decision-curve interpretation focused on the continuous selected model versus clinical scores, while conformal and disagreement curves were treated as deployment-policy complements rather than direct substitutes for continuous ranking. Subgroup conformal summaries are reported at `alpha=0.10` to balance coverage with enough actionable volume for stable subgroup interpretation. Secondary horizon performance was also exported for the journal package.
+
+## Ethics, Data Access, And Reproducibility
+
+This study is a retrospective secondary analysis of a de-identified MIMIC-derived cohort and does not involve prospective intervention or direct patient contact. The repository distributes code, derived artifact summaries, and manuscript assets rather than raw source patient data. Reproducing the cohort from source requires independent credentialed access to MIMIC and the associated data-use approvals. All manuscript claims are therefore limited to internal validation on the checked-in derivative cohort and should not be read as transportability or bedside-readiness claims.

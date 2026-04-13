@@ -26,6 +26,7 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 import numpy as np
+import optuna
 import pandas as pd
 from catboost import CatBoostClassifier
 from lightgbm import LGBMClassifier
@@ -131,7 +132,10 @@ CARE_PROCESS_COLS = [
 ]
 BASELINE_PROCESS_COLS = ["baseline_scr_estimated_flag"]
 PRIMARY_MODELS = ["logistic", "lightgbm", "xgboost"]
-ROBUST_MODELS = ["logistic", "lightgbm", "xgboost"]
+EXPLORATORY_BENCHMARK_MODELS = ["catboost"]
+CALIBRATION_BENCHMARK_MODELS = PRIMARY_MODELS + EXPLORATORY_BENCHMARK_MODELS
+ROBUST_MODELS = CALIBRATION_BENCHMARK_MODELS
+CONFORMAL_CONSENSUS_MODELS = ["lightgbm", "xgboost", "logistic"]
 CALIBRATION_METHODS = ["sigmoid", "isotonic"]
 MONOTONIC_FEATURES = {
     "age": 1,
@@ -146,6 +150,14 @@ MONOTONIC_FEATURES = {
     "meanbp_median": -1,
     "spo2_median": -1,
 }
+CANONICAL_HPO_VERSION = "2026-04-13-01"
+CANONICAL_HPO_MODELS = ["lightgbm"]
+CANONICAL_HPO_TRIALS = {"lightgbm": 40}
+CANONICAL_HPO_OBJECTIVE = "auroc_plus_0.25_recall_ppv50_minus_0.10_brier"
+CANONICAL_HPO_TOP_TRIALS = 10
+TUNED_MODEL_PARAMS_PATH = ARTIFACT_DIR / "tuned_model_params.json"
+CANONICAL_HPO_TOP_TRIALS_PATH = ARTIFACT_DIR / "canonical_hpo_top_trials.csv"
+CANONICAL_HPO_SUMMARY_PATH = ARTIFACT_DIR / "canonical_hpo_summary.json"
 
 
 @dataclass
@@ -981,65 +993,258 @@ def summarize_metric_intervals(
     return pd.DataFrame(rows).reset_index(drop=True)
 
 
-def build_estimator(model_name: str, y_train: pd.Series, random_state: int) -> Any:
+@lru_cache(maxsize=1)
+def load_tuned_model_payload() -> dict[str, Any]:
+    if not TUNED_MODEL_PARAMS_PATH.exists():
+        return {}
+    payload = json.loads(TUNED_MODEL_PARAMS_PATH.read_text())
+    if payload.get("version") != CANONICAL_HPO_VERSION:
+        return {}
+    return payload
+
+
+def tuned_model_params(model_name: str) -> dict[str, Any]:
+    payload = load_tuned_model_payload()
+    models = payload.get("models", {})
+    if not isinstance(models, dict):
+        return {}
+    model_payload = models.get(model_name, {})
+    if not isinstance(model_payload, dict):
+        return {}
+    params = model_payload.get("best_params", {})
+    return dict(params) if isinstance(params, dict) else {}
+
+
+def default_estimator_params(
+    model_name: str, y_train: pd.Series, random_state: int
+) -> dict[str, Any]:
     positives = max(float(y_train.sum()), 1.0)
     negatives = max(float(len(y_train) - y_train.sum()), 1.0)
     scale_pos_weight = negatives / positives
 
     if model_name == "logistic":
-        return LogisticRegression(
-            max_iter=3000,
-            class_weight="balanced",
-            solver="lbfgs",
-            random_state=random_state,
-        )
+        return {
+            "max_iter": 3000,
+            "class_weight": "balanced",
+            "solver": "lbfgs",
+            "random_state": random_state,
+        }
     if model_name == "lightgbm":
-        return LGBMClassifier(
-            objective="binary",
-            n_estimators=350,
-            learning_rate=0.05,
-            num_leaves=31,
-            subsample=0.85,
-            colsample_bytree=0.85,
-            min_child_samples=20,
-            reg_alpha=0.1,
-            reg_lambda=1.0,
-            class_weight="balanced",
-            n_jobs=CPU_COUNT,
-            random_state=random_state,
-            verbose=-1,
-        )
+        return {
+            "objective": "binary",
+            "n_estimators": 350,
+            "learning_rate": 0.05,
+            "num_leaves": 31,
+            "subsample": 0.85,
+            "colsample_bytree": 0.85,
+            "min_child_samples": 20,
+            "reg_alpha": 0.1,
+            "reg_lambda": 1.0,
+            "class_weight": "balanced",
+            "n_jobs": CPU_COUNT,
+            "random_state": random_state,
+            "verbose": -1,
+        }
     if model_name == "xgboost":
-        return XGBClassifier(
-            objective="binary:logistic",
-            eval_metric="logloss",
-            n_estimators=350,
-            learning_rate=0.05,
-            max_depth=4,
-            min_child_weight=1.0,
-            subsample=0.85,
-            colsample_bytree=0.85,
-            reg_alpha=0.0,
-            reg_lambda=1.0,
-            scale_pos_weight=scale_pos_weight,
-            tree_method="hist",
-            n_jobs=CPU_COUNT,
-            random_state=random_state,
-        )
+        return {
+            "objective": "binary:logistic",
+            "eval_metric": "logloss",
+            "n_estimators": 350,
+            "learning_rate": 0.05,
+            "max_depth": 4,
+            "min_child_weight": 1.0,
+            "subsample": 0.85,
+            "colsample_bytree": 0.85,
+            "reg_alpha": 0.0,
+            "reg_lambda": 1.0,
+            "scale_pos_weight": scale_pos_weight,
+            "tree_method": "hist",
+            "n_jobs": CPU_COUNT,
+            "random_state": random_state,
+        }
     if model_name == "catboost":
-        return CatBoostClassifier(
-            iterations=500,
-            learning_rate=0.04,
-            depth=6,
-            loss_function="Logloss",
-            eval_metric="AUC",
-            verbose=False,
-            random_seed=random_state,
-            auto_class_weights="Balanced",
-            thread_count=-1,
-            train_dir=str(CATBOOST_OUTPUT_DIR),
-        )
+        return {
+            "iterations": 500,
+            "learning_rate": 0.04,
+            "depth": 6,
+            "loss_function": "Logloss",
+            "eval_metric": "AUC",
+            "verbose": False,
+            "random_seed": random_state,
+            "auto_class_weights": "Balanced",
+            "thread_count": -1,
+            "train_dir": str(CATBOOST_OUTPUT_DIR),
+        }
     raise ValueError(f"Unsupported model: {model_name}")
+
+
+def build_estimator(
+    model_name: str,
+    y_train: pd.Series,
+    random_state: int,
+    *,
+    param_overrides: dict[str, Any] | None = None,
+    use_tuned_defaults: bool = True,
+) -> Any:
+    params = default_estimator_params(model_name, y_train, random_state)
+    if use_tuned_defaults:
+        params.update(tuned_model_params(model_name))
+    if param_overrides:
+        params.update(param_overrides)
+
+    if model_name == "logistic":
+        return LogisticRegression(**params)
+    if model_name == "lightgbm":
+        return LGBMClassifier(**params)
+    if model_name == "xgboost":
+        return XGBClassifier(**params)
+    if model_name == "catboost":
+        return CatBoostClassifier(**params)
+    raise ValueError(f"Unsupported model: {model_name}")
+
+
+def canonical_hpo_score(auroc: float, recall_at_ppv_050: float, brier: float) -> float:
+    recall = 0.0 if math.isnan(recall_at_ppv_050) else recall_at_ppv_050
+    if math.isnan(auroc):
+        return float("-inf")
+    return float(auroc + 0.25 * recall - 0.10 * brier)
+
+
+def sample_hpo_params(trial: optuna.Trial, model_name: str) -> dict[str, Any]:
+    if model_name == "lightgbm":
+        return {
+            "n_estimators": trial.suggest_int("n_estimators", 200, 900),
+            "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.20, log=True),
+            "num_leaves": trial.suggest_int("num_leaves", 16, 96),
+            "max_depth": trial.suggest_int("max_depth", 3, 10),
+            "min_child_samples": trial.suggest_int("min_child_samples", 10, 80),
+            "subsample": trial.suggest_float("subsample", 0.60, 1.0),
+            "colsample_bytree": trial.suggest_float("colsample_bytree", 0.50, 1.0),
+            "reg_alpha": trial.suggest_float("reg_alpha", 1e-4, 10.0, log=True),
+            "reg_lambda": trial.suggest_float("reg_lambda", 1e-4, 10.0, log=True),
+        }
+    raise ValueError(f"Unsupported HPO model: {model_name}")
+
+
+def run_canonical_hpo(
+    frame: pd.DataFrame,
+    feature_cols: list[str],
+    *,
+    random_state: int = 42,
+) -> tuple[dict[str, Any], pd.DataFrame]:
+    optuna.logging.set_verbosity(optuna.logging.WARNING)
+    train_outer, _test_outer, train_model, val_model = split_frame(
+        frame,
+        label_col=TARGET_COL,
+        random_state=random_state,
+        use_group_split=True,
+    )
+    feature_space = fit_feature_space(train_model, feature_cols, train_model[TARGET_COL])
+    X_train = feature_space.transform_frame(train_model)
+    X_val = feature_space.transform_frame(val_model)
+    y_train = train_model[TARGET_COL]
+    y_val = val_model[TARGET_COL]
+
+    payload: dict[str, Any] = {
+        "version": CANONICAL_HPO_VERSION,
+        "objective": CANONICAL_HPO_OBJECTIVE,
+        "split_random_state": random_state,
+        "feature_set": "full",
+        "models": {},
+    }
+    top_trial_rows: list[dict[str, Any]] = []
+
+    for model_name in CANONICAL_HPO_MODELS:
+        trial_budget = int(CANONICAL_HPO_TRIALS.get(model_name, 0))
+        if trial_budget <= 0:
+            continue
+
+        def objective(trial: optuna.Trial) -> float:
+            sampled_params = sample_hpo_params(trial, model_name)
+            estimator = build_estimator(
+                model_name,
+                y_train,
+                random_state,
+                param_overrides=sampled_params,
+                use_tuned_defaults=False,
+            )
+            estimator.fit(X_train, y_train)
+            val_probs = predict_probabilities(estimator, X_val)
+            metrics = binary_metrics(y_val, val_probs, threshold=0.50)
+            frontier = threshold_search(y_val, val_probs, precision_target=PRIMARY_PRECISION_TARGET)
+            recall = float(frontier.get("recall", float("nan")))
+            precision = float(frontier.get("precision", float("nan")))
+            threshold = float(frontier.get("threshold", float("nan")))
+            score = canonical_hpo_score(float(metrics["auroc"]), recall, float(metrics["brier"]))
+            trial.set_user_attr("auroc", float(metrics["auroc"]))
+            trial.set_user_attr("auprc", float(metrics["auprc"]))
+            trial.set_user_attr("brier", float(metrics["brier"]))
+            trial.set_user_attr("ece", float(metrics["ece"]))
+            trial.set_user_attr("recall_at_ppv_050", recall)
+            trial.set_user_attr("precision_at_ppv_050", precision)
+            trial.set_user_attr("threshold_ppv_050", threshold)
+            return score
+
+        study = optuna.create_study(
+            direction="maximize",
+            sampler=optuna.samplers.TPESampler(seed=random_state),
+        )
+        study.optimize(
+            objective,
+            n_trials=trial_budget,
+            n_jobs=max(1, min(8, CPU_COUNT)),
+            show_progress_bar=False,
+        )
+
+        best_trial = study.best_trial
+        payload["models"][model_name] = {
+            "n_trials": len(study.trials),
+            "best_value": float(best_trial.value),
+            "best_params": best_trial.params,
+            "best_metrics": {
+                "auroc": float(best_trial.user_attrs.get("auroc", float("nan"))),
+                "auprc": float(best_trial.user_attrs.get("auprc", float("nan"))),
+                "brier": float(best_trial.user_attrs.get("brier", float("nan"))),
+                "ece": float(best_trial.user_attrs.get("ece", float("nan"))),
+                "recall_at_ppv_050": float(best_trial.user_attrs.get("recall_at_ppv_050", float("nan"))),
+                "precision_at_ppv_050": float(best_trial.user_attrs.get("precision_at_ppv_050", float("nan"))),
+                "threshold_ppv_050": float(best_trial.user_attrs.get("threshold_ppv_050", float("nan"))),
+            },
+        }
+
+        completed_trials = [
+            trial for trial in study.trials if trial.state == optuna.trial.TrialState.COMPLETE
+        ]
+        ordered_trials = sorted(
+            completed_trials,
+            key=lambda trial: float(trial.value if trial.value is not None else float("-inf")),
+            reverse=True,
+        )
+        for trial in ordered_trials[:CANONICAL_HPO_TOP_TRIALS]:
+            row = {
+                "model_name": model_name,
+                "trial_number": int(trial.number),
+                "objective_value": float(trial.value if trial.value is not None else float("nan")),
+                "auroc": float(trial.user_attrs.get("auroc", float("nan"))),
+                "auprc": float(trial.user_attrs.get("auprc", float("nan"))),
+                "brier": float(trial.user_attrs.get("brier", float("nan"))),
+                "ece": float(trial.user_attrs.get("ece", float("nan"))),
+                "recall_at_ppv_050": float(trial.user_attrs.get("recall_at_ppv_050", float("nan"))),
+                "precision_at_ppv_050": float(trial.user_attrs.get("precision_at_ppv_050", float("nan"))),
+                "threshold_ppv_050": float(trial.user_attrs.get("threshold_ppv_050", float("nan"))),
+            }
+            for key, value in trial.params.items():
+                row[f"param_{key}"] = value
+            top_trial_rows.append(row)
+        log.info(
+            "Canonical HPO model=%s best objective=%.4f AUROC=%.3f recall@PPV0.50=%.3f",
+            model_name,
+            float(best_trial.value),
+            float(best_trial.user_attrs.get("auroc", float("nan"))),
+            float(best_trial.user_attrs.get("recall_at_ppv_050", float("nan"))),
+        )
+
+    return payload, pd.DataFrame(top_trial_rows)
 
 
 def build_monotonic_model(
@@ -1152,7 +1357,7 @@ def choose_best_calibration_per_model(
     X_val = feature_space.transform_frame(val_model)
 
     records: list[ModelSelectionRecord] = []
-    for model_name in PRIMARY_MODELS:
+    for model_name in CALIBRATION_BENCHMARK_MODELS:
         for calibration_method in CALIBRATION_METHODS:
             record = fit_and_score_candidate(
                 model_name=model_name,
@@ -1956,7 +2161,7 @@ def repeated_conformal_consensus(
     method: str = "mondrian",
 ) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
-    consensus_models = ["lightgbm", "xgboost", "logistic"]
+    consensus_models = CONFORMAL_CONSENSUS_MODELS
     for seed in CONFORMAL_REPEATED_SEEDS:
         train_outer, test_outer, train_model, cal_model = split_frame(
             frame,
@@ -2513,7 +2718,7 @@ def build_clinical_utility_artifacts(
         )
         policy_metric_rows.append(alert_policy_metrics(y_true, alert_mask, strategy_name=strategy_name))
 
-    consensus_models = ["lightgbm", "xgboost", "logistic"]
+    consensus_models = CONFORMAL_CONSENSUS_MODELS
     consensus_bundles: dict[str, dict[str, Any]] = {}
     for model_name in consensus_models:
         consensus_bundles[model_name] = fit_conformal_bundle(
@@ -2640,7 +2845,7 @@ def select_best_model(repeated_results: pd.DataFrame) -> str:
         render_table(summary, floatfmt=".3f"),
     )
     deployable_summary = summary.loc[
-        [index for index in summary.index if index != "monotonic_hgbt"]
+        [index for index in summary.index if index in PRIMARY_MODELS]
     ]
     return str(deployable_summary.index[0])
 
@@ -3383,7 +3588,18 @@ def write_benchmark_report(
     ceiling_table: pd.DataFrame,
     clinical_score_table: pd.DataFrame,
     clinical_score_operating_table: pd.DataFrame | None = None,
+    hpo_payload: dict[str, Any] | None = None,
+    hpo_trials: pd.DataFrame | None = None,
 ) -> None:
+    def render_scalar(value: Any, digits: int = 3) -> str:
+        if value is None:
+            return "NA"
+        if isinstance(value, (int, float, np.integer, np.floating)):
+            if pd.isna(value):
+                return "NA"
+            return f"{float(value):.{digits}f}"
+        return str(value)
+
     lines = [
         "# Benchmark and ceiling report",
         "",
@@ -3395,6 +3611,36 @@ def write_benchmark_report(
         "",
         render_table(benchmark_summary, index=False, floatfmt=".3f"),
     ]
+    if hpo_payload and hpo_payload.get("models"):
+        lines.extend(
+            [
+                "",
+                "## Canonical grouped Optuna tuning",
+                "",
+                f"- Objective: `{hpo_payload.get('objective', CANONICAL_HPO_OBJECTIVE)}`",
+                f"- Split design: subject-grouped train/validation search with random state `{hpo_payload.get('split_random_state', 42)}`.",
+                f"- Tuned feature set: `{hpo_payload.get('feature_set', 'full')}`",
+            ]
+        )
+        for model_name, model_payload in hpo_payload.get("models", {}).items():
+            best_metrics = model_payload.get("best_metrics", {})
+            lines.append(
+                "- "
+                f"`{model_name}`: `{model_payload.get('n_trials', 0)}` trials, "
+                f"best objective `{render_scalar(model_payload.get('best_value'))}`, "
+                f"validation AUROC `{render_scalar(best_metrics.get('auroc'))}`, "
+                f"recall@PPV0.50 `{render_scalar(best_metrics.get('recall_at_ppv_050'))}`, "
+                f"Brier `{render_scalar(best_metrics.get('brier'))}`."
+            )
+        if hpo_trials is not None and not hpo_trials.empty:
+            lines.extend(
+                [
+                    "",
+                    "### Top HPO trials",
+                    "",
+                    render_table(hpo_trials, index=False, floatfmt=".3f"),
+                ]
+            )
     if not clinical_score_table.empty:
         lines.extend(
             [
@@ -3682,6 +3928,12 @@ def run_workflow() -> None:
     write_audit_report(audit, feature_sets)
     write_data_contract(data_contract)
     write_journal_positioning()
+
+    hpo_payload, hpo_top_trials = run_canonical_hpo(frame, feature_sets["full"], random_state=42)
+    write_json(CANONICAL_HPO_SUMMARY_PATH, hpo_payload)
+    hpo_top_trials.to_csv(CANONICAL_HPO_TOP_TRIALS_PATH, index=False)
+    write_json(TUNED_MODEL_PARAMS_PATH, hpo_payload)
+    load_tuned_model_payload.cache_clear()
 
     calibration_benchmark = choose_best_calibration_per_model(
         frame,
@@ -4051,6 +4303,8 @@ def run_workflow() -> None:
         ceiling_table,
         clinical_score_summary,
         score_operating_points,
+        hpo_payload,
+        hpo_top_trials,
     )
     write_clinical_utility_report(
         utility_continuous,
