@@ -1,0 +1,18 @@
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+Ensemble & Base model(s) & alpha & Seeds & Coverage mean & Certain fraction & Alert PPV & Clear NPV & Miss count\\
+\midrule
+intersection & lightgbm+xgboost+logistic & 0.050 & 21 & 0.911 & 0.462 & 0.591 & 0.926 & 45.048\\
+intersection & lightgbm+xgboost+logistic & 0.100 & 21 & 0.835 & 0.683 & 0.534 & 0.901 & 86.000\\
+intersection & lightgbm+xgboost+logistic & 0.150 & 21 & 0.766 & 0.820 & 0.501 & 0.885 & 116.762\\
+intersection & lightgbm+xgboost+logistic & 0.200 & 21 & 0.699 & 0.888 & 0.486 & 0.876 & 134.000\\
+single\_model & xgboost & 0.050 & 21 & 0.952 & 0.318 & 0.643 & 0.948 & 23.095\\
+single\_model & xgboost & 0.100 & 21 & 0.900 & 0.503 & 0.579 & 0.924 & 49.952\\
+single\_model & xgboost & 0.150 & 21 & 0.848 & 0.653 & 0.540 & 0.903 & 80.190\\
+single\_model & xgboost & 0.200 & 21 & 0.797 & 0.782 & 0.509 & 0.887 & 109.000\\
+union & lightgbm+xgboost+logistic & 0.050 & 21 & 0.982 & 0.164 & 0.729 & 0.962 & 8.714\\
+union & lightgbm+xgboost+logistic & 0.100 & 21 & 0.954 & 0.308 & 0.651 & 0.949 & 21.381\\
+union & lightgbm+xgboost+logistic & 0.150 & 21 & 0.922 & 0.432 & 0.606 & 0.933 & 38.190\\
+union & lightgbm+xgboost+logistic & 0.200 & 21 & 0.885 & 0.550 & 0.568 & 0.918 & 58.286\\
+\bottomrule
+\end{tabular}

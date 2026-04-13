@@ -1,0 +1,13 @@
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Strategy & Alert rate & Alert precision & Alert recall & Net benefit @0.10 & Net benefit @0.20 & Net benefit @0.30\\
+\midrule
+treat\_all & 1.000 & 0.265 & 1.000 & 0.184 & 0.082 & -0.049\\
+treat\_none & 0.000 & NA & 0.000 & 0.000 & 0.000 & 0.000\\
+fixed\_threshold\_ppv50 & 0.296 & 0.493 & 0.550 & 0.129 & 0.108 & 0.082\\
+disagreement\_selective & 0.099 & 0.510 & 0.190 & 0.045 & 0.038 & 0.030\\
+conformal\_alpha\_0.05 & 0.107 & 0.640 & 0.258 & 0.064 & 0.059 & 0.052\\
+conformal\_alpha\_0.10 & 0.157 & 0.589 & 0.348 & 0.085 & 0.076 & 0.065\\
+union\_conformal\_alpha\_0.05 & 0.050 & 0.752 & 0.143 & 0.037 & 0.035 & 0.033\\
+\bottomrule
+\end{tabular}
