@@ -1,0 +1,209 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{Poston2019,Kellum2021}
+\citation{Hoste2015,Bagshaw2007}
+\citation{See2019}
+\citation{Zarbock2023}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:introduction}{{1}{1}{Introduction}{section.1}{}}
+\citation{VanCalster2019,Steyerberg2010}
+\citation{Vovk2005}
+\citation{Johnson2023,Goldberger2000}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces End-to-end study workflow. The raw SA-AKI cohort is derived from MIMIC-IV~v3.1 via Sepsis-3 and KDIGO criteria, audited against a data contract, and split into subject-grouped partitions. Three evaluation tracks (conventional baselines, disagreement-based selective triage (ablation), and Mondrian conformal selective triage (primary)) feed into a unified manuscript asset pipeline that produces all tables, figures, and decision-curve analyses reported in this paper.}}{3}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:workflow}{{1}{3}{End-to-end study workflow. The raw SA-AKI cohort is derived from MIMIC-IV~v3.1 via Sepsis-3 and KDIGO criteria, audited against a data contract, and split into subject-grouped partitions. Three evaluation tracks (conventional baselines, disagreement-based selective triage (ablation), and Mondrian conformal selective triage (primary)) feed into a unified manuscript asset pipeline that produces all tables, figures, and decision-curve analyses reported in this paper}{figure.caption.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Methods}{3}{section.2}\protected@file@percent }
+\newlabel{sec:methods}{{2}{3}{Methods}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Data Source}{3}{subsection.2.1}\protected@file@percent }
+\newlabel{sec:data-source}{{2.1}{3}{Data Source}{subsection.2.1}{}}
+\citation{Singer2016}
+\citation{KDIGO2012}
+\citation{Kellum2021}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Cohort Construction}{4}{subsection.2.2}\protected@file@percent }
+\newlabel{sec:cohort}{{2.2}{4}{Cohort Construction}{subsection.2.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Inclusion criteria.}{4}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Sepsis-3 identification.}{4}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{KDIGO acute kidney injury staging.}{4}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{SA-AKI temporal linkage.}{4}{section*.5}\protected@file@percent }
+\newlabel{eq:saaki-window}{{1}{4}{SA-AKI temporal linkage}{equation.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Exclusion criteria.}{5}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Final cohort.}{5}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Feature Engineering}{5}{subsection.2.3}\protected@file@percent }
+\newlabel{sec:features}{{2.3}{5}{Feature Engineering}{subsection.2.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Time-varying features.}{5}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Static and severity features.}{5}{section*.9}\protected@file@percent }
+\citation{Chen2016}
+\citation{Ke2017}
+\citation{Prokhorenkova2018}
+\citation{Akiba2019}
+\citation{Vovk2005,Angelopoulos2021}
+\@writefile{toc}{\contentsline {paragraph}{Therapy indicators.}{6}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Final feature set.}{6}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Models}{6}{subsection.2.4}\protected@file@percent }
+\newlabel{sec:models}{{2.4}{6}{Models}{subsection.2.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Conventional baselines.}{6}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Hyperparameter optimisation.}{6}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Calibration.}{6}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Score-only comparators.}{6}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Conformal Selective Triage}{6}{subsection.2.5}\protected@file@percent }
+\newlabel{sec:conformal}{{2.5}{6}{Conformal Selective Triage}{subsection.2.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Formulation.}{7}{section*.16}\protected@file@percent }
+\newlabel{eq:conformal-split}{{2}{7}{Formulation}{equation.2}{}}
+\newlabel{eq:nonconformity}{{3}{7}{Formulation}{equation.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Set-valued predictions.}{7}{section*.17}\protected@file@percent }
+\newlabel{eq:pred-set}{{4}{7}{Set-valued predictions}{equation.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Multi-model consensus.}{7}{section*.18}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Conformal selective-triage decision flow. A calibrated risk model produces a probability estimate at T24. Mondrian conformal thresholds, estimated on a held-out calibration set, convert this probability into a prediction set. The set cardinality determines the triage action: $\{1\} \to $ \emph  {Alert}, $\{0\} \to $ \emph  {Clear}, $\{0,1\} \to $ \emph  {Defer}.}}{8}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:conformal-flow}{{2}{8}{Conformal selective-triage decision flow. A calibrated risk model produces a probability estimate at T24. Mondrian conformal thresholds, estimated on a held-out calibration set, convert this probability into a prediction set. The set cardinality determines the triage action: $\{1\} \to $ \emph {Alert}, $\{0\} \to $ \emph {Clear}, $\{0,1\} \to $ \emph {Defer}}{figure.caption.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Disagreement-Based Selective Triage}{8}{subsection.2.6}\protected@file@percent }
+\newlabel{sec:disagreement}{{2.6}{8}{Disagreement-Based Selective Triage}{subsection.2.6}{}}
+\newlabel{eq:disagreement}{{5}{8}{Disagreement-Based Selective Triage}{equation.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Disagreement-based selective-triage comparator (ablation). A full-feature model and a physiology-only model independently score each patient. The absolute probability gap serves as a defer signal: large disagreement triggers deferral to clinician review, while concordant predictions above or below risk thresholds produce \emph  {Alert} or \emph  {Clear} decisions. Unlike conformal triage, this approach provides no formal coverage guarantee.}}{9}{figure.caption.20}\protected@file@percent }
+\newlabel{fig:disagreement-flow}{{3}{9}{Disagreement-based selective-triage comparator (ablation). A full-feature model and a physiology-only model independently score each patient. The absolute probability gap serves as a defer signal: large disagreement triggers deferral to clinician review, while concordant predictions above or below risk thresholds produce \emph {Alert} or \emph {Clear} decisions. Unlike conformal triage, this approach provides no formal coverage guarantee}{figure.caption.20}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Evaluation Protocol}{9}{subsection.2.7}\protected@file@percent }
+\newlabel{sec:evaluation}{{2.7}{9}{Evaluation Protocol}{subsection.2.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{Subject-grouped splitting.}{9}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Repeated evaluation.}{9}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Discrimination and calibration metrics.}{9}{section*.23}\protected@file@percent }
+\citation{Vickers2006}
+\citation{Goldberger2000}
+\@writefile{toc}{\contentsline {paragraph}{Conformal triage metrics.}{10}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Decision-curve analysis.}{10}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Shift robustness.}{10}{section*.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Subgroup analysis.}{10}{section*.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.8}Ethics, Data Access, and Reproducibility}{10}{subsection.2.8}\protected@file@percent }
+\newlabel{sec:ethics}{{2.8}{10}{Ethics, Data Access, and Reproducibility}{subsection.2.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{10}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Cohort and Data Contract}{10}{subsection.3.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cohort and data-contract summary.}}{11}{table.caption.28}\protected@file@percent }
+\newlabel{tab:cohort}{{1}{11}{Cohort and data-contract summary}{table.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Prediction Ceiling and Conventional Benchmarks}{11}{subsection.3.2}\protected@file@percent }
+\citation{Akiba2019}
+\citation{Prokhorenkova2018}
+\citation{Vincent1996}
+\citation{Knaus1991}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Prediction ceiling and benchmark summary. The leak-prone configuration (including the time-to-event variable) reaches AUROC 0.810, while the leak-free grouped setting remains at 0.763, establishing an empirical ceiling under the current feature and model constraints on what first-24-hour features can achieve.}}{12}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:ceiling}{{4}{12}{Prediction ceiling and benchmark summary. The leak-prone configuration (including the time-to-event variable) reaches AUROC 0.810, while the leak-free grouped setting remains at 0.763, establishing an empirical ceiling under the current feature and model constraints on what first-24-hour features can achieve}{figure.caption.29}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Baseline discrimination and calibration benchmark. All metrics are means across repeated subject-grouped splits. AUROC = area under the receiver operating characteristic curve; AUPRC = area under the precision--recall curve; ECE = expected calibration error.}}{12}{table.caption.30}\protected@file@percent }
+\newlabel{tab:benchmark}{{2}{12}{Baseline discrimination and calibration benchmark. All metrics are means across repeated subject-grouped splits. AUROC = area under the receiver operating characteristic curve; AUPRC = area under the precision--recall curve; ECE = expected calibration error}{table.caption.30}{}}
+\citation{Vickers2006}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Calibration and clinical-utility panel. Left: calibration curves for the primary baselines. Right: decision-curve analysis comparing the continuous XGBoost score against clinical severity scores and fixed-policy comparators.}}{13}{figure.caption.31}\protected@file@percent }
+\newlabel{fig:utility-panel}{{5}{13}{Calibration and clinical-utility panel. Left: calibration curves for the primary baselines. Right: decision-curve analysis comparing the continuous XGBoost score against clinical severity scores and fixed-policy comparators}{figure.caption.31}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Main conformal results across repeated grouped splits. Coverage is the fraction of patients whose true label falls within the conformal prediction set. Certain fraction is the proportion of patients receiving a singleton (Alert or Clear) rather than a deferred (\{0,1\}) prediction. All estimates are means $\pm $ bootstrap confidence intervals across 21 subject-grouped seeds.}}{14}{table.caption.32}\protected@file@percent }
+\newlabel{tab:conformal-main}{{3}{14}{Main conformal results across repeated grouped splits. Coverage is the fraction of patients whose true label falls within the conformal prediction set. Certain fraction is the proportion of patients receiving a singleton (Alert or Clear) rather than a deferred (\{0,1\}) prediction. All estimates are means $\pm $ bootstrap confidence intervals across 21 subject-grouped seeds}{table.caption.32}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Conformal operating-characteristic curve. As $\alpha $ increases, coverage decreases and the certain-decision fraction rises, tracing the fundamental coverage--automation tradeoff.}}{14}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:conformal-curve}{{6}{14}{Conformal operating-characteristic curve. As $\alpha $ increases, coverage decreases and the certain-decision fraction rises, tracing the fundamental coverage--automation tradeoff}{figure.caption.33}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Main Conformal Triage Result}{14}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Multi-Model Consensus}{15}{subsection.3.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Multi-model consensus conformal results. The union strategy defers whenever any constituent model is uncertain; the intersection strategy acts only when all models agree. Single-model results (XGBoost) are repeated from Table~\ref {tab:conformal-main} for comparison.}}{16}{table.caption.34}\protected@file@percent }
+\newlabel{tab:conformal-consensus}{{4}{16}{Multi-model consensus conformal results. The union strategy defers whenever any constituent model is uncertain; the intersection strategy acts only when all models agree. Single-model results (XGBoost) are repeated from Table~\ref {tab:conformal-main} for comparison}{table.caption.34}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Multi-model consensus trade-off panel. The union strategy achieves the highest reliability (alert PPV and clear NPV) at the cost of the lowest automation rate; the intersection strategy maximizes automation but sacrifices reliability.}}{16}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:consensus}{{7}{16}{Multi-model consensus trade-off panel. The union strategy achieves the highest reliability (alert PPV and clear NPV) at the cost of the lowest automation rate; the intersection strategy maximizes automation but sacrifices reliability}{figure.caption.35}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Shift robustness versus fixed-threshold policies. Conformal coverage remains stable under increasing missingness because the framework defers more cases; fixed thresholds lose recall without signaling increased uncertainty.}}{17}{table.caption.36}\protected@file@percent }
+\newlabel{tab:shift}{{5}{17}{Shift robustness versus fixed-threshold policies. Conformal coverage remains stable under increasing missingness because the framework defers more cases; fixed thresholds lose recall without signaling increased uncertainty}{table.caption.36}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Comparison With Disagreement-Based Selective Triage}{17}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Robustness Under Distribution Shift}{17}{subsection.3.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Robustness-under-shift panel. Left: conformal coverage and certain-decision fraction under increasing missingness. Right: fixed-threshold precision and recall under the same conditions.}}{18}{figure.caption.37}\protected@file@percent }
+\newlabel{fig:shift}{{8}{18}{Robustness-under-shift panel. Left: conformal coverage and certain-decision fraction under increasing missingness. Right: fixed-threshold precision and recall under the same conditions}{figure.caption.37}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Subgroup Heterogeneity}{18}{subsection.3.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Subgroup heterogeneity summary for conformal triage at $\alpha =0.10$. Coverage and reliability metrics are reported for each subgroup level. High-acuity strata (high SOFA, vasopressor use) show lower coverage and higher event rates, reflecting the inherent difficulty of predicting outcomes in the sickest patients.}}{19}{table.caption.38}\protected@file@percent }
+\newlabel{tab:subgroups}{{6}{19}{Subgroup heterogeneity summary for conformal triage at $\alpha =0.10$. Coverage and reliability metrics are reported for each subgroup level. High-acuity strata (high SOFA, vasopressor use) show lower coverage and higher event rates, reflecting the inherent difficulty of predicting outcomes in the sickest patients}{table.caption.38}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Subgroup coverage and reliability forest plot at $\alpha =0.10$. Points represent subgroup-level estimates; horizontal bars indicate variability across grouped seeds. The dashed vertical line marks the nominal $1-\alpha =0.90$ coverage target.}}{19}{figure.caption.39}\protected@file@percent }
+\newlabel{fig:subgroups}{{9}{19}{Subgroup coverage and reliability forest plot at $\alpha =0.10$. Points represent subgroup-level estimates; horizontal bars indicate variability across grouped seeds. The dashed vertical line marks the nominal $1-\alpha =0.90$ coverage target}{figure.caption.39}{}}
+\citation{Chen2025}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{20}{section.4}\protected@file@percent }
+\citation{Li2023}
+\citation{Hu2021}
+\citation{Roknaldin2024}
+\citation{He2009}
+\citation{Singer2016}
+\citation{Kang2023}
+\citation{Vovk2005,Angelopoulos2021}
+\citation{Vovk2005}
+\citation{Vickers2006}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Limitations}{24}{section.5}\protected@file@percent }
+\citation{Vovk2005}
+\citation{Johnson2023}
+\citation{Singer2016,Vincent1996}
+\citation{KDIGO2012}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{26}{section.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Appendix Table B1. Repeated grouped benchmark summary for the main tree-family comparison.}}{27}{table.caption.41}\protected@file@percent }
+\newlabel{tab:app-b1}{{7}{27}{Appendix Table B1. Repeated grouped benchmark summary for the main tree-family comparison}{table.caption.41}{}}
+\@writefile{toc}{\contentsline {section}{Appendices}{27}{section*.40}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A}Data and Cohort}{27}{appendix.1.A}\protected@file@percent }
+\newlabel{app:data}{{A}{27}{Data and Cohort}{appendix.1.A}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Extended Benchmarks}{27}{appendix.1.B}\protected@file@percent }
+\newlabel{app:benchmarks}{{B}{27}{Extended Benchmarks}{appendix.1.B}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}Tree-Family Benchmark}{27}{subsection.1.B.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Appendix Table B2. Grouped Optuna summary for the LightGBM benchmark.}}{28}{table.caption.42}\protected@file@percent }
+\newlabel{tab:app-b2}{{8}{28}{Appendix Table B2. Grouped Optuna summary for the LightGBM benchmark}{table.caption.42}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Appendix Table B3. Top grouped Optuna LightGBM trials.}}{28}{table.caption.43}\protected@file@percent }
+\newlabel{tab:app-b3}{{9}{28}{Appendix Table B3. Top grouped Optuna LightGBM trials}{table.caption.43}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Appendix Table B4. Feature ablation of the selected model.}}{28}{table.caption.44}\protected@file@percent }
+\newlabel{tab:app-b4}{{10}{28}{Appendix Table B4. Feature ablation of the selected model}{table.caption.44}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Appendix Table B5. Secondary horizon sensitivity analyses.}}{28}{table.caption.45}\protected@file@percent }
+\newlabel{tab:app-b5}{{11}{28}{Appendix Table B5. Secondary horizon sensitivity analyses}{table.caption.45}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Hyperparameter Optimization}{28}{subsection.1.B.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Feature Ablation}{28}{subsection.1.B.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Secondary Horizons}{28}{subsection.1.B.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Appendix Figure B1. ROC and precision-recall benchmark curves.}}{29}{figure.caption.46}\protected@file@percent }
+\newlabel{fig:app-b1}{{10}{29}{Appendix Figure B1. ROC and precision-recall benchmark curves}{figure.caption.46}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Appendix Table B6. Repeated grouped disagreement-based selective-triage summary.}}{29}{table.caption.49}\protected@file@percent }
+\newlabel{tab:app-b6}{{12}{29}{Appendix Table B6. Repeated grouped disagreement-based selective-triage summary}{table.caption.49}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces Appendix Table B7. Disagreement-based shift sensitivity summary.}}{29}{table.caption.50}\protected@file@percent }
+\newlabel{tab:app-b7}{{13}{29}{Appendix Table B7. Disagreement-based shift sensitivity summary}{table.caption.50}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5}ROC, Calibration, and Decision Curves}{29}{subsection.1.B.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.6}Disagreement-Based Selective Triage}{29}{subsection.1.B.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.7}Clinical Score Comparators}{29}{subsection.1.B.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Appendix Figure B2. Calibration curve for the deployed baseline (XGBoost with isotonic calibration).}}{30}{figure.caption.47}\protected@file@percent }
+\newlabel{fig:app-b2}{{11}{30}{Appendix Figure B2. Calibration curve for the deployed baseline (XGBoost with isotonic calibration)}{figure.caption.47}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces Appendix Table B8. Repeated grouped clinical score summary.}}{30}{table.caption.51}\protected@file@percent }
+\newlabel{tab:app-b8}{{14}{30}{Appendix Table B8. Repeated grouped clinical score summary}{table.caption.51}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Appendix Figure B3. Decision curve for benchmark models and fixed-policy comparators.}}{31}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:app-b3}{{12}{31}{Appendix Figure B3. Decision curve for benchmark models and fixed-policy comparators}{figure.caption.48}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces Appendix Table B9. Clinical score operating points on the main grouped split.}}{31}{table.caption.52}\protected@file@percent }
+\newlabel{tab:app-b9}{{15}{31}{Appendix Table B9. Clinical score operating points on the main grouped split}{table.caption.52}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.8}Clinical Utility}{31}{subsection.1.B.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.9}Negative and Null Probes}{31}{subsection.1.B.9}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {16}{\ignorespaces Appendix Table B10. Key decision-curve net-benefit comparisons.}}{32}{table.caption.53}\protected@file@percent }
+\newlabel{tab:app-b10}{{16}{32}{Appendix Table B10. Key decision-curve net-benefit comparisons}{table.caption.53}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {17}{\ignorespaces Appendix Table B11. Fixed-policy clinical utility summary.}}{32}{table.caption.54}\protected@file@percent }
+\newlabel{tab:app-b11}{{17}{32}{Appendix Table B11. Fixed-policy clinical utility summary}{table.caption.54}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {18}{\ignorespaces Appendix Table B12. Negative and null probe results carried forward for transparency.}}{32}{table.caption.55}\protected@file@percent }
+\newlabel{tab:app-b12}{{18}{32}{Appendix Table B12. Negative and null probe results carried forward for transparency}{table.caption.55}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Shift and Subgroup Notes}{32}{appendix.1.C}\protected@file@percent }
+\newlabel{app:shift}{{C}{32}{Shift and Subgroup Notes}{appendix.1.C}{}}
+\bibstyle{plainnat}
+\bibdata{refs}
+\bibcite{Akiba2019}{{1}{2019}{{Akiba et~al.}}{{Akiba, Sano, Yanase, Ohta, and Koyama}}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Reproducibility}{33}{appendix.1.D}\protected@file@percent }
+\newlabel{app:repro}{{D}{33}{Reproducibility}{appendix.1.D}{}}
+\bibcite{Angelopoulos2021}{{2}{2021}{{Angelopoulos and Bates}}{{}}}
+\bibcite{Bagshaw2007}{{3}{2008}{{Bagshaw et~al.}}{{Bagshaw, George, and Bellomo}}}
+\bibcite{Chen2025}{{4}{2025}{{Chen et~al.}}{{Chen, Wu, Wu, Li, and Yan}}}
+\bibcite{Chen2016}{{5}{2016}{{Chen and Guestrin}}{{}}}
+\bibcite{Goldberger2000}{{6}{2000}{{Goldberger et~al.}}{{Goldberger, Amaral, Glass, Hausdorff, Ivanov, Mark, Mietus, Moody, Peng, and Stanley}}}
+\bibcite{He2009}{{7}{2009}{{He and Garcia}}{{}}}
+\bibcite{Hoste2015}{{8}{2015}{{Hoste et~al.}}{{Hoste, Bagshaw, Bellomo, Cely, Colman, Cruz, Edipidis, Forni, Gomersall, Govil, et~al.}}}
+\bibcite{Hu2021}{{9}{2021}{{Hu et~al.}}{{Hu, Liu, and Du}}}
+\bibcite{Johnson2023}{{10}{2023}{{Johnson et~al.}}{{Johnson, Bulgarelli, Shen, Gayles, Shammout, Horng, Pollard, Hao, Moody, Gow, Lehman, Celi, and Mark}}}
+\bibcite{Kang2023}{{11}{2023}{{Kang and Yoon}}{{}}}
+\bibcite{Ke2017}{{12}{2017}{{Ke et~al.}}{{Ke, Meng, Finley, Wang, Chen, Ma, Ye, and Liu}}}
+\bibcite{Kellum2021}{{13}{2021}{{Kellum et~al.}}{{Kellum, Wen, de~Caestecker, Bhatt, Bhatt, and Bhatt}}}
+\bibcite{KDIGO2012}{{14}{2012}{{Kidney Disease: Improving Global Outcomes (KDIGO) Acute Kidney Injury Work Group}}{{}}}
+\bibcite{Knaus1991}{{15}{1991}{{Knaus et~al.}}{{Knaus, Wagner, Draper, Zimmerman, Bergner, Bastos, Sirio, Murphy, Lotring, Damiano, and Harrell}}}
+\bibcite{Li2023}{{16}{2023}{{Li et~al.}}{{Li, Huang, Geng, Li, Li, and Wang}}}
+\bibcite{Poston2019}{{17}{2019}{{Poston and Koyner}}{{}}}
+\bibcite{Prokhorenkova2018}{{18}{2018}{{Prokhorenkova et~al.}}{{Prokhorenkova, Gusev, Vorobev, Dorogush, and Gulin}}}
+\bibcite{Roknaldin2024}{{19}{2024}{{Roknaldin et~al.}}{{}}}
+\bibcite{See2019}{{20}{2019}{{See et~al.}}{{See, Jayasinghe, Glassford, Bailey, Johnson, Polkinghorne, Toussaint, and Bellomo}}}
+\bibcite{Singer2016}{{21}{2016}{{Singer et~al.}}{{Singer, Deutschman, Seymour, Shankar-Hari, Annane, Bauer, Bellomo, Bernard, Chiche, Coopersmith, et~al.}}}
+\bibcite{Steyerberg2010}{{22}{2010}{{Steyerberg et~al.}}{{Steyerberg, Vickers, Cook, Gerds, Gonen, Obuchowski, Pencina, and Kattan}}}
+\bibcite{VanCalster2019}{{23}{2019}{{Van~Calster et~al.}}{{Van~Calster, McLernon, van Smeden, Bottolo, Ghosh, and ";~Steyerberg}}}
+\bibcite{Vickers2006}{{24}{2006}{{Vickers and Elkin}}{{}}}
+\bibcite{Vincent1996}{{25}{1996}{{Vincent et~al.}}{{Vincent, Moreno, Takala, Willatts, De~Mendon{\c {c}}a, Bruining, Reinhart, Suter, and Thijs}}}
+\bibcite{Vovk2005}{{26}{2005}{{Vovk et~al.}}{{Vovk, Gammerman, and Shafer}}}
+\bibcite{Zarbock2023}{{27}{2023}{{Zarbock et~al.}}{{Zarbock, Nadim, Pickkers, Gomez, Bell, Joannidis, Kashani, Koyner, Pannu, Meersch, et~al.}}}
+\gdef \@abspage@last{36}

@@ -1,0 +1,288 @@
+% ============================================================
+% Discussion, Limitations, Conclusion, and Appendices
+% Insert this content into main.tex replacing the existing
+% \section{Discussion} through \end{appendices}
+% ============================================================
+
+\section{Discussion}
+
+The central finding of this study is that first-24-hour discrimination for SA-AKI mortality is bounded, and that this ceiling fundamentally changes the research target. Rather than pursuing marginal AUROC gains through architecture search or feature engineering, the more productive question becomes: given a fixed and modest level of discrimination, how should a clinical decision system behave when it is uncertain? The conventional benchmark results, the grouped Optuna tuning pass, and the CatBoost diversity comparator all converge on the same conclusion. XGBoost, LightGBM, and CatBoost occupy a narrow performance band (AUROC 0.765--0.768, Brier 0.161), and even a leak-prone ceiling experiment that includes the time-to-event variable reaches only AUROC 0.810. The leak-free grouped estimate remains at 0.763. This is not a failure of methodology; it is a property of the prediction problem. Recognizing that property is the prerequisite for building a deployment framework that does not overstate what the model can deliver.
+
+Comparison with prior SA-AKI mortality prediction studies contextualizes this ceiling. Chen et al.\cite{Chen2025} recently reported XGBoost-based SA-AKI mortality prediction on MIMIC-IV and eICU with AUROC approximately 0.878, but their feature set included length-of-stay as a predictor, which constitutes direct temporal leakage when the prediction horizon is anchored at 24 hours. In addition, feature selection was performed on the full dataset prior to the train-test split, allowing evaluation-set outcomes to influence the predictor set. SMOTE and ADASYN were applied in combination without stated rationale, mean imputation was used for right-skewed biomarkers such as creatinine (for which median or log-transformed imputation is more appropriate), and missingness indicators were not constructed despite the informative nature of clinical data absence. The evaluation relied on a 75/25 split without a separate validation set, and neither calibration nor principled threshold selection was reported. The leak-free AUROC of 0.768 obtained in the present study under strict T24 feature enforcement is materially lower, and this gap is attributed to methodological discipline rather than model inferiority.
+
+Li et al.\cite{Li2023} used gradient boosting on a similar MIMIC-derived SA-AKI cohort and reported AUROC approximately 0.794. However, Lasso-based feature selection was conducted on the full dataset before splitting (selection leakage), and MICE imputation was fitted globally rather than on the training partition alone (preprocessing leakage). Missingness indicators were not constructed, and the linear framework prioritised main effects at the expense of interaction terms that may carry predictive signal in this clinical domain. The discrimination gap between their XGBoost model (AUROC 0.794) and logistic regression baseline (AUROC 0.730) is difficult to interpret given the scope of the selection and imputation leakage.
+
+Hu et al.\cite{Hu2021} reported a Cox proportional hazards model for SA-AKI mortality with a C-index of 0.72, but the feature engineering relied on whole-stay median aggregation, meaning that post-baseline physiological trajectories were embedded in the predictor set. MICE imputation was fitted on the full dataset, features with greater than 20\% missingness were dropped without investigation of the missingness mechanism, and the test set comprised only 102 rows, yielding unreliable performance estimates with wide implicit confidence intervals. Ethnicity was included as a predictor, raising fairness and transportability concerns that were not addressed.
+
+Roknaldin et al.\cite{Roknaldin2024} reported AUC 0.887 for SA-AKI mortality prediction, but the methodology described feature selection and SMOTE application prior to the final train-test split, allowing evaluation-set information to influence both the predictor set and the resampled training distribution. Multiple imputation was fitted globally, a fixed correlation threshold was applied for feature pruning (risking removal of weakly correlated but jointly informative variables), and redundant features were retained, including minimum and maximum eGFR alongside creatinine, from which eGFR is derived. Parametric t-tests were applied to skewed laboratory markers, and the test set was small relative to the validation partition, further limiting the reliability of the reported estimates.
+
+A consistent pattern emerges across these studies. Reported AUROCs in the 0.80--0.88 range typically rely on whole-stay features, relaxed or unspecified temporal windows, or preprocessing pipelines that leak test-set information into training through global feature selection, global imputation fitting, or inclusion of post-baseline correlates such as length of stay. When strict first-24-hour prediction is enforced with subject-grouped evaluation and train-only preprocessing, discrimination falls into the 0.75--0.77 range. The results obtained in the present study are therefore consistent with the literature once methodological differences are accounted for, and they suggest that the prediction ceiling is a property of the clinical problem rather than an artifact of any individual pipeline.
+
+The choice of class-imbalance strategy further illustrates the importance of methodological rigour. Several prior studies employed SMOTE, ADASYN, or combinations thereof without assessing whether synthetic examples were generated in overlapped or noisy regions of the feature space. SMOTE interpolates between minority-class neighbours without regard to the local class boundary, and in high-dimensional clinical data with substantial feature overlap between survivors and non-survivors, this interpolation can produce synthetic points that lie in ambiguous regions and distort the learned decision surface. ADASYN concentrates synthesis near low-density and borderline instances, which can shift decision boundaries around outliers and reduce model stability. In the present study, inverse class weighting (\texttt{class\_weight='balanced'}) was found to be more effective than synthetic oversampling: it achieved comparable or superior discrimination without inflating recall at the expense of precision, and without introducing synthetic training examples of uncertain clinical plausibility. This finding is consistent with the broader literature on imbalanced learning in overlapped-class settings, where intrinsic cost-sensitive methods tend to outperform resampling when the class boundary is inherently diffuse.\cite{He2009}
+
+Several factors explain why this ceiling exists. First, ICU mortality in SA-AKI patients is inherently stochastic. Two patients with identical physiological profiles at 24 hours may diverge dramatically depending on treatment response, complications, and the trajectory of organ failure over subsequent days. The first-24-hour feature window captures the initial clinical presentation but not the treatment response, which is arguably the strongest predictor of outcome.\cite{Singer2016} Second, unmeasured confounders play a substantial role. Goals-of-care decisions, family preferences regarding code status, and the timing of transitions to comfort care are powerful determinants of in-hospital mortality that leave no trace in the structured EHR data available at T24.\cite{Kang2023} Third, the 162-feature engineering pipeline, while comprehensive in its coverage of physiology, severity scores, and care-process markers, is still bounded by what can be extracted from structured MIMIC tables. Free-text clinical notes, imaging findings, and real-time bedside assessments are not captured. These factors collectively impose a ceiling that no amount of hyperparameter tuning or model-family diversification can overcome, and they motivate the shift from discrimination optimization to uncertainty-aware decision governance.
+
+The choice of a 24-hour prediction window (T0--T24) warrants explicit justification. From a clinical workflow perspective, many high-impact management decisions in SA-AKI, including early goal-directed fluid resuscitation, vasopressor initiation, and renal replacement therapy consultation, are made within the first 6--12 hours of ICU admission. A prediction generated at T24 therefore arrives after some of these decisions have already been taken. The T24 window was selected because it represents the earliest time point at which a comprehensive set of laboratory results, severity scores, and treatment-response indicators becomes reliably available in the structured EHR. Earlier windows (T6 or T12) would yield fewer non-missing features and lower discrimination, though they could inform decisions that have not yet been made. A staged prediction approach (T6 $\to$ T12 $\to$ T24) that updates triage recommendations as additional data accumulate represents a natural extension of this work and is identified as a priority for future investigation.
+
+The conformal selective triage framework is the primary methodological contribution of this work, and it addresses the bounded-ceiling problem directly. Instead of forcing every patient into a binary high-risk versus low-risk classification, conformal prediction partitions the cohort into three clinically interpretable actions: Alert (prediction set $\{1\}$), Clear (prediction set $\{0\}$), and Defer (prediction set $\{0,1\}$). The Defer region is not a failure mode or a nuisance artifact; it is the mechanism through which the framework maintains its coverage guarantee.\cite{Vovk2005,Angelopoulos2021} At $\alpha = 0.05$, single-model conformal triage achieved coverage 0.952 with alert PPV 0.643 and clear NPV 0.948, while deferring 68.2\% of cases. The multi-model union consensus at the same $\alpha$ concentrated decisions further, yielding alert PPV 0.729 and clear NPV 0.962 while deferring 83.6\% of cases. This trade-off between automation rate and decision reliability is explicit and tunable, which is precisely what a deployment-oriented framework requires. The clinician retains full authority over deferred cases, and the system provides high-confidence recommendations only when the evidence supports them.
+
+The conformal framework is methodologically superior to the disagreement-based deferral baseline for several reasons. The disagreement policy relies on an empirically tuned agreement threshold between a physiology-only model and a process-enriched model, and its defer region is defined by a heuristic gap rather than a formal coverage objective. While the disagreement baseline demonstrates that uncertainty-aware action restriction improves reliability (the actionable error rate dropped from 0.343 under fixed thresholds to 0.254 under selective triage), it provides no finite-sample guarantee on coverage or miss rate. Conformal prediction, by contrast, provides a distribution-free coverage guarantee under the exchangeability assumption: the probability that the true label falls outside the prediction set is bounded by $\alpha$ regardless of the underlying data distribution.\cite{Vovk2005} This guarantee extends naturally to multi-model consensus through set union operations, since the union of individually valid prediction sets is itself a valid prediction set. The intersection of prediction sets, by contrast, does not inherit the marginal coverage guarantee; the intersection can exclude the true label when constituent models disagree, and the empirical coverage of 0.911 at $\alpha = 0.05$ (below the nominal 0.95 target) confirms this theoretical expectation. Intersection results should therefore be interpreted as empirical operating points without formal coverage guarantees. A Bonferroni-style correction (using $\alpha/K$ for $K$ models) could in principle restore the guarantee for intersection, but at the cost of substantially wider prediction sets and lower automation rates. The conformal framework degrades gracefully rather than failing silently when the exchangeability assumption is weakened. For a clinical informatics audience, this distinction matters: the conformal framework makes its assumptions and guarantees explicit, whereas the disagreement baseline requires the reader to trust an empirical calibration that may not transfer across institutions or time periods.
+
+From a clinical workflow perspective, the Alert/Defer/Clear trichotomy maps naturally onto ICU triage operations. The Alert channel identifies patients for whom the model has high confidence of mortality risk, supporting early escalation decisions such as intensivist review, goals-of-care conversations, or preemptive resource allocation. At the union consensus operating point ($\alpha = 0.05$), alert PPV of 0.729 approaches the threshold at which automated alerts become actionable rather than noise-generating; approximately three out of four alerted patients are true positives. The Clear channel (used here as a model-confidence label indicating lower predicted risk, not as a clinical clearance for discharge or de-escalation) identifies patients for whom the model has high confidence of survival, supporting resource deprioritization or step-down consideration. Clear NPV of 0.962 means that fewer than 4\% of cleared patients will experience the outcome, which is a clinically meaningful safety margin. The Defer channel, which absorbs the majority of cases at conservative $\alpha$ levels, mandates clinician review without model-driven recommendation. This is a deliberate design property: it prevents the model from making confident recommendations in the ambiguous middle of the risk distribution where discrimination is weakest. The decision-curve analysis reinforces this interpretation. At threshold 0.20, the continuous XGBoost score achieves net benefit 0.133 versus 0.082 for APACHE-III and 0.082 for SOFA, confirming that the ML model adds clinical value over existing severity scores.\cite{Vickers2006} It should be acknowledged that SOFA and APACHE-III were evaluated as single-feature logistic regression baselines, which is not how these scores are used in routine clinical practice. SOFA was designed as a monitoring tool for tracking organ dysfunction trajectories over time, and APACHE-III was designed as an admission severity score for case-mix adjustment and benchmarking rather than for individual patient triage. The comparison is therefore intended to establish a discrimination floor relative to commonly available clinical information, not to suggest that these scores are being used in their intended capacity. The conformal and disagreement policies should be read as complementary action-governance layers that sacrifice some net benefit for narrower, higher-confidence action sets.
+
+The shift robustness findings have direct implications for multi-site deployment. Under simulated distribution shift (random missingness injection at 10--30\% severity, measurement-process dropout, and care-process dropout), conformal coverage remained stable (0.947--0.970 at $\alpha = 0.05$) because the framework automatically deferred more cases as input quality degraded. This self-correcting behavior is a structural property of conformal prediction: when the nonconformity scores shift, the prediction sets widen, and more cases fall into the Defer region. By contrast, fixed-threshold policies experienced silent degradation. At 30\% physiology missingness, the fixed 0.50 threshold retained precision of 0.619 but recall collapsed to 0.171, meaning the model missed 83\% of true positives without any explicit signal that its operating characteristics had changed. This distinction is critical for deployment across institutions where documentation practices, measurement protocols, and care processes differ from the training environment. A conformal system that defers more when uncertain is safer than a fixed-threshold system that continues to make confident-looking predictions on degraded inputs. It should be noted that the simulated missingness perturbations follow a missing-completely-at-random (MCAR) mechanism, whereas the missingness analysis conducted on the training partition rejected the MCAR null hypothesis via Little's test. Real-world distribution shift between institutions is more likely to produce missing-not-at-random (MNAR) patterns, in which the probability of a measurement being absent depends on the unobserved value itself or on the patient's clinical trajectory. The MCAR simulation therefore represents a favourable scenario for shift robustness, and the framework's resilience to more realistic MNAR perturbations remains to be established.
+
+The subgroup heterogeneity analysis reveals important patterns for deployment governance. At $\alpha = 0.10$, gender parity was preserved: female patients achieved coverage 0.921 with alert PPV 0.620, and male patients achieved coverage 0.902 with alert PPV 0.564, a gap within the pre-specified $\Delta \leq 0.05$ fairness bound for AUROC parity. Age-band stratification showed expected gradients, with younger patients ($\leq 50$) achieving the highest coverage (0.930) and certain-decision fraction (0.602), while the oldest stratum ($> 80$) had lower certain-decision fraction (0.344) reflecting greater clinical heterogeneity. The most clinically significant heterogeneity appeared across SOFA bands. Low-SOFA patients achieved coverage 0.949 with a small alert burden (3.7\%), consistent with a population where mortality risk is genuinely low and the model can safely clear most cases. High-SOFA patients achieved lower coverage (0.866) with a much larger alert burden (31.6\%) and alert PPV of 0.659, reflecting a sicker population where the model correctly identifies more patients as high-risk but also defers more cases. This SOFA-stratified pattern suggests a natural deployment governance policy: broader automation for low-acuity strata where the model is most reliable, and mandatory clinician oversight for high-acuity strata where the defer region is largest. Vasopressor use showed a similar gradient, with vasopressor-positive patients exhibiting lower coverage (0.885) and higher defer rates. These findings do not invalidate the framework; they define the boundaries within which it can be deployed responsibly.
+
+
+\section{Limitations}
+This work has several important limitations that bound the scope of its claims.
+\begin{enumerate}
+\item \textbf{Internal validation only.} The study is validated on a single-center MIMIC-derived cohort originating primarily from Beth Israel Deaconess Medical Center (BIDMC). No external cohort from a different institution or health system is included, so all performance estimates reflect internal discrimination and calibration. Transportability to other ICU populations, EHR systems, or documentation cultures is not established.
+
+\item \textbf{No temporal split.} MIMIC-IV does not expose defensible calendar timestamps at the granularity needed for a true temporal validation split. The subject-grouped random split used here controls for patient-level leakage but does not test whether the model's operating characteristics are stable across calendar time. Temporal drift in clinical practice, coding conventions, or patient demographics could degrade performance in ways that this evaluation design cannot detect.
+
+\item \textbf{Repeated subjects.} The working cohort contains 9{,}002 unique subjects across 10{,}036 ICU-stay-level rows, with 1{,}034 repeated-subject rows that make stay-level random splitting inappropriate for deployment claims. The package therefore treats subject-grouped evaluation as a hard design constraint rather than an optional robustness check. Patients with multiple ICU stays may differ systematically from single-stay patients, and the grouped split does not fully eliminate within-subject correlation in the calibration and test sets. Furthermore, within the conformal calibration partition, repeated stays from the same subject produce nonconformity scores that are not fully independent. While the exchangeability assumption underlying conformal prediction is weaker than independence, within-subject correlation could affect quantile estimation. A sensitivity analysis restricting the calibration set to one stay per subject was not conducted but represents a useful robustness check for future work.
+
+\item \textbf{Process features may not transport.} The 162-feature engineering pipeline includes care-process and measurement-process features (e.g., frequency of laboratory draws, timing of interventions) that reflect institutional workflows at BIDMC. These features contribute to discrimination in this cohort but may not generalize to institutions with different staffing models, monitoring protocols, or EHR documentation practices. The feature ablation in Appendix~\ref{app:benchmarks} (Table~\ref{tab:app-b4}) shows that the physiology-severity subset achieves AUROC 0.756, only modestly below the full model's 0.763, suggesting that the process-feature contribution is real but not dominant.
+
+\item \textbf{Conformal guarantees are marginal, not conditional.} The finite-sample coverage guarantee provided by conformal prediction holds marginally under the exchangeability assumption (that is, averaged over the entire test population).\cite{Vovk2005} It does not guarantee conditional coverage within specific subgroups (e.g., high-SOFA patients, elderly patients, or specific ethnic groups). The subgroup analysis in Table~\ref{tab:subgroups} shows that coverage varies across strata, with high-SOFA patients achieving only 0.866 coverage at $\alpha = 0.10$ compared with 0.949 for low-SOFA patients. Deployment governance must account for this heterogeneity.
+
+\item \textbf{Secondary horizon results are limited by low event counts.} The 48-hour mortality endpoint has prevalence 0.004 and produced AUROC 0.705 with no usable PPV $\geq 0.50$ operating point. The 7-day endpoint (prevalence 0.115, AUROC 0.732) retains low recall at the conservative precision target. These secondary horizons should be treated as sensitivity analyses rather than standalone deployment targets.
+
+\item \textbf{No prospective evaluation or clinician behavior study.} The manuscript focuses entirely on retrospective decision support. It does not evaluate whether the Alert/Defer/Clear framework changes clinician behavior, improves patient outcomes, or integrates smoothly into existing ICU workflows. Prospective validation with clinician-in-the-loop evaluation is a necessary next step before any deployment claim can be made.
+
+\item \textbf{Disagreement baseline is heuristic.} The disagreement-based selective-triage comparator depends on an empirically tuned agreement threshold and is included as a methodological comparison rather than as the recommended deployment strategy. Its operating characteristics are not guaranteed to transfer across cohorts or model families.
+
+\item \textbf{Feature engineering is bounded by the T24 window.} All predictor features are extracted from the first 24 hours of ICU admission. Features from later time points (treatment response trajectories, serial organ failure trends, and evolving care-process markers) could substantially improve discrimination but would shift the prediction horizon and change the clinical use case. The T24 constraint is a deliberate design choice that prioritizes early triage over maximal discrimination.
+
+\item \textbf{Calibration may drift without recalibration infrastructure.} The isotonic calibration applied to the selected XGBoost model was fitted on the grouped validation set from this cohort. In a deployed setting, calibration would need periodic monitoring and recalibration as patient populations, treatment protocols, and documentation practices evolve. No recalibration infrastructure or drift-detection mechanism is proposed in this work.
+
+\item \textbf{No comparison with alternative uncertainty quantification methods.} Conformal prediction was selected for its distribution-free finite-sample coverage guarantees and model-agnostic applicability, but alternative uncertainty quantification approaches (Monte Carlo dropout, deep ensembles, Bayesian logistic regression, and calibration-based selective classifiers using the Chow reject option) were not benchmarked. Whether these alternatives could achieve more favourable coverage--automation tradeoffs without formal guarantees remains an open question.
+
+\item \textbf{No individual-level feature explanations.} The manuscript focuses on the decision-framework contribution and does not include individual-level feature-importance analysis (e.g., SHAP or LIME) for the underlying XGBoost model. Clinicians receiving an Alert or Clear recommendation would benefit from knowing which features contributed most to that classification. Feature-level explanations for conformal triage decisions are identified as a priority for future work.
+\end{enumerate}
+
+\section{Conclusion}
+
+In this SA-AKI cohort derived from MIMIC, the predictive ceiling for first-24-hour ICU mortality risk is bounded at approximately AUROC 0.77 under leak-free subject-grouped evaluation, and that empirical fact changes the scientific target. The most defensible contribution of this work is not a marginal improvement in discrimination but an uncertainty-aware triage framework that makes explicit when the model should act and when it should defer. The conventional benchmark comparison (XGBoost with isotonic calibration at AUROC 0.768, outperforming APACHE-III at 0.579 and SOFA at 0.646 on decision-curve net benefit) establishes that machine learning adds value over existing severity scores. But the more important finding is that this value can be delivered safely only when the model's uncertainty is quantified and translated into actionable clinical categories.
+
+Conformal selective triage provides that translation. It yields clinically interpretable Alert/Defer/Clear decisions with finite-sample coverage guarantees, stronger reliability under conservative multi-model consensus (union alert PPV 0.729, clear NPV 0.962 at $\alpha = 0.05$), and more graceful degradation under simulated distribution shift than fixed-threshold policies. The framework does not claim to solve the SA-AKI mortality prediction problem; it claims to define a more realistic boundary around what first-24-hour retrospective models can responsibly deliver. For institutions considering ML-assisted ICU triage, the practical message is that the model should be deployed as a triage assistant with an explicit defer option, not as an autonomous classifier, and that deployment governance should be stratified by patient acuity.
+
+This work does not claim bedside readiness. External validation on independent cohorts, temporal validation across calendar periods, and prospective clinician-in-the-loop evaluation are all necessary before the Alert/Defer/Clear framework can be recommended for clinical use. What this work does claim is that conformal selective triage is a principled and transparent mechanism for navigating the gap between retrospective model development and safe clinical deployment, and that the bounded-ceiling finding should temper expectations about what first-24-hour SA-AKI mortality models can achieve regardless of the modeling approach.
+
+\begin{appendices}
+
+\section{Data and Cohort}\label{app:data}
+
+The working cohort was derived from MIMIC-IV v3.1, a publicly available critical care database covering ICU admissions at Beth Israel Deaconess Medical Center.\cite{Johnson2023} SA-AKI was defined by the co-occurrence of sepsis (Sepsis-3 criteria: suspected infection evidenced by antibiotic administration and culture sampling within specified temporal windows, plus Sequential Organ Failure Assessment score $\geq 2$)\cite{Singer2016,Vincent1996} and acute kidney injury (KDIGO staging criteria based on serum creatinine elevation or urine output reduction).\cite{KDIGO2012} The cohort construction pipeline applied the following exclusion criteria: age $< 18$ years, ICU stays shorter than 24 hours, and missing key outcome variables. One row in the final dataset represents one ICU-stay-level SA-AKI record scored at 24 hours after ICU admission (T24).
+
+The audit pass identified 9{,}002 unique subjects among 10{,}036 working rows, with 1{,}034 repeated-subject rows that make stay-level random splitting inappropriate for deployment claims. The package therefore treats subject-grouped evaluation as a hard design constraint rather than an optional robustness check. Feature engineering produced 162 predictor variables from the first 24 hours of ICU admission, using nine statistical aggregations (first, last, median, interquartile range, range, delta, area under the curve, slope, and count) applied to time-series physiological and process measurements.
+
+The explicit data contract for the journal package is intentionally conservative: one row equals one ICU-stay-level SA-AKI record scored at T24; all predictor features must be available by T24; post-T24 information is excluded from deployment claims even if it exists elsewhere in the repository; and bedside-readiness, transportability, and exact thesis-cohort equivalence are not claimed.
+
+\section{Extended Benchmarks}\label{app:benchmarks}
+
+This appendix gathers the benchmark, ablation, and comparator tables that support the main narrative without overloading the primary Results section.
+
+\subsection{Tree-Family Benchmark}
+
+Table~\ref{tab:app-b1} reports the repeated grouped benchmark summary for the three tree-model families. The narrow performance band (AUROC 0.765--0.768) confirms that model-family selection is not the primary driver of discrimination in this cohort.
+
+\begin{table}[!t]
+\centering
+\small
+\caption{Appendix Table B1. Repeated grouped benchmark summary for the main tree-family comparison.}
+\label{tab:app-b1}
+\begin{adjustbox}{max width=\linewidth}
+\input{tables/appendix_b1_tree_benchmark.tex}
+\end{adjustbox}
+\end{table}
+
+\subsection{Hyperparameter Optimization}
+
+Tables~\ref{tab:app-b2} and~\ref{tab:app-b3} summarize the grouped Optuna search for LightGBM. The 40-trial search improved validation recall at PPV $\geq 0.50$ to 0.590, but the repeated grouped benchmark still left XGBoost, tuned LightGBM, and CatBoost in a narrow performance band. This result reinforces the bounded-ceiling interpretation: systematic hyperparameter optimization does not break through the discrimination ceiling imposed by the T24 feature window.
+
+\begin{table*}[!t]
+\centering
+\small
+\caption{Appendix Table B2. Grouped Optuna summary for the LightGBM benchmark.}
+\label{tab:app-b2}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b2_hpo_overview.tex}
+\end{adjustbox}
+\end{table*}
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Appendix Table B3. Top grouped Optuna LightGBM trials.}
+\label{tab:app-b3}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b3_hpo_trials.tex}
+\end{adjustbox}
+\end{table*}
+
+\subsection{Feature Ablation}
+
+Table~\ref{tab:app-b4} reports the feature ablation of the selected XGBoost model across three feature subsets: physiology-severity only, physiology plus care-process, and the full feature set. The physiology-severity subset achieves AUROC 0.756, only 0.007 below the full model, indicating that the process-feature contribution is real but modest. This has implications for transportability: institutions where process features differ substantially from BIDMC may still achieve reasonable discrimination using physiology-only inputs.
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Appendix Table B4. Feature ablation of the selected model.}
+\label{tab:app-b4}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b4_feature_ablation.tex}
+\end{adjustbox}
+\end{table*}
+
+\subsection{Secondary Horizons}
+
+Table~\ref{tab:app-b5} reports sensitivity analyses for secondary prediction horizons. The 48-hour endpoint (prevalence 0.004) produced AUROC 0.705 with no usable PPV $\geq 0.50$ operating point, confirming that very-short-horizon mortality is too rare for reliable prediction with this feature set. The 7-day endpoint (prevalence 0.115, AUROC 0.732) is more stable but retains low recall at the conservative precision target (0.060). These results are included for completeness but should not be interpreted as standalone deployment targets.
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Appendix Table B5. Secondary horizon sensitivity analyses.}
+\label{tab:app-b5}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b5_secondary_horizons.tex}
+\end{adjustbox}
+\end{table*}
+
+\subsection{ROC, Calibration, and Decision Curves}
+
+Figures~\ref{fig:app-b1}--\ref{fig:app-b3} provide the full ROC and precision-recall curves, calibration curve for the deployed baseline, and decision curve for benchmark and fixed-policy comparators. The ROC and PR curves confirm the narrow discrimination band across model families. The calibration curve shows that isotonic recalibration produces well-calibrated probabilities across the risk spectrum. The decision curve demonstrates that the continuous XGBoost score dominates APACHE-III and SOFA across the clinically relevant threshold range (0.10--0.30).
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{appendix_b1_roc_pr.png}
+\caption{Appendix Figure B1. ROC and precision-recall benchmark curves.}
+\label{fig:app-b1}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{appendix_b2_calibration_curve.png}
+\caption{Appendix Figure B2. Calibration curve for the deployed baseline (XGBoost with isotonic calibration).}
+\label{fig:app-b2}
+\end{figure}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{appendix_b3_decision_curve.png}
+\caption{Appendix Figure B3. Decision curve for benchmark models and fixed-policy comparators.}
+\label{fig:app-b3}
+\end{figure}
+
+\subsection{Disagreement-Based Selective Triage}
+
+Tables~\ref{tab:app-b6} and~\ref{tab:app-b7} summarize the disagreement-based selective-triage comparator. Table~\ref{tab:app-b6} shows the repeated grouped summary: the selective-triage policy reduced actionable error rate from 0.343 (fixed threshold) to 0.254, but at the cost of a much higher defer rate (0.740 versus 0.480). Table~\ref{tab:app-b7} reports the disagreement-based shift sensitivity, showing that the selective policy maintains lower actionable error under shift but with substantially reduced alert recall compared with conformal triage.
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Appendix Table B6. Repeated grouped disagreement-based selective-triage summary.}
+\label{tab:app-b6}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b6_disagreement_summary.tex}
+\end{adjustbox}
+\end{table*}
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Appendix Table B7. Disagreement-based shift sensitivity summary.}
+\label{tab:app-b7}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b7_disagreement_shift.tex}
+\end{adjustbox}
+\end{table*}
+
+\subsection{Clinical Score Comparators}
+
+Tables~\ref{tab:app-b8} and~\ref{tab:app-b9} report the clinical score baselines. SOFA achieved repeated grouped AUROC 0.646 and APACHE-III achieved 0.579, both substantially below the ML baselines. At the PPV $\geq 0.50$ operating point, SOFA achieved recall 0.147 and APACHE-III achieved recall 0.023, confirming that single severity scores are insufficient for reliable mortality triage in this cohort. These scores remain useful as clinical anchors for decision-curve comparison but should not be considered competitive triage tools on their own.
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Appendix Table B8. Repeated grouped clinical score summary.}
+\label{tab:app-b8}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b8_score_summary.tex}
+\end{adjustbox}
+\end{table*}
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Appendix Table B9. Clinical score operating points on the main grouped split.}
+\label{tab:app-b9}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b9_score_operating.tex}
+\end{adjustbox}
+\end{table*}
+
+\subsection{Clinical Utility}
+
+Tables~\ref{tab:app-b10} and~\ref{tab:app-b11} provide the full decision-curve net-benefit comparisons and fixed-policy utility summaries. At threshold 0.20, the continuous XGBoost score achieves net benefit 0.133, compared with 0.108 for the fixed PPV $\geq 0.50$ threshold, 0.059 for conformal $\alpha = 0.05$, and 0.035 for union conformal $\alpha = 0.05$. The conformal and union policies trade net benefit for higher alert precision and explicit deferral, which is the intended design: they are action-governance layers, not replacements for continuous risk ranking.
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Appendix Table B10. Key decision-curve net-benefit comparisons.}
+\label{tab:app-b10}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b10_utility_focus.tex}
+\end{adjustbox}
+\end{table*}
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Appendix Table B11. Fixed-policy clinical utility summary.}
+\label{tab:app-b11}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b11_utility_policy.tex}
+\end{adjustbox}
+\end{table*}
+
+\subsection{Negative and Null Probes}
+
+Table~\ref{tab:app-b12} reports negative and null results from exploratory probe experiments, carried forward for transparency. Missingness-indicator features (AUROC 0.755), engineered ratio features (0.751), a three-model stacking ensemble (0.759), and HPO-tuned LightGBM (0.760) all failed to break through the discrimination ceiling. A random survival forest achieved concordance 0.726, below the primary XGBoost baseline. These null results reinforce the bounded-ceiling interpretation and justify the shift toward uncertainty quantification rather than continued architecture search.
+
+\begin{table*}[!t]
+\centering
+\small
+\caption{Appendix Table B12. Negative and null probe results carried forward for transparency.}
+\label{tab:app-b12}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/appendix_b12_negative_probes.tex}
+\end{adjustbox}
+\end{table*}
+
+\section{Shift and Subgroup Notes}\label{app:shift}
+
+The shift and subgroup results are intentionally framed as deployment governance notes rather than as new performance claims. Three shift scenarios were evaluated: random physiology missingness injection (10--30\% severity), measurement-process feature dropout (complete removal of measurement-frequency features), and care-process feature dropout (complete removal of care-process features).
+
+Under all shift scenarios, conformal coverage at $\alpha = 0.05$ remained between 0.947 and 0.970, compared with the clean baseline of 0.950. The mechanism is structural: as input quality degrades, nonconformity scores shift, prediction sets widen, and more cases enter the Defer region. At 30\% physiology missingness, the conformal certain-decision fraction dropped from 0.316 (clean) to 0.235, meaning the system automatically became more conservative. Fixed-threshold policies, by contrast, experienced silent recall degradation from 0.294 (clean) to 0.171 at 30\% missingness without any explicit signal to the clinician that the model's reliability had changed.
+
+Subgroup analyses reinforce a governance-oriented interpretation. Low-acuity strata (low SOFA, no vasopressors, younger age) support broader automation with higher coverage and lower defer rates. High-acuity strata (high SOFA, vasopressor use, advanced age) require larger defer regions to maintain reliability. These patterns define where a cautious deployment policy should be most conservative and where automation can be extended with greater confidence. Gender parity was preserved across all operating points, with coverage differences between female and male patients remaining within 0.02.
+
+\section{Reproducibility}\label{app:repro}
+
+The manuscript and all associated tables, figures, and artifact summaries are generated from a fixed artifact bundle using a deterministic three-step build pipeline:
+\begin{enumerate}
+\item The deployment analysis script is executed to generate the canonical artifact bundle. This script performs the full evaluation pipeline including subject-grouped splitting, model training, calibration selection, conformal prediction, shift simulation, subgroup analysis, and decision-curve computation.
+\item The manuscript build script materializes the chaptered markdown manuscript from the artifact bundle.
+\item The \LaTeX{} build script copies the official OUP template files, regenerates the figure and table assets, and writes the main document, bibliography, and package README into the manuscript directory.
+\end{enumerate}
+
+The selected model snapshot preserved in the artifact bundle is XGBoost with isotonic calibration: mean AUROC 0.768 (cluster-bootstrap 95\% CI: 0.741--0.787), mean AUPRC 0.544, mean recall at PPV $\geq 0.50$ of 0.608, and decision-curve net benefit 0.133 at threshold 0.20. Headline conformal estimates were repeated across 21 grouped seeds to assess stability. The base random seed for preprocessing operations (imputation, feature selection, scaling) is 42. The 21 evaluation seeds used for repeated grouped benchmarking and conformal headline estimates are a fixed sequence of distinct integers (listed in the source code) that ensure independent subject-grouped splits across repetitions. The train/test split ratio is 80/20 with stratification by outcome.
+
+Confidence intervals reported in Table~3 are 2.5th and 97.5th percentile intervals computed across the 21 per-seed point estimates. The conformal coverage guarantee is a per-split property: each of the 21 independent experiments is expected to satisfy $\Pr(y \in C(x)) \geq 1 - \alpha$ individually. Across the 21 seeds at $\alpha = 0.05$, per-seed coverage ranged from a minimum of 0.938 to a maximum of 0.968, with 19 of 21 seeds achieving coverage at or above the nominal 0.95 target.
+
+The source patient-level data are not redistributed with this repository. Reproducing the cohort from raw source requires independent credentialed access to MIMIC-IV via PhysioNet and the corresponding data-use approvals. The checked-in repository provides the analysis code, derived artifact summaries, and manuscript assets used to support the internal-validation claims in this package.
+
+\end{appendices}

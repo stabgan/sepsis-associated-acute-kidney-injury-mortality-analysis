@@ -1,0 +1,173 @@
+\section{Results}
+
+\subsection{Cohort and Data Contract}
+
+Table~\ref{tab:cohort} summarizes the working cohort and the constraints that bound all manuscript claims. The analytic dataset comprises 10{,}036 ICU-stay-level SA-AKI records drawn from the derived SA-AKI analytic dataset, spanning 254 columns and carrying an in-hospital mortality prevalence of 0.267. All predictor features are restricted to the first 24 hours after ICU admission (T24), and the primary outcome is the binary mortality indicator. The cohort contains 9{,}002 unique subjects among 10{,}036 rows, meaning 1{,}034 rows represent repeated ICU stays for the same patient. This duplication makes stay-level random splitting inappropriate for any deployment-oriented claim, and all results reported in this paper therefore use subject-grouped evaluation by the unique subject identifier.
+
+\begin{table}[!t]
+\centering
+\small
+\caption{Cohort and data-contract summary.}
+\label{tab:cohort}
+\begin{adjustbox}{max width=\linewidth}
+\input{tables/table1_cohort.tex}
+\end{adjustbox}
+\end{table}
+
+The prevalence of 26.7\% is clinically significant: roughly one in four SA-AKI patients in this cohort died during the index hospitalization. This base rate is high enough that a well-calibrated triage tool can provide meaningful clinical value, but also high enough that naive treat-all policies already capture a substantial fraction of true positives. The data contract explicitly excludes several categories of claims that retrospective single-center studies sometimes overstate. No bedside-readiness claim is made, because the cohort has not been validated prospectively or against real-time EHR feeds. No external-validation or multi-center transportability claim is made, because all results derive from a single MIMIC-derived dataset. No claim is made that the v2 cohort exactly matches the thesis cohort description without ETL reconciliation, acknowledging known documentation mismatches identified during the audit pass. Finally, no reliance is placed on stay-level metrics for deployment-readiness claims, because the repeated-subject structure demands grouped evaluation as a hard design constraint rather than an optional robustness check.
+
+These constraints are not merely defensive caveats; they define the interpretive boundary for every result that follows. The prediction ceiling, the conformal coverage guarantees, and the subgroup heterogeneity analyses are all internally valid within this cohort under subject-grouped evaluation, but they should not be extrapolated to other institutions, time periods, or EHR systems without independent validation.
+
+\subsection{Prediction Ceiling and Conventional Benchmarks}
+
+Figure~\ref{fig:ceiling} and Table~\ref{tab:benchmark} anchor the benchmark story. The central finding is that the discrimination ceiling for first-24-hour SA-AKI mortality prediction is bounded, and the differences among baseline model families are comparatively small relative to the gap between any ML model and the clinical severity scores.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{figure2_prediction_ceiling.png}
+\caption{Prediction ceiling and benchmark summary. The leak-prone configuration (including the time-to-event variable) reaches AUROC 0.810, while the leak-free grouped setting remains at 0.763, establishing an empirical ceiling under the current feature and model constraints on what first-24-hour features can achieve.}
+\label{fig:ceiling}
+\end{figure}
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Baseline discrimination and calibration benchmark. All metrics are means across repeated subject-grouped splits. AUROC = area under the receiver operating characteristic curve; AUPRC = area under the precision--recall curve; ECE = expected calibration error.}
+\label{tab:benchmark}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/table2_benchmark.tex}
+\end{adjustbox}
+\end{table*}
+
+The ceiling experiment deserves careful interpretation. In the canonical workflow, the leak-prone configuration that adds the time-to-event variable as a predictor reaches AUROC 0.810, while the leak-free grouped setting, which excludes any post-T24 temporal information, remains at 0.763. The 0.047-point gap quantifies how much discriminative signal is attributable to temporal information that would not be available at the point of prediction in a real deployment. This gap is not trivially small: it represents roughly the same magnitude as the entire performance difference between logistic regression and XGBoost in the leak-free setting. The implication is that a substantial fraction of the ``achievable'' discrimination in this cohort is locked behind information that arrives after the prediction window closes, and no amount of feature engineering or hyperparameter tuning within the T24 constraint can recover it.
+
+Among the leak-free baselines, XGBoost achieved the highest mean AUROC of 0.768, followed closely by LightGBM at 0.765 and logistic regression at 0.751. The tree-based models occupied a narrow performance band: the 0.003-point AUROC difference between XGBoost and LightGBM is well within the standard deviation of repeated grouped splits and is not clinically meaningful. The repeated grouped benchmark selected XGBoost as the primary model because it combined mean AUROC 0.768, Brier score 0.161, and recall at PPV $\geq 0.50$ of 0.608 more consistently than the competing baselines. The grouped Optuna pass\cite{Akiba2019} improved LightGBM validation recall at PPV $\geq 0.50$ to 0.590, but repeated grouped LightGBM still averaged AUROC 0.765 and recall 0.575 on test data, confirming that hyperparameter optimization shifted the operating point without breaking through the empirical ceiling under the current feature and model constraints. The exploratory CatBoost\cite{Prokhorenkova2018} comparator remained competitive (AUROC 0.768, Brier 0.161, recall 0.623) but did not materially simplify or improve the downstream conformal story, so it was retained in the appendix as a diversity check rather than replacing the primary model family.
+
+The clinical severity scores performed substantially worse. SOFA\cite{Vincent1996} achieved AUROC 0.646 and APACHE-III\cite{Knaus1991} achieved AUROC 0.579, both well below the ML baselines. These scores were evaluated as single-feature logistic regression baselines under the same grouped protocol, which does not reflect their intended clinical use. SOFA was designed for longitudinal organ-dysfunction monitoring, and APACHE-III for admission-level case-mix adjustment. The comparison is intended to establish a discrimination floor relative to routinely available clinical information rather than to evaluate these instruments in their designed capacity. More critically, the severity scores exhibited poor calibration: APACHE-III had an expected calibration error (ECE) of 0.226 and SOFA had ECE 0.217, compared with 0.017 for XGBoost and 0.021 for LightGBM. A calibration slope of 0.843 for APACHE-III indicates systematic overconfidence in its probability estimates, which would translate directly into miscalibrated triage decisions if used as a standalone risk stratifier. For a clinician at the bedside, this means that an APACHE-III-based risk estimate of 40\% mortality might correspond to a true risk closer to 30\%, systematically biasing escalation decisions. The ML models, by contrast, achieved calibration slopes near 1.0 (XGBoost: 1.035; LightGBM: 1.031), indicating that their predicted probabilities are reliable inputs for downstream threshold-based or conformal decision policies.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{figure7_clinical_utility_panel.png}
+\caption{Calibration and clinical-utility panel. Left: calibration curves for the primary baselines. Right: decision-curve analysis comparing the continuous XGBoost score against clinical severity scores and fixed-policy comparators.}
+\label{fig:utility-panel}
+\end{figure}
+
+The clinical-utility panel (Figure~\ref{fig:utility-panel}) translates these discrimination and calibration differences into decision-theoretic terms. At a decision threshold of 0.20 (a clinically plausible threshold for initiating heightened monitoring or early renal replacement therapy consultation in SA-AKI), the continuous XGBoost score yields a net benefit of 0.133 versus 0.082 for APACHE-III, 0.082 for SOFA, and 0.108 for the fixed-threshold PPV $\geq 0.50$ policy.\cite{Vickers2006} In practical terms, the net benefit of 0.133 means that using the XGBoost model at this threshold is equivalent to correctly identifying approximately 13.3 additional true-positive deaths per 100 patients compared with a treat-none strategy, without increasing false-positive burden. The 0.051-point net-benefit advantage over APACHE-III (0.133 vs.\ 0.082) represents a clinically meaningful improvement in triage efficiency: for every 100 SA-AKI patients screened, the ML model would correctly escalate approximately 5 additional patients who will die, while maintaining comparable false-positive rates.
+
+The conformal $\alpha=0.05$ policy is deliberately more conservative, with net benefit 0.059, alert rate 0.107, and alert PPV 0.640. This distinction is important for interpreting the results that follow: the continuous model score is the appropriate comparator for clinical severity scores in a decision-curve framework, whereas the conformal and disagreement policies are complementary deployment-governance layers that trade some aggregate net benefit for narrower, higher-confidence action sets. The conformal policy does not aim to maximize net benefit across all patients; it aims to maximize the reliability of the decisions it does make, while explicitly deferring the rest.
+
+\subsection{Main Conformal Triage Result}
+
+Table~\ref{tab:conformal-main} summarizes repeated subject-grouped single-model conformal triage results across four $\alpha$ levels, each averaged over 21 grouped seeds. The main manuscript operating point is the low-$\alpha$ regime, where coverage is tightly controlled while a clinically meaningful defer region is preserved.
+
+\begin{table*}[!t]
+\centering
+\small
+\caption{Main conformal results across repeated grouped splits. Coverage is the fraction of patients whose true label falls within the conformal prediction set. Certain fraction is the proportion of patients receiving a singleton (Alert or Clear) rather than a deferred (\{0,1\}) prediction. All estimates are means $\pm$ bootstrap confidence intervals across 21 subject-grouped seeds.}
+\label{tab:conformal-main}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/table3_conformal.tex}
+\end{adjustbox}
+\end{table*}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{figure5_conformal_operating_curve.png}
+\caption{Conformal operating-characteristic curve. As $\alpha$ increases, coverage decreases and the certain-decision fraction rises, tracing the fundamental coverage--automation tradeoff.}
+\label{fig:conformal-curve}
+\end{figure}
+
+At $\alpha=0.05$, single-model conformal triage achieved empirical coverage (defined as the fraction of test patients whose true outcome label is contained in the conformal prediction set) of 0.952 (95\% CI: 0.945--0.959) with a certain-decision fraction of 0.318, alert PPV of 0.643, and clear NPV of 0.948. The coverage of 0.952 confirms that the conformal guarantee is met: the true label is contained in the prediction set for at least $1-\alpha = 0.95$ of patients, averaged across seeds. The certain-decision fraction of 0.318 means that only about one-third of patients receive a definitive Alert or Clear recommendation; the remaining 68.2\% are deferred to clinician judgment. It is important to note that deferred patients are not left without information. In the proposed deployment framework, the continuous calibrated risk score is displayed alongside the Defer label, providing the clinician with a probability estimate that can inform, but not automate, the triage decision. The conformal framework thus functions as a risk score with an explicit confidence flag rather than a pure three-way classifier, and the Defer channel serves as a structured mechanism for communicating model uncertainty to the end user. For a clinician, this operating point represents a conservative triage assistant: when it issues a recommendation, it is relatively reliable (PPV 0.643 for alerts, NPV 0.948 for clears), but it issues recommendations infrequently. The miss count of 23.1 patients per seed, representing cases where the true label falls outside the prediction set, is the price paid for the 31.8\% automation rate.
+
+The clinical interpretation of these operating characteristics depends on the deployment context. An alert PPV of 0.643 means that when the model flags a patient as high-risk, approximately 64\% of those patients will indeed die during the hospitalization. This is not high enough for autonomous escalation decisions; a clinician would still need to review each alert, but it is high enough to meaningfully prioritize which patients receive early attention in a busy ICU. The clear NPV of 0.948 is more immediately actionable: when the model clears a patient, only 5.2\% of those patients will die. In a triage context, this supports deprioritization of cleared patients from intensive monitoring protocols, freeing clinical resources for the deferred and alerted groups.
+
+As $\alpha$ increases, the framework trades coverage for automation. At $\alpha=0.10$, coverage drops to 0.900 while the certain-decision fraction rises to 0.503, meaning roughly half of patients now receive definitive recommendations. Alert PPV decreases to 0.579 and clear NPV to 0.924, reflecting the dilution that comes with broader automation. As a post-hoc descriptive observation, the operating point at $\alpha=0.12$ satisfies both NPV $\geq 0.90$ and PPV $\geq 0.55$, with certain-decision fraction 0.532, alert PPV 0.556, and clear NPV 0.912. This operating point is reported as a descriptive characterisation of the coverage--automation tradeoff rather than as a prescriptive recommendation, since the criterion was evaluated on test-set performance and selecting $\alpha$ on test data constitutes a form of post-hoc optimisation. In a prospective deployment, the $\alpha$ level should be selected on a held-out validation or calibration set according to institutional risk tolerance, and the test-set performance should be reported as a held-out evaluation of that pre-specified choice. At $\alpha=0.20$, the certain-decision fraction reaches 0.782 but alert PPV falls to 0.509, barely above the prior probability of death among alerted patients, and clear NPV drops to 0.887, which may be insufficient for safe deprioritization in high-acuity settings. The conformal operating-characteristic curve (Figure~\ref{fig:conformal-curve}) visualizes this fundamental coverage--automation tradeoff, providing a governance tool for institutions to select the $\alpha$ level that matches their risk tolerance and staffing constraints.
+
+\subsection{Multi-Model Consensus}
+
+Table~\ref{tab:conformal-consensus} and Figure~\ref{fig:consensus} extend the conformal framework to multi-model consensus. Three consensus strategies are compared: single-model (XGBoost alone), intersection (a patient is classified only if all three models, namely XGBoost, LightGBM, and logistic regression, agree on the same singleton prediction set), and union (a patient is deferred if any model's prediction set includes both classes).
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Multi-model consensus conformal results. The union strategy defers whenever any constituent model is uncertain; the intersection strategy acts only when all models agree. Single-model results (XGBoost) are repeated from Table~\ref{tab:conformal-main} for comparison.}
+\label{tab:conformal-consensus}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/table4_consensus.tex}
+\end{adjustbox}
+\end{table*}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{figure6_consensus_tradeoff.png}
+\caption{Multi-model consensus trade-off panel. The union strategy achieves the highest reliability (alert PPV and clear NPV) at the cost of the lowest automation rate; the intersection strategy maximizes automation but sacrifices reliability.}
+\label{fig:consensus}
+\end{figure}
+
+At $\alpha=0.05$, the union consensus yields coverage 0.982, alert PPV 0.729, and clear NPV 0.962, with a certain-decision fraction of only 0.164 and a miss count of 8.7 patients per seed. The coverage of 0.982 substantially exceeds the nominal $1-\alpha=0.95$ target because the union strategy is inherently conservative: by deferring whenever any model is uncertain, it captures nearly all borderline cases. The alert PPV of 0.729 is the highest among all operating points reported in this paper; when the union consensus flags a patient as high-risk, nearly three-quarters of those patients will die. This approaches the reliability threshold where automated escalation protocols (e.g., automatic nephrology or palliative care consultation) become defensible, though the low automation rate of 16.4\% limits the throughput of such a system.
+
+The intersection strategy represents the opposite extreme. At $\alpha=0.05$, intersection achieves coverage 0.911, certain-decision fraction 0.462, alert PPV 0.591, and clear NPV 0.926. By requiring unanimous agreement among all three models, the intersection strategy acts on more patients (46.2\% vs.\ 16.4\% for union) but with lower reliability. The coverage of 0.911 falls below the nominal 0.95 target, which is expected: the intersection of individually valid prediction sets is not guaranteed to maintain marginal coverage, because the intersection can exclude the true label when models disagree about borderline cases. This coverage shortfall is a known theoretical limitation and should be weighed against the higher automation rate when selecting a consensus strategy. This coverage shortfall has practical implications: institutions selecting the intersection strategy should be aware that the formal coverage guarantee does not hold for this consensus mode, and the intersection results should be interpreted as empirical operating points.
+
+The single-model XGBoost results sit between these extremes, confirming that the consensus strategies represent genuine tradeoffs rather than strict dominance relationships. For deployment, the choice among union, intersection, and single-model consensus depends on institutional priorities. A high-acuity ICU with adequate staffing might prefer the union strategy, accepting low automation in exchange for high-confidence alerts that trigger specific clinical pathways. A resource-constrained setting might prefer the single-model or intersection strategy to maximize the fraction of patients receiving automated triage, accepting modestly lower reliability. Figure~\ref{fig:consensus} visualizes these tradeoffs across $\alpha$ levels, providing a governance surface that institutions can navigate based on their specific clinical and operational constraints.
+
+\subsection{Comparison With Disagreement-Based Selective Triage}
+
+The disagreement-based selective-triage policy remains an important ablation because it demonstrates that explicit deferral helps even before formal conformalization. In the disagreement framework, a process-enriched full model and a physiology-severity model are trained on the same grouped split, and cases are considered actionable only when the two models agree within an empirically tuned threshold. The repeated grouped summary is included in Appendix~\ref{app:benchmarks} (Table~B6).
+
+In brief, disagreement triage narrows the actionable region and reduces actionable error relative to a naive apply-everywhere policy, confirming that uncertainty-aware action restriction is beneficial regardless of the specific mechanism used to identify uncertain cases. However, the disagreement policy depends on an empirically calibrated agreement threshold that lacks formal coverage guarantees. The conformal formulation is methodologically stronger for two reasons: first, it provides finite-sample coverage guarantees under exchangeability rather than relying on heuristic threshold selection; and second, it naturally extends to multi-model consensus (Section~3.4) and robustness analysis (Section~3.6) without requiring separate threshold recalibration for each configuration. The disagreement baseline is therefore retained as a useful comparator that motivates the conformal approach, rather than as a competing recommendation.
+
+\subsection{Robustness Under Distribution Shift}
+
+Table~\ref{tab:shift} and Figure~\ref{fig:shift} summarize robustness under three simulated distribution-shift scenarios: physiology missingness shift (random dropout of physiological feature values at 10\%, 20\%, and 30\% severity), measurement-process dropout (complete removal of a measurement-process feature family), and care-process dropout (complete removal of a care-process feature family). These scenarios are designed to approximate the kinds of distributional changes that occur when a model trained at one institution is deployed at another with different documentation practices, laboratory ordering patterns, or EHR configurations.
+
+\begin{table*}[!t]
+\centering
+\small
+\caption{Shift robustness versus fixed-threshold policies. Conformal coverage remains stable under increasing missingness because the framework defers more cases; fixed thresholds lose recall without signaling increased uncertainty.}
+\label{tab:shift}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/table5_shift.tex}
+\end{adjustbox}
+\end{table*}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{figure8_shift_panel.png}
+\caption{Robustness-under-shift panel. Left: conformal coverage and certain-decision fraction under increasing missingness. Right: fixed-threshold precision and recall under the same conditions.}
+\label{fig:shift}
+\end{figure}
+
+The central finding is that conformal coverage remains stable across all shift scenarios while the framework automatically adjusts its automation rate. Under clean conditions, conformal coverage is 0.950 with a certain-decision fraction of 0.316. As physiology missingness increases to 10\%, 20\%, and 30\%, coverage remains at or above the nominal level (0.950, 0.963, 0.970), but the certain-decision fraction decreases monotonically from 0.297 to 0.268 to 0.235. This behavior is exactly what a well-designed uncertainty-aware system should exhibit: when the input data become noisier, the model becomes less certain about more patients and defers them rather than making unreliable predictions. The increasing coverage above the nominal 0.95 target reflects the conservatism of the conformal calibration under shift, as the nonconformity thresholds estimated on clean calibration data become more conservative when applied to noisier test data, producing wider prediction sets.
+
+By contrast, the fixed-threshold policy at PPV $\geq 0.50$ exhibits a qualitatively different failure mode. Under clean conditions, fixed-threshold recall is 0.294. As missingness increases to 30\%, recall drops to 0.171, a 42\% relative decline, while precision actually increases slightly to 0.619. This pattern is clinically dangerous: the fixed-threshold policy silently misses an increasing fraction of patients who will die, without providing any signal that its operating characteristics have degraded. A clinician relying on a fixed-threshold alert system would see fewer alerts under shift and might interpret this as evidence that the patient population has improved, when in fact the model has simply become less sensitive. The conformal framework avoids this failure mode by making uncertainty explicit through the defer channel.
+
+The measurement-process and care-process dropout scenarios test robustness to complete removal of feature families rather than random missingness. Under measurement-process dropout, conformal coverage remains at 0.950 with a certain-decision fraction of 0.281 and alert PPV of 0.646, comparable to the clean baseline. Under care-process dropout, coverage is 0.947 with certain-decision fraction 0.320 and alert PPV 0.624. These results suggest that the conformal framework is robust to the loss of entire feature categories, not just random value-level missingness. The slight decrease in alert PPV under care-process dropout (0.624 vs.\ 0.640 clean) indicates that care-process features contribute modestly to alert precision, but the conformal guarantee absorbs this degradation by deferring additional borderline cases rather than allowing alert quality to deteriorate unchecked.
+
+\subsection{Subgroup Heterogeneity}
+
+Table~\ref{tab:subgroups} and Figure~\ref{fig:subgroups} report subgroup-level conformal triage performance at $\alpha=0.10$ across five clinically relevant stratification axes: age band, gender, mechanical ventilation status, SOFA severity band, and vasopressor use. This $\alpha$ level was chosen for subgroup reporting because it provides a balanced operating point (certain-decision fraction $\approx 0.50$) that exposes heterogeneity more clearly than the conservative $\alpha=0.05$ regime.
+
+\begin{table*}[!t]
+\centering
+\scriptsize
+\caption{Subgroup heterogeneity summary for conformal triage at $\alpha=0.10$. Coverage and reliability metrics are reported for each subgroup level. High-acuity strata (high SOFA, vasopressor use) show lower coverage and higher event rates, reflecting the inherent difficulty of predicting outcomes in the sickest patients.}
+\label{tab:subgroups}
+\begin{adjustbox}{max width=\textwidth}
+\input{tables/table6_subgroups.tex}
+\end{adjustbox}
+\end{table*}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{figure9_subgroup_forest.png}
+\caption{Subgroup coverage and reliability forest plot at $\alpha=0.10$. Points represent subgroup-level estimates; horizontal bars indicate variability across grouped seeds. The dashed vertical line marks the nominal $1-\alpha=0.90$ coverage target.}
+\label{fig:subgroups}
+\end{figure}
+
+Gender parity is well preserved. Female patients (n=954, event rate 0.257) achieved coverage 0.921 with alert PPV 0.620 and clear NPV 0.928, while male patients (n=1{,}047, event rate 0.273) achieved coverage 0.902 with alert PPV 0.564 and clear NPV 0.914. The 0.019-point coverage gap and 0.056-point alert PPV gap are modest and do not suggest systematic gender-based discrimination in the conformal triage framework. Both genders maintain coverage above the nominal 0.90 target, and the slightly lower male coverage is consistent with the slightly higher male event rate rather than with a model-specific bias.
+
+Age-band heterogeneity follows a clinically expected gradient. The youngest stratum ($\leq$50 years, n=244, event rate 0.201) achieved the highest coverage (0.930) and the highest certain-decision fraction (0.602), reflecting the relative predictability of outcomes in younger SA-AKI patients. The oldest stratum ($>$80 years, n=425, event rate 0.292) achieved coverage 0.908 but the lowest certain-decision fraction (0.344), indicating that the model defers more frequently for elderly patients, a reasonable behavior given the greater clinical complexity and comorbidity burden in this age group. Alert PPV was comparable across age bands (range: 0.571--0.621), suggesting that when the model does issue an alert for an elderly patient, it is approximately as reliable as for a younger patient.
+
+The most pronounced heterogeneity appears along the acuity axis. High-SOFA patients (n=566, event rate 0.412) achieved coverage of only 0.866, below the nominal 0.90 target, with alert PPV 0.659 and clear NPV 0.842. Low-SOFA patients (n=855, event rate 0.171) achieved coverage 0.949 with alert PPV 0.469 and clear NPV 0.929. The 0.083-point coverage gap between high-SOFA and low-SOFA strata is the largest subgroup disparity in the table and reflects a fundamental challenge: the sickest patients are the hardest to predict, and the conformal framework transparently reports this difficulty through reduced coverage rather than masking it behind a uniform accuracy claim. The high-SOFA clear NPV of 0.842 means that 15.8\% of patients cleared by the model in this stratum will die, a rate that may be unacceptable for clinical deprioritization without additional safeguards. This finding reinforces the paper's deployment message: the model should be treated as a triage assistant with a defer option, not as a universal autonomous classifier, and institutions deploying such a system should consider SOFA-stratified $\alpha$ thresholds or mandatory clinician review for high-acuity patients regardless of the model's recommendation.
+
+Vasopressor and mechanical ventilation strata show similar patterns. Vasopressor-positive patients (n=724, event rate 0.327) achieved coverage 0.885 versus 0.926 for vasopressor-negative patients (n=1{,}277, event rate 0.230). Mechanically ventilated patients (n=1{,}085, event rate 0.261) achieved coverage 0.917 versus 0.904 for non-ventilated patients (n=916, event rate 0.271), with the ventilated group showing higher alert PPV (0.620 vs.\ 0.558). Mechanical ventilation status appears to sharpen the model's alert channel, possibly because ventilated patients represent a more homogeneous high-acuity subpopulation where the physiological signal is stronger. Taken together, the subgroup analyses confirm that the conformal framework provides transparent, stratum-specific performance reporting and that deployment governance should account for acuity-dependent coverage variation.

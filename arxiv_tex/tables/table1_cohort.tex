@@ -1,0 +1,24 @@
+{\footnotesize
+\begin{tabular}{@{}p{4.2cm}p{9.5cm}@{}}
+\toprule
+Item & Value\\
+\midrule
+Working cohort & mimic\_saaki\_raw\_v2.csv\\
+Rows & 10{,}036\\
+Columns & 254\\
+Outcome prevalence & 0.267\\
+Prediction time & 24 hours after ICU admission (T24)\\
+Outcome & \texttt{event\_observed} is the in-hospital death label; \texttt{time\_to\_event\_hrs} is hours from ICU admission to death or last known alive/discharge censoring.\\
+Evaluation & Subject-grouped holdout by \texttt{subject\_id}\\
+Explicitly excluded claims &
+  \begin{minipage}[t]{\linewidth}
+  \begin{itemize}[nosep,leftmargin=1em,topsep=0pt,partopsep=0pt]
+    \item No bedside-readiness claim.
+    \item No external-validation or multi-center transportability claim.
+    \item No claim that the v2 cohort exactly matches the thesis cohort description without ETL reconciliation.
+    \item No reliance on stay-level metrics for deployment-readiness claims.
+  \end{itemize}
+  \end{minipage}\\
+\bottomrule
+\end{tabular}
+}

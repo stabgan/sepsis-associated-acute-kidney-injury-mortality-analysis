@@ -1,0 +1,592 @@
+% ============================================================================
+%  arXiv preprint — SA-AKI Conformal Selective Triage
+%  Kaustabh Ganguly, IIT Madras
+% ============================================================================
+\documentclass[11pt]{article}
+
+% --- Page geometry ----------------------------------------------------------
+\usepackage[margin=1in]{geometry}
+
+% --- Mathematics ------------------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% --- Typography (Computer Modern is the default; microtype for refinements) -
+\usepackage{microtype}
+
+% --- Tables -----------------------------------------------------------------
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{enumitem}          % compact lists inside table cells
+
+% --- Figures ----------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{subcaption}
+\graphicspath{{figures/}}
+
+% --- Colour (for hyperlinks and minor highlights) ---------------------------
+\usepackage{xcolor}
+
+% --- Appendices -------------------------------------------------------------
+\usepackage[toc,page]{appendix}
+
+% --- Hyperlinks -------------------------------------------------------------
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=green!50!black,
+            urlcolor=blue!70!black]{hyperref}
+
+% --- Citations --------------------------------------------------------------
+\usepackage{natbib}
+
+% --- Convenience macros -----------------------------------------------------
+\newcommand{\ie}{\textit{i.e.}}
+\newcommand{\eg}{\textit{e.g.}}
+\newcommand{\cf}{\textit{cf.}}
+\newcommand{\etal}{\textit{et~al.}}
+\newcommand{\AUROC}{\text{AUROC}}
+\newcommand{\AUPRC}{\text{AUPRC}}
+
+% ============================================================================
+%  TITLE AND AUTHOR
+% ============================================================================
+\title{When to Alert, When to Defer:\\
+       Conformal Selective Triage for ICU Mortality\\
+       in Sepsis-Associated Acute Kidney Injury}
+
+\author{Kaustabh Ganguly\\
+        Indian Institute of Technology Madras\\
+        \texttt{ch23m514@smail.iitm.ac.in} $\cdot$ \texttt{kaustabhganguly@gmail.com}}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% ============================================================================
+%  ABSTRACT
+% ============================================================================
+\begin{abstract}
+\noindent
+\textbf{Background.}
+Sepsis-associated acute kidney injury (SA-AKI) carries high in-hospital mortality,
+yet machine learning studies for this population typically report a single
+discrimination metric and overstate deployment readiness.  Clinicians require not
+only a risk score but also an explicit signal indicating whether the model's
+prediction is reliable enough to act upon.
+
+\textbf{Methods.}
+A total of 10,036 ICU stays (9,002 unique subjects; 26.7\% mortality) from the
+Medical Information Mart for Intensive Care~IV (MIMIC-IV) version~3.1 were analysed.  A total
+of 162 features were extracted from the first 24~hours of ICU admission using nine
+statistical aggregations over time-varying measurements.  Conventional baselines
+(logistic regression, XGBoost, LightGBM) were evaluated under subject-grouped
+train/validation/test splits repeated across 21 random seeds.  Mondrian conformal
+prediction was applied to convert calibrated risk scores into set-valued triage
+decisions (\emph{Alert}~$\{1\}$, \emph{Clear}~$\{0\}$, or
+\emph{Defer}~$\{0,1\}$) with finite-sample coverage guarantees.  A
+disagreement-based selective-triage comparator was included as an ablation.
+
+\textbf{Results.}
+The best conventional baseline was XGBoost with isotonic calibration (mean
+$\AUROC = 0.768$; recall at $\text{PPV} \ge 0.50$: $0.608$).  Even a
+leak-augmented ceiling experiment that included time-to-event as a feature reached
+only $\AUROC = 0.810$, confirming bounded discrimination.  Single-model conformal
+triage at $\alpha = 0.05$ achieved coverage of $0.952$, alert positive predictive
+value (PPV) of $0.643$, and clear negative predictive value (NPV) of $0.948$.
+Multi-model union consensus concentrated decisions into a smaller actionable region
+with alert PPV of $0.729$ and clear NPV of $0.962$.  On decision-curve analysis
+the selected continuous model achieved net benefit $0.133$ at a threshold
+probability of $0.20$, compared with $0.082$ for APACHE-III and $0.082$ for SOFA.
+Under simulated missingness shift, conformal coverage remained stable while
+fixed-threshold policies lost recall.
+
+\textbf{Conclusions.}
+The principal contribution is not a new discrimination leader but an
+\emph{Alert\,/\,Defer\,/\,Clear} triage framework with distribution-free coverage
+guarantees.  For this SA-AKI cohort the scientific opportunity lies in safe
+decision-making under bounded predictive signal rather than incremental AUROC
+improvement.
+\end{abstract}
+
+\medskip
+\noindent\textbf{Keywords:}
+sepsis-associated acute kidney injury, conformal prediction, selective triage,
+ICU mortality, MIMIC-IV, uncertainty quantification
+
+
+% ============================================================================
+%  1. INTRODUCTION
+% ============================================================================
+\section{Introduction}\label{sec:introduction}
+
+Sepsis-associated acute kidney injury (SA-AKI) couples the systemic inflammatory
+cascade of sepsis with acute renal failure, producing a clinical phenotype that
+carries substantially higher intensive care unit (ICU) mortality than either
+condition alone~\citep{Poston2019,Kellum2021}.  Reported in-hospital mortality
+rates for SA-AKI range from 25\% to 45\% depending on cohort definitions and
+severity staging~\citep{Hoste2015,Bagshaw2007}, and survivors face elevated risks
+of chronic kidney disease progression, prolonged hospitalisation, and increased
+long-term healthcare utilisation~\citep{See2019}.  Early identification of
+patients at highest risk of death is therefore a prerequisite for timely
+escalation of care, whether that involves intensifying haemodynamic support,
+initiating renal replacement therapy, or triggering goals-of-care
+discussions~\citep{Zarbock2023}.
+
+Despite the clinical importance of this prediction task, the machine learning
+literature on SA-AKI mortality has followed a familiar pattern: studies report a
+single area under the receiver operating characteristic curve (AUROC), declare
+the model ``promising,'' and do not address the operational question
+that matters at the bedside: \emph{when should the model's output actually
+change a clinical decision?}  This gap between discrimination and deployment
+readiness is not unique to SA-AKI.  Across critical care prediction tasks,
+models are rarely accompanied by explicit uncertainty quantification, calibration
+audits, or decision-theoretic evaluations that would be necessary before a risk
+score could safely enter a clinical workflow~\citep{VanCalster2019,Steyerberg2010}.
+The result is a growing inventory of models with similar AUROCs and no clear path
+to clinical integration.
+
+The present study begins from a clear empirical observation: discrimination in
+this cohort is bounded.  A total of 10,036 ICU stays from MIMIC-IV~v3.1 were analysed, and
+it was found that the strongest conventional models (logistic regression, XGBoost,
+LightGBM, and CatBoost) occupy a narrow performance band with mean AUROCs
+between $0.765$ and $0.768$ under subject-grouped evaluation repeated across 21
+random seeds.  Grouped Optuna hyperparameter optimisation (40~trials) and the
+addition of CatBoost as a diversity comparator did not materially widen this
+band.  Even a deliberately leak-prone ceiling experiment that included
+time-to-event as a predictor reached only $\AUROC = 0.810$.  This finding
+reframes the research question: the central challenge is not how to extract another
+$0.01$ of AUROC from the same first-24-hour feature set, but how to build a
+clinically legible triage policy that behaves safely under bounded signal.
+
+Two uncertainty-aware selective-triage strategies are therefore compared.  The
+first is a \emph{disagreement-based} approach, included as an ablation, in which
+divergence between a physiology-only model and a process-enriched full-feature
+model serves as a heuristic defer signal.  The second, and primary contribution,
+is \emph{conformal selective triage}.  Mondrian conformal
+prediction~\citep{Vovk2005} converts calibrated probabilistic risk scores into
+set-valued decisions with finite-sample coverage guarantees.  For binary
+mortality prediction the prediction set takes one of three clinically
+interpretable forms: $\{1\}$ (\emph{Alert}, indicating confidence that the patient
+is high-risk), $\{0\}$ (\emph{Clear}, indicating confidence that the patient is
+lower-risk), or $\{0,1\}$ (\emph{Defer}, indicating that the model's uncertainty is too large
+for safe automation and the case should be reviewed by a clinician).  This
+three-way interface maps directly onto ICU triage workflows and provides an
+explicit abstention channel that fixed-threshold classifiers lack.
+
+This manuscript makes three contributions.  First, the prediction
+ceiling for first-24-hour SA-AKI mortality risk is documented under a rigorous subject-grouped
+evaluation design, establishing that incremental model engineering yields
+diminishing returns in this cohort.  Second, conformal selective
+triage is introduced as the primary decision framework, and it is demonstrated that it provides
+explicit, safety-oriented operating points characterised by coverage, alert
+positive predictive value (PPV), and clear negative predictive value (NPV), with
+multi-model consensus further concentrating decisions into a smaller, more
+reliable actionable region.  Third, it is shown that conformal deferral degrades more
+gracefully than fixed thresholds under simulated distribution shift (random
+missingness injection and process-feature dropout), offering a more realistic
+deployment boundary for ICU mortality risk models.  The goal is not to claim
+bedside readiness but to present a clinically grounded informatics study that
+defines when a model should and should not be trusted.
+
+
+% ============================================================================
+%  2. METHODS
+% ============================================================================
+\section{Methods}\label{sec:methods}
+
+Figure~\ref{fig:workflow} summarises the end-to-end pipeline from cohort
+construction through evaluation.  Each subsection below corresponds to a stage
+in this workflow.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figure1_workflow.pdf}
+  \caption{End-to-end study workflow.  The raw SA-AKI cohort is derived from
+    MIMIC-IV~v3.1 via Sepsis-3 and KDIGO criteria, audited against a data
+    contract, and split into subject-grouped partitions.  Three evaluation
+    tracks (conventional baselines, disagreement-based selective triage
+    (ablation), and Mondrian conformal selective triage (primary)) feed into
+    a unified manuscript asset pipeline that produces all tables, figures, and
+    decision-curve analyses reported in this paper.}
+  \label{fig:workflow}
+\end{figure}
+
+% ----------------------------------------------------------------------------
+\subsection{Data Source}\label{sec:data-source}
+
+This retrospective study used the Medical Information Mart for Intensive Care~IV
+(MIMIC-IV) version~3.1~\citep{Johnson2023,Goldberger2000}, a freely available
+critical care database hosted on PhysioNet that contains de-identified electronic
+health records from Beth Israel Deaconess Medical Center (BIDMC), Boston,
+Massachusetts, spanning admissions from 2008 to 2019.  MIMIC-IV integrates data
+from three modules: \texttt{hosp} (hospital-wide administrative and laboratory
+data), \texttt{icu} (high-resolution bedside charted events from MetaVision), and
+\texttt{ed} (emergency department encounters).
+
+Source tables were ingested into a PostgreSQL analytical warehouse to enable
+reproducible, SQL-driven cohort construction.  Clinical concept identification
+relied on an ontology-driven pipeline rather than brittle hard-coded drug lists.
+Specifically, systemic antibiotic and vasopressor flags, required for Sepsis-3
+labelling and feature construction respectively, were derived by mapping
+MIMIC-IV medication entries through a crosswalk linking SNOMED~CT concepts to
+Unified Medical Language System (UMLS) Concept Unique Identifiers (CUIs), then
+resolving to RxNorm ingredient-level value sets, with the Anatomical Therapeutic
+Chemical (ATC) classification used as an orthogonal cross-reference and coverage
+check.  This approach ensures that the drug identification layer generalises
+across formulary variations and is robust to synonym differences in medication
+naming.
+
+% ----------------------------------------------------------------------------
+\subsection{Cohort Construction}\label{sec:cohort}
+
+The analytic cohort was constructed through a series of inclusion and exclusion
+criteria applied sequentially to all ICU stays in MIMIC-IV~v3.1.  The pipeline
+follows a CONSORT-style reduction and is summarised below.
+
+\paragraph{Inclusion criteria.}
+Three inclusion criteria were applied sequentially: (1)~adult patients aged $\ge 18$~years at ICU admission; (2)~only the index ICU admission per hospital encounter, to avoid within-subject correlation from repeated stays; and (3)~a minimum ICU length of stay of $\ge 24$~hours, ensuring that the full T0--T24 feature extraction window was available for every patient.
+
+\paragraph{Sepsis-3 identification.}
+Sepsis was defined according to the Third International Consensus
+Definitions~\citep{Singer2016}.  A patient was classified as having
+\emph{suspected infection} if a body-fluid culture was ordered and a systemic
+antibiotic was administered within a clinically plausible window (culture order
+within $\pm 72$~hours of antibiotic start, with the antibiotic initiated within
+24~hours before or 72~hours after the culture).  Sepsis was confirmed when
+suspected infection co-occurred with an acute increase in organ dysfunction,
+operationalised as a change in the Sequential Organ Failure Assessment (SOFA)
+score of $\Delta\text{SOFA} \ge 2$ points relative to a pre-infection baseline.
+The sepsis onset time, $t_{\text{sepsis}}$, was defined as the beginning of the
+first qualifying ICU calendar day on which both conditions were met.
+
+\paragraph{KDIGO acute kidney injury staging.}
+AKI was identified using the Kidney Disease: Improving Global Outcomes (KDIGO)
+2012 criteria~\citep{KDIGO2012}, which define AKI by any one of three triggers:
+\begin{itemize}
+  \item \textbf{Absolute creatinine rise:} serum creatinine (SCr) increase
+        $\ge 0.3$~mg/dL within any 48-hour window.
+  \item \textbf{Relative creatinine rise:} SCr $\ge 1.5\times$ baseline within
+        7~days.  Baseline SCr was established hierarchically: the lowest
+        outpatient value in the 7--365~days before admission was preferred; when
+        unavailable, the admission SCr was used.
+  \item \textbf{Urine output criterion:} urine output $\le 0.5$~mL/kg/h
+        sustained for $\ge 6$~consecutive hours, computed via a sliding-window
+        sessionisation algorithm applied to hourly charted urine volumes
+        normalised by admission body weight.
+\end{itemize}
+The AKI onset time, $t_{\text{aki}}$, was defined as the earliest time at which
+any of the three criteria was first satisfied.
+
+\paragraph{SA-AKI temporal linkage.}
+A patient was classified as having SA-AKI if AKI onset fell within a
+$\pm 48$-hour window around sepsis onset:
+\begin{equation}\label{eq:saaki-window}
+  t_{\text{sepsis}} - 48\text{ h}
+  \;\le\; t_{\text{aki}}
+  \;\le\; t_{\text{sepsis}} + 48\text{ h}.
+\end{equation}
+This window captures both AKI that develops as a consequence of sepsis and AKI
+that is already evolving at the time sepsis is recognised, consistent with
+contemporary definitions of sepsis-associated organ
+dysfunction~\citep{Kellum2021}.
+
+\paragraph{Exclusion criteria.}
+Two additional exclusions were applied to the SA-AKI cohort.  First, patients with pre-existing end-stage renal disease (ESRD), identified via ICD-9/10 diagnosis codes or documented chronic dialysis, were excluded because their renal trajectory is fundamentally different from acute injury.  Second, patients who received renal replacement therapy within the first 24~hours of ICU admission were excluded to avoid confounding the T0--T24 feature window with an intervention that simultaneously reflects severity and alters downstream laboratory values.
+
+\paragraph{Final cohort.}
+After applying all criteria, the analytic cohort comprised \textbf{10,036}~ICU
+stays from \textbf{9,002}~unique subjects, with an in-hospital mortality
+prevalence of \textbf{26.7\%}.  The primary outcome was in-hospital death
+(the binary in-hospital mortality indicator, coded as~$1$); the secondary time-to-event variable was hours
+from ICU admission to death or discharge (the time-to-event variable, measured in hours from ICU admission to death or censoring), with
+patients discharged alive treated as right-censored.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Feature Engineering}\label{sec:features}
+
+All predictive features were restricted to measurements recorded within the
+first 24~hours of ICU admission (T0--T24) to ensure clinical actionability and
+prevent temporal leakage.  A scripted audit verified that no variable encoding
+information after T24 (including total ICU length of stay and whole-stay
+aggregates) was included in the predictor set.
+
+\paragraph{Time-varying features.}
+For each time-varying clinical measurement (vital signs, laboratory values,
+fluid balance, urine output), nine statistical aggregations were computed over
+the T0--T24 window:
+\begin{enumerate}
+  \item \textbf{First} and \textbf{last} recorded values (capturing initial
+        presentation and 24-hour trajectory endpoint);
+  \item \textbf{Median} (robust central tendency);
+  \item \textbf{Interquartile range (IQR)} and \textbf{range}
+        (max~$-$~min) (variability);
+  \item \textbf{Delta} (last~$-$~first) (directional change);
+  \item \textbf{Area under the curve (AUC)} via trapezoidal integration
+        (cumulative exposure);
+  \item \textbf{Slope} from ordinary least-squares regression against time
+        (rate of change);
+  \item \textbf{Count} of non-missing observations (measurement intensity).
+\end{enumerate}
+This nine-aggregation scheme was applied to vital signs (heart rate, mean
+arterial pressure, systolic and diastolic blood pressure, respiratory rate,
+SpO\textsubscript{2}, temperature), laboratory values (serum creatinine, blood
+urea nitrogen, lactate, bilirubin, platelets, white blood cell count,
+haemoglobin, bicarbonate, potassium, sodium, glucose, arterial pH,
+PaO\textsubscript{2}, PaCO\textsubscript{2}), cumulative fluid balance, and
+hourly urine output.
+
+\paragraph{Static and severity features.}
+Static features included age, sex, admission body weight, and 17~Charlson
+comorbidity index components (diabetes, congestive heart failure, chronic
+pulmonary disease, renal disease, liver disease, malignancy, among others).
+Severity scores comprised the SOFA score at 24~hours (with individual organ
+sub-scores) and the APACHE-III score computed at ICU admission.
+
+\paragraph{Therapy indicators.}
+Binary and duration-based indicators captured whether the patient received
+mechanical ventilation, vasopressor infusion, or renal replacement therapy
+during the T0--T24 window, along with the cumulative duration of each
+intervention.
+
+\paragraph{Final feature set.}
+The resulting feature matrix contained \textbf{162}~features per ICU stay.
+Missingness was handled in three steps: (i)~Little's MCAR test was performed on
+the training partition and rejected the null hypothesis of completely random
+missingness; (ii)~binary missingness indicators were created for each feature
+with missing values, and only those indicators significantly associated with
+mortality ($\chi^2$ test, $p < 0.05$) were retained as additional predictors;
+(iii)~remaining missing values were imputed with the training-set median.
+Highly correlated feature pairs (Pearson $r > 0.99$) were deduplicated, and all
+numerical features were standardised using parameters fitted exclusively on the
+training partition.
+
+% ----------------------------------------------------------------------------
+\subsection{Models}\label{sec:models}
+
+\paragraph{Conventional baselines.}
+Three families of supervised classifiers were trained for binary mortality
+prediction.  $\ell_2$-regularised logistic regression (LR) served as a transparent linear baseline.  XGBoost~\citep{Chen2016}, employing gradient-boosted decision trees with histogram-based splitting, and LightGBM~\citep{Ke2017}, employing leaf-wise gradient boosting with exclusive feature bundling, provided two complementary tree-ensemble approaches.
+CatBoost~\citep{Prokhorenkova2018} was included as a diversity comparator to
+test whether a distinct gradient-boosting family (ordered boosting with
+symmetric trees) materially changed the model-selection narrative.
+
+\paragraph{Hyperparameter optimisation.}
+For LightGBM, a grouped Optuna search~\citep{Akiba2019} was conducted over
+40~trials, optimising a composite objective that combined AUROC, recall at
+$\text{PPV} \ge 0.50$, and Brier score on the grouped validation split.  The
+tuned configuration was frozen and carried into the repeated grouped benchmark.
+XGBoost and logistic regression used default or lightly tuned hyperparameters to
+preserve interpretability of the model-comparison story.
+
+\paragraph{Calibration.}
+Post-hoc calibration was applied to all models.  Both sigmoid (Platt scaling)
+and isotonic regression recalibration were benchmarked on the held-out grouped
+validation split, and the variant with lower expected calibration error (ECE)
+was selected for each model.  Calibration quality was assessed via reliability
+diagrams, calibration intercept, and calibration slope.
+
+\paragraph{Score-only comparators.}
+SOFA and APACHE-III scores were evaluated as single-feature logistic baselines
+under the same grouped protocol, providing clinical-score anchors for
+decision-curve analysis.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Conformal Selective Triage}\label{sec:conformal}
+
+The primary methodological contribution is the application of Mondrian conformal
+prediction~\citep{Vovk2005,Angelopoulos2021} to convert calibrated risk scores
+into set-valued triage decisions with finite-sample coverage guarantees.
+
+Mondrian conformal prediction was selected over standard (label-unconditional) conformal prediction because it provides class-conditional marginal coverage, which is the stronger guarantee for imbalanced classification problems. With a mortality prevalence of 26.7\%, standard conformal prediction could satisfy its marginal coverage guarantee by achieving high coverage on the majority class (survivors) while under-covering the minority class (deaths). Mondrian conformal prediction avoids this failure mode by computing separate nonconformity thresholds for each class.
+
+\paragraph{Formulation.}
+Let $f: \mathcal{X} \to [0,1]$ denote a calibrated risk model and let
+$\alpha \in (0,1)$ be the desired miscoverage rate.  The data available for
+conformal inference are partitioned into three disjoint subsets:
+\begin{equation}\label{eq:conformal-split}
+  \mathcal{D} = \mathcal{D}_{\text{train}}
+  \;\dot\cup\; \mathcal{D}_{\text{cal}}
+  \;\dot\cup\; \mathcal{D}_{\text{test}},
+\end{equation}
+where $\mathcal{D}_{\text{train}}$ is used to fit $f$,
+$\mathcal{D}_{\text{cal}}$ is used to estimate class-conditional nonconformity
+thresholds, and $\mathcal{D}_{\text{test}}$ receives set-valued predictions.
+
+Post-hoc calibration was fitted via three-fold cross-validation internal to $\mathcal{D}_{\text{train}}$ using \texttt{CalibratedClassifierCV}; the calibration map was therefore learned entirely within the training partition. The conformal calibration set $\mathcal{D}_{\text{cal}}$ was a separate held-out split carved from the training data (approximately 20\% of the training partition) and was not used in any step of model fitting or recalibration. This separation ensures that the nonconformity scores computed on $\mathcal{D}_{\text{cal}}$ satisfy the exchangeability requirement with respect to $\mathcal{D}_{\text{test}}$, preserving the finite-sample coverage guarantee.
+
+For each calibration example $(x_i, y_i) \in \mathcal{D}_{\text{cal}}$, the
+nonconformity score for class $y \in \{0,1\}$ is defined as
+\begin{equation}\label{eq:nonconformity}
+  s_i^{(y)} = 1 - \hat{p}_y(x_i),
+\end{equation}
+where $\hat{p}_y(x_i)$ denotes the model's estimated probability for class $y$.
+Mondrian conformal prediction computes class-conditional quantiles: for each
+class $y$, the threshold $\hat{q}_y$ is the $\lceil (1-\alpha)(|\mathcal{D}_{\text{cal}}^{(y)}| + 1) \rceil / |\mathcal{D}_{\text{cal}}^{(y)}|$
+quantile of the nonconformity scores $\{s_i^{(y)} : y_i = y\}$.
+
+\paragraph{Set-valued predictions.}
+For a new test example $x_{\text{new}}$, the prediction set is
+\begin{equation}\label{eq:pred-set}
+  C(x_{\text{new}}) = \bigl\{y \in \{0,1\} : s_{\text{new}}^{(y)} \le \hat{q}_y\bigr\}.
+\end{equation}
+This yields three clinically interpretable outcomes:
+\begin{itemize}
+  \item $C(x) = \{1\}$: \textbf{Alert}, indicating confidence that the patient is
+        high-risk; escalate monitoring or intervention.
+  \item $C(x) = \{0\}$: \textbf{Clear}, indicating confidence that the patient is
+        lower-risk; standard care pathway.
+  \item $C(x) = \{0,1\}$: \textbf{Defer}, indicating that the model's uncertainty is too large
+        for safe automation; the case requires clinician review.
+\end{itemize}
+In principle, the prediction set may also be empty ($C(x) = \emptyset$) when neither class exceeds its nonconformity threshold. In practice, this case was not observed for any test example under the calibrated models used in this study, and it is not expected to arise when the base classifier is well-calibrated.
+
+The coverage guarantee ensures that $\Pr\bigl(y_{\text{new}} \in
+C(x_{\text{new}})\bigr) \ge 1 - \alpha$ marginally over the calibration and
+test exchangeability assumption, without distributional assumptions on the
+data-generating process.
+
+\paragraph{Multi-model consensus.}
+To further concentrate the actionable region, a union consensus was constructed
+across multiple base models.  A patient was assigned \emph{Alert} only if
+\emph{all} base models produced $\{1\}$, and \emph{Clear} only if all produced
+$\{0\}$; any disagreement among models resulted in \emph{Defer}.  This
+conservative policy trades actionable volume for higher alert PPV and clear NPV.
+
+Figure~\ref{fig:conformal-flow} illustrates the conformal triage decision flow.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.85\linewidth]{figure3_conformal_flow.pdf}
+  \caption{Conformal selective-triage decision flow.  A calibrated risk model
+    produces a probability estimate at T24.  Mondrian conformal thresholds,
+    estimated on a held-out calibration set, convert this probability into a
+    prediction set.  The set cardinality determines the triage action:
+    $\{1\} \to$ \emph{Alert}, $\{0\} \to$ \emph{Clear},
+    $\{0,1\} \to$ \emph{Defer}.}
+  \label{fig:conformal-flow}
+\end{figure}
+
+
+% ----------------------------------------------------------------------------
+\subsection{Disagreement-Based Selective Triage}\label{sec:disagreement}
+
+A disagreement-based selective-triage comparator was included as an ablation to
+contextualise the conformal approach.  Two models were trained on the same
+grouped split: a \emph{full-feature model} using all 162~predictors (physiology,
+severity scores, therapy indicators, comorbidities, and
+measurement-process features), and a \emph{physiology-only model} restricted to vital signs and laboratory
+values, excluding care-process and therapy features.
+For each test patient, the disagreement signal was defined as the absolute
+difference between the two models' predicted probabilities:
+\begin{equation}\label{eq:disagreement}
+  d(x) = \bigl|f_{\text{full}}(x) - f_{\text{phys}}(x)\bigr|.
+\end{equation}
+An agreement threshold $\tau_d$ and risk thresholds $\tau_{\text{low}}$,
+$\tau_{\text{high}}$ were tuned on the grouped validation split.  Patients with
+$d(x) > \tau_d$ were deferred; among the remaining patients, those with
+$f_{\text{full}}(x) \ge \tau_{\text{high}}$ were alerted and those with
+$f_{\text{full}}(x) \le \tau_{\text{low}}$ were cleared.  This heuristic
+approach provides no formal coverage guarantee and is included to demonstrate
+the value of the conformal framework's distribution-free properties.
+
+Figure~\ref{fig:disagreement-flow} illustrates the disagreement-based decision
+flow.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.85\linewidth]{figure4_disagreement_flow.pdf}
+  \caption{Disagreement-based selective-triage comparator (ablation).  A
+    full-feature model and a physiology-only model independently score each
+    patient.  The absolute probability gap serves as a defer signal: large
+    disagreement triggers deferral to clinician review, while concordant
+    predictions above or below risk thresholds produce \emph{Alert} or
+    \emph{Clear} decisions.  Unlike conformal triage, this approach provides
+    no formal coverage guarantee.}
+  \label{fig:disagreement-flow}
+\end{figure}
+
+% ----------------------------------------------------------------------------
+\subsection{Evaluation Protocol}\label{sec:evaluation}
+
+\paragraph{Subject-grouped splitting.}
+Because the cohort contains repeated subjects (10,036~stays from 9,002~unique
+patients), all train/validation/test splits were performed at the subject level
+using the unique subject identifier as the grouping key.  This ensures that all stays
+from a given patient appear in exactly one partition, preventing optimistic bias
+from within-subject correlation.
+
+\paragraph{Repeated evaluation.}
+All headline results were computed across \textbf{21}~independent grouped random
+seeds to quantify seed-to-seed variability.  Summary statistics (mean, standard
+deviation, and percentile-based confidence intervals) are reported for all
+primary metrics.
+
+\paragraph{Discrimination and calibration metrics.}
+Conventional model performance was assessed using AUROC, area under the
+precision--recall curve (AUPRC), Brier score, expected calibration error (ECE,
+10~bins), calibration intercept, calibration slope, and recall at
+$\text{PPV} \ge 0.50$ (a deployment-oriented threshold that ensures at least
+half of alerted patients are true positives).
+
+\paragraph{Conformal triage metrics.}
+For conformal selective triage, the following metrics were reported: empirical coverage (fraction of
+test patients whose true label is contained in the prediction set), certain-decision
+fraction (proportion of patients receiving a singleton prediction set),
+defer rate, alert PPV, clear NPV, and absolute miss count.  These metrics were
+evaluated at multiple miscoverage levels ($\alpha \in \{0.05, 0.10, 0.15, 0.20\}$).
+
+\paragraph{Decision-curve analysis.}
+Clinical utility was assessed via decision-curve analysis~\citep{Vickers2006},
+which plots net benefit as a function of threshold probability.  The selected
+continuous model was compared against APACHE-III, SOFA, treat-all, and
+treat-none strategies.  Conformal and disagreement triage curves were overlaid
+as deployment-policy complements rather than direct substitutes for continuous
+risk ranking.
+
+\paragraph{Shift robustness.}
+Robustness to distribution shift was evaluated by (i)~random missingness
+injection at increasing rates (10\%, 20\%, 30\% of features set to missing at
+test time) and (ii)~systematic dropout of measurement-process and care-process
+feature families.  Coverage stability of conformal predictions was compared
+against recall degradation of fixed-threshold policies under each perturbation.
+
+\paragraph{Subgroup analysis.}
+Conformal triage summaries were stratified by clinically relevant subgroups
+(sex, age band, SOFA severity band, mechanical ventilation status, and vasopressor use) at $\alpha = 0.10$ to balance
+coverage with sufficient actionable volume for stable subgroup-level
+interpretation.
+
+% ----------------------------------------------------------------------------
+\subsection{Ethics, Data Access, and Reproducibility}\label{sec:ethics}
+
+This study is a retrospective secondary analysis of de-identified data from the
+MIMIC-IV database and does not involve prospective intervention or direct patient
+contact.  Access to MIMIC-IV requires completion of a recognised human-subjects
+training course and execution of a data use agreement through
+PhysioNet~\citep{Goldberger2000}.  The study was conducted under the existing
+institutional review board approval that governs the MIMIC-IV data release.
+
+The code repository distributes analysis scripts, derived artifact summaries,
+and manuscript assets; raw patient-level data are not redistributed.
+Reproducing the cohort from source requires independent credentialed access to
+MIMIC-IV and the associated data-use approvals.  All manuscript claims are
+limited to internal validation on the derived cohort and should not be
+interpreted as transportability or bedside-readiness claims.
+
+
+% === RESULTS SECTION ===
+\input{section_results.tex}
+
+% === DISCUSSION, LIMITATIONS, CONCLUSION, APPENDICES ===
+\input{section_discussion_to_appendices.tex}
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}
+

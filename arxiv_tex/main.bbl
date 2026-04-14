@@ -1,0 +1,226 @@
+\begin{thebibliography}{27}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Akiba et~al.(2019)Akiba, Sano, Yanase, Ohta, and Koyama]{Akiba2019}
+Takuya Akiba, Shotaro Sano, Toshihiko Yanase, Takeru Ohta, and Masanori Koyama.
+\newblock {Optuna}: A next-generation hyperparameter optimization framework.
+\newblock In \emph{Proceedings of the 25th ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, pages 2623--2631, 2019.
+\newblock \doi{10.1145/3292500.3330701}.
+
+\bibitem[Angelopoulos and Bates(2021)]{Angelopoulos2021}
+Anastasios~N. Angelopoulos and Stephen Bates.
+\newblock A gentle introduction to conformal prediction and distribution-free
+  uncertainty quantification.
+\newblock \emph{arXiv preprint arXiv:2107.07511}, 2021.
+
+\bibitem[Bagshaw et~al.(2008)Bagshaw, George, and Bellomo]{Bagshaw2007}
+Sean~M. Bagshaw, Carol George, and Rinaldo Bellomo.
+\newblock Early acute kidney injury and sepsis: a multicentre evaluation.
+\newblock \emph{Critical Care}, 12\penalty0 (2):\penalty0 R47, 2008.
+\newblock \doi{10.1186/cc6863}.
+
+\bibitem[Chen et~al.(2025)Chen, Wu, Wu, Li, and Yan]{Chen2025}
+Jialin Chen, Dan Wu, Chuyu Wu, Yiling Li, and Jing Yan.
+\newblock Machine learning-based prediction of {ICU} mortality in
+  sepsis-associated acute kidney injury patients using {MIMIC-IV} database with
+  validation from {eICU} database.
+\newblock \emph{arXiv preprint arXiv:2502.17978}, 2025.
+
+\bibitem[Chen and Guestrin(2016)]{Chen2016}
+Tianqi Chen and Carlos Guestrin.
+\newblock {XGBoost}: A scalable tree boosting system.
+\newblock In \emph{Proceedings of the 22nd ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, pages 785--794, 2016.
+\newblock \doi{10.1145/2939672.2939785}.
+
+\bibitem[Goldberger et~al.(2000)Goldberger, Amaral, Glass, Hausdorff, Ivanov,
+  Mark, Mietus, Moody, Peng, and Stanley]{Goldberger2000}
+Ary~L. Goldberger, Luis A.~N. Amaral, Leon Glass, Jeffrey~M. Hausdorff,
+  Plamen~Ch. Ivanov, Roger~G. Mark, Joseph~E. Mietus, George~B. Moody,
+  Chung-Kang Peng, and H.~Eugene Stanley.
+\newblock {PhysioBank}, {PhysioToolkit}, and {PhysioNet}: Components of a new
+  research resource for complex physiologic signals.
+\newblock \emph{Circulation}, 101\penalty0 (23):\penalty0 e215--e220, 2000.
+\newblock \doi{10.1161/01.CIR.101.23.e215}.
+
+\bibitem[He and Garcia(2009)]{He2009}
+Haibo He and Edwardo~A. Garcia.
+\newblock Learning from imbalanced data.
+\newblock \emph{IEEE Transactions on Knowledge and Data Engineering},
+  21\penalty0 (9):\penalty0 1263--1284, 2009.
+
+\bibitem[Hoste et~al.(2015)Hoste, Bagshaw, Bellomo, Cely, Colman, Cruz,
+  Edipidis, Forni, Gomersall, Govil, et~al.]{Hoste2015}
+Eric A.~J. Hoste, Sean~M. Bagshaw, Rinaldo Bellomo, Cynthia~M. Cely, Roos
+  Colman, Dinna~N. Cruz, Kyriakos Edipidis, Lui~G. Forni, Charles~D. Gomersall,
+  Deepak Govil, et~al.
+\newblock Epidemiology of acute kidney injury in critically ill patients: the
+  multinational {AKI-EPI} study.
+\newblock \emph{Intensive Care Medicine}, 41\penalty0 (8):\penalty0 1411--1423,
+  2015.
+\newblock \doi{10.1007/s00134-015-3934-7}.
+
+\bibitem[Hu et~al.(2021)Hu, Liu, and Du]{Hu2021}
+Yue Hu, Haiyan Liu, and Bin Du.
+\newblock Prediction of in-hospital mortality in patients with
+  sepsis-associated acute kidney injury using a cox proportional hazards model.
+\newblock \emph{Frontiers in Medicine}, 8:\penalty0 741837, 2021.
+
+\bibitem[Johnson et~al.(2023)Johnson, Bulgarelli, Shen, Gayles, Shammout,
+  Horng, Pollard, Hao, Moody, Gow, Lehman, Celi, and Mark]{Johnson2023}
+Alistair E.~W. Johnson, Lucas Bulgarelli, Lu~Shen, Alvin Gayles, Ayad Shammout,
+  Steven Horng, Tom~J. Pollard, Sicheng Hao, Benjamin Moody, Brian Gow,
+  Li-wei~H. Lehman, Leo~A. Celi, and Roger~G. Mark.
+\newblock {MIMIC-IV}, a freely accessible electronic health record dataset.
+\newblock \emph{Scientific Data}, 10:\penalty0 1, 2023.
+\newblock \doi{10.1038/s41597-022-01899-x}.
+
+\bibitem[Kang and Yoon(2023)]{Kang2023}
+Jin~Soo Kang and Hee~Jin Yoon.
+\newblock Current challenges in adopting machine learning to critical care and
+  emergency medicine.
+\newblock \emph{Acute and Critical Care}, 38\penalty0 (1):\penalty0 1--9, 2023.
+\newblock \doi{10.4266/acc.2022.01255}.
+
+\bibitem[Ke et~al.(2017)Ke, Meng, Finley, Wang, Chen, Ma, Ye, and Liu]{Ke2017}
+Guolin Ke, Qi~Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei
+  Ye, and Tie-Yan Liu.
+\newblock {LightGBM}: A highly efficient gradient boosting decision tree.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~30, 2017.
+
+\bibitem[Kellum et~al.(2021)Kellum, Wen, de~Caestecker, Bhatt, Bhatt, and
+  Bhatt]{Kellum2021}
+John~A. Kellum, Xiaoyan Wen, Mark~P. de~Caestecker, Udayan~Y. Bhatt, Nisha
+  Bhatt, and Nisha Bhatt.
+\newblock Sepsis-associated acute kidney injury: a problem deserving of new
+  solutions.
+\newblock \emph{Nephron}, 145\penalty0 (4):\penalty0 443--448, 2021.
+\newblock \doi{10.1159/000514940}.
+
+\bibitem[{Kidney Disease: Improving Global Outcomes (KDIGO) Acute Kidney Injury
+  Work Group}(2012)]{KDIGO2012}
+{Kidney Disease: Improving Global Outcomes (KDIGO) Acute Kidney Injury Work
+  Group}.
+\newblock {KDIGO} clinical practice guideline for acute kidney injury.
+\newblock \emph{Kidney International Supplements}, 2\penalty0 (1):\penalty0
+  1--138, 2012.
+\newblock \doi{10.1038/kisup.2012.1}.
+
+\bibitem[Knaus et~al.(1991)Knaus, Wagner, Draper, Zimmerman, Bergner, Bastos,
+  Sirio, Murphy, Lotring, Damiano, and Harrell]{Knaus1991}
+William~A. Knaus, Douglas~P. Wagner, Elizabeth~A. Draper, Jack~E. Zimmerman,
+  Marilyn Bergner, Patricia~G. Bastos, Christopher~A. Sirio, Donald~J. Murphy,
+  Terry Lotring, Anne Damiano, and Frank~E. Harrell.
+\newblock The {APACHE III} prognostic system: risk prediction of hospital
+  mortality for critically ill hospitalized adults.
+\newblock \emph{Chest}, 100\penalty0 (6):\penalty0 1619--1636, 1991.
+\newblock \doi{10.1378/chest.100.6.1619}.
+
+\bibitem[Li et~al.(2023)Li, Huang, Geng, Li, Li, and Wang]{Li2023}
+Yufeng Li, Rong Huang, Yanjun Geng, Tianhang Li, Weibo Li, and Jiayi Wang.
+\newblock Machine learning algorithm to predict mortality in critically ill
+  patients with sepsis-associated acute kidney injury.
+\newblock \emph{Scientific Reports}, 13\penalty0 (1):\penalty0 4893, 2023.
+\newblock \doi{10.1038/s41598-023-32160-z}.
+
+\bibitem[Poston and Koyner(2019)]{Poston2019}
+Jason~T. Poston and Jay~L. Koyner.
+\newblock Sepsis associated acute kidney injury.
+\newblock \emph{BMJ}, 364:\penalty0 k4891, 2019.
+\newblock \doi{10.1136/bmj.k4891}.
+
+\bibitem[Prokhorenkova et~al.(2018)Prokhorenkova, Gusev, Vorobev, Dorogush, and
+  Gulin]{Prokhorenkova2018}
+Liudmila Prokhorenkova, Gleb Gusev, Aleksandr Vorobev, Anna~Veronika Dorogush,
+  and Andrey Gulin.
+\newblock {CatBoost}: unbiased boosting with categorical features.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~31, 2018.
+
+\bibitem[Roknaldin et~al.(2024)]{Roknaldin2024}
+Fatemeh Roknaldin et~al.
+\newblock Machine learning-based prediction of mortality in sepsis-associated
+  acute kidney injury.
+\newblock \emph{BMC Nephrology}, 25:\penalty0 42, 2024.
+
+\bibitem[See et~al.(2019)See, Jayasinghe, Glassford, Bailey, Johnson,
+  Polkinghorne, Toussaint, and Bellomo]{See2019}
+Emily~J. See, Keerthi Jayasinghe, Neil Glassford, Michael Bailey, David~W.
+  Johnson, Kevan~R. Polkinghorne, Nigel~D. Toussaint, and Rinaldo Bellomo.
+\newblock Long-term risk of adverse outcomes after acute kidney injury: a
+  systematic review and meta-analysis of cohort studies using consensus
+  definitions of exposure.
+\newblock \emph{Kidney International}, 95\penalty0 (1):\penalty0 160--172,
+  2019.
+\newblock \doi{10.1016/j.kint.2018.08.036}.
+
+\bibitem[Singer et~al.(2016)Singer, Deutschman, Seymour, Shankar-Hari, Annane,
+  Bauer, Bellomo, Bernard, Chiche, Coopersmith, et~al.]{Singer2016}
+Mervyn Singer, Clifford~S. Deutschman, Christopher~Warren Seymour, Manu
+  Shankar-Hari, Djillali Annane, Michael Bauer, Rinaldo Bellomo, Gordon~R.
+  Bernard, Jean-Daniel Chiche, Craig~M. Coopersmith, et~al.
+\newblock The {Third International Consensus Definitions for Sepsis and Septic
+  Shock} ({Sepsis-3}).
+\newblock \emph{JAMA}, 315\penalty0 (8):\penalty0 801--810, 2016.
+\newblock \doi{10.1001/jama.2016.0287}.
+
+\bibitem[Steyerberg et~al.(2010)Steyerberg, Vickers, Cook, Gerds, Gonen,
+  Obuchowski, Pencina, and Kattan]{Steyerberg2010}
+Ewout~W. Steyerberg, Andrew~J. Vickers, Nancy~R. Cook, Thomas Gerds, Mithat
+  Gonen, Nancy Obuchowski, Michael~J. Pencina, and Michael~W. Kattan.
+\newblock Assessing the performance of prediction models: a framework for some
+  traditional and novel measures.
+\newblock \emph{Epidemiology}, 21\penalty0 (1):\penalty0 128--138, 2010.
+\newblock \doi{10.1097/EDE.0b013e3181c30fb2}.
+
+\bibitem[Van~Calster et~al.(2019)Van~Calster, McLernon, van Smeden, Bottolo,
+  Ghosh, and ";~Steyerberg]{VanCalster2019}
+Ben Van~Calster, David~J. McLernon, Maarten van Smeden, Georg Bottolo, Leonardo
+  and";~Heinze, Sujit Ghosh, and Ewout~W. ";~Steyerberg.
+\newblock Calibration: the {Achilles} heel of predictive analytics.
+\newblock \emph{BMC Medicine}, 17:\penalty0 230, 2019.
+\newblock \doi{10.1186/s12916-019-1466-7}.
+
+\bibitem[Vickers and Elkin(2006)]{Vickers2006}
+Andrew~J. Vickers and Elena~B. Elkin.
+\newblock Decision curve analysis: a novel method for evaluating prediction
+  models.
+\newblock \emph{Medical Decision Making}, 26\penalty0 (6):\penalty0 565--574,
+  2006.
+\newblock \doi{10.1177/0272989X06295361}.
+
+\bibitem[Vincent et~al.(1996)Vincent, Moreno, Takala, Willatts,
+  De~Mendon{\c{c}}a, Bruining, Reinhart, Suter, and Thijs]{Vincent1996}
+Jean-Louis Vincent, Rui Moreno, Jukka Takala, Sheila Willatts, Arnaldo
+  De~Mendon{\c{c}}a, Hans Bruining, Christian~K. Reinhart, Peter~M. Suter, and
+  L.~G. Thijs.
+\newblock The {SOFA} (sepsis-related organ failure assessment) score to
+  describe organ dysfunction/failure.
+\newblock \emph{Intensive Care Medicine}, 22\penalty0 (7):\penalty0 707--710,
+  1996.
+\newblock \doi{10.1007/BF01709751}.
+
+\bibitem[Vovk et~al.(2005)Vovk, Gammerman, and Shafer]{Vovk2005}
+Vladimir Vovk, Alex Gammerman, and Glenn Shafer.
+\newblock \emph{Algorithmic Learning in a Random World}.
+\newblock Springer, 2005.
+\newblock \doi{10.1007/b106715}.
+
+\bibitem[Zarbock et~al.(2023)Zarbock, Nadim, Pickkers, Gomez, Bell, Joannidis,
+  Kashani, Koyner, Pannu, Meersch, et~al.]{Zarbock2023}
+Alexander Zarbock, Mitra~K. Nadim, Peter Pickkers, Hernando Gomez, Samira Bell,
+  Michael Joannidis, Kianoush Kashani, Jay~L. Koyner, Neesh Pannu, Melanie
+  Meersch, et~al.
+\newblock Sepsis-associated acute kidney injury: consensus report of the 28th
+  {Acute Disease Quality Initiative} workgroup.
+\newblock \emph{Nature Reviews Nephrology}, 19\penalty0 (6):\penalty0 401--417,
+  2023.
+\newblock \doi{10.1038/s41581-023-00683-3}.
+
+\end{thebibliography}
